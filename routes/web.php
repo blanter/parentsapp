@@ -17,4 +17,12 @@ Route::middleware('check.pin')->group(function () {
     Route::get('/parents-score', [ParentScoreController::class, 'index'])->name('parents.index');
     Route::post('/parents-score', [ParentScoreController::class, 'store'])->name('parents.store');
     Route::delete('/parents-score/{id}', [ParentScoreController::class, 'destroy'])->name('scores.destroy');
+    
+    // Edit Score
+    Route::get('/edit-score/{id}', [ParentScoreController::class, 'editscore'])->name('score.edit');
+    Route::put('/edit-score/{id}', [ParentScoreController::class, 'updatescore'])->name('score.update');
+    
 });
+
+// Public No PIN
+Route::get('/leaderboard-parents', [ParentScoreController::class, 'leaderboard'])->name('parents.leaderboard');

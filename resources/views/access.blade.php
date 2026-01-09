@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Access - Lifebook Academy</title>
+    <link href="{{asset('/file/lifebookicon.png')}}" rel='icon' type='image/x-icon'/>
+    <title>Login Access - Parents App</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="{{asset('/file/style.css')}}" rel="stylesheet"/>
+    <link href="{{asset('/file/style.css')}}?v=6" rel="stylesheet"/>
     <script src="{{asset('/file/jquery.min.js')}}"></script>
     <style>.subtitle,.title{text-align:center}:root{--accent:#6366f1;--muted:#6b7280;--bg:#ffffff;--box-bg:#fff;--box-border:#e5e7eb;--box-radius:12px;--success:#10b981;--danger:#ef4444;font-family:Poppins,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}body,html{height:100%;margin:0;color:#111827}.page{min-height:100%;display:flex;align-items:center;justify-content:center;padding:28px}.card{width:100%;max-width:460px;background:var(--bg);border-radius:16px;box-shadow:0 10px 30px rgba(16,24,40,.06);padding:32px;box-sizing:border-box}.title{font-size:20px;font-weight:700;color:var(--accent);margin:0 0 6px}.msg,.subtitle{font-size:13px}.hint,.subtitle{color:var(--muted)}.subtitle{margin:0 0 18px}.messages{margin-bottom:12px}.msg{padding:10px 12px;border-radius:10px;margin-bottom:8px}.pin-input,.pin-input input{font-size:28px;font-weight:600;outline:0;text-align:center}.msg.error{background:#fff5f5;color:var(--danger);border:1px solid rgba(239,68,68,.08)}.msg.success{background:#ecfdf5;color:var(--success);border:1px solid rgba(16,185,129,.08)}.pin-form{display:flex;flex-direction:column;gap:18px}.pin-boxes{display:flex;gap:12px;justify-content:center;align-items:center;margin:0 auto;flex-wrap:wrap}.pin-input{width:56px;height:64px;border-radius:12px;border:2px solid var(--box-border);background:var(--box-bg);display:inline-flex;align-items:center;justify-content:center;transition:.14s}.pin-input input{width:100%;height:100%;border:0;background:0 0;caret-color:transparent}.pin-input:focus-within{border-color:var(--accent);box-shadow:0 6px 20px rgba(99,102,241,.08);transform:translateY(-2px)}.hint{font-size:13px;text-align:center}.actions{display:flex;gap:8px;justify-content:center;align-items:center}.btn{padding:10px 16px;border-radius:10px;border:0;cursor:pointer;font-weight:700;font-size:14px}.btn.primary{background:var(--accent);color:#fff;box-shadow:0 6px 18px rgba(99,102,241,.12)}.btn.ghost,.small{color:var(--muted)}.btn.ghost{background:0 0;border:1px solid rgba(0,0,0,.04)}.small{font-size:12px;text-align:center}@media (max-width:480px){.pin-input{width:40px;height:50px;font-size:20px}.card{background:transparent;box-shadow:none;padding:2px}}.sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}</style>
 </head>
 <body>
     <div class="page">
         <div class="card" role="main" aria-labelledby="pinTitle">
-            <h1 id="pinTitle" class="title">Masukkan PIN Akses</h1>
-            <p class="subtitle">Masukkan 6-digit PIN</p>
+            <h1 id="pinTitle" class="title">Enter Access PIN</h1>
+            <p class="subtitle">Enter 6-digit PIN</p>
 
             <div class="messages">
                 @if(session('error'))
@@ -32,7 +33,6 @@
 
                 {{-- Six PIN boxes --}}
                 <div class="pin-boxes" id="pinBoxes" aria-hidden="false">
-                    {{-- Each box contains a single text input (numeric). Keep inputs as real inputs for mobile numeric keyboard --}}
                     <div class="pin-input">
                         <label class="sr-only" for="pin-1">Digit 1</label>
                         <input inputmode="numeric" pattern="[0-9]*" maxlength="1" id="pin-1" aria-label="Digit 1" />
@@ -62,11 +62,11 @@
                 {{-- hidden input untuk dikirim --}}
                 <input type="hidden" name="pin" id="pinHidden" />
 
-                <div class="hint">Tekan <strong>Enter</strong> untuk mengirim 6 digit pin</div>
+                <div class="hint">Press <strong>Enter</strong> to send the 6 digit pin</div>
 
                 <div class="actions">
-                    <button type="submit" class="btn primary">Masuk</button>
-                    <button type="button" id="clearBtn" class="btn ghost" aria-label="Bersihkan PIN">Bersihkan</button>
+                    <button type="submit" class="btn primary">Login</button>
+                    <button type="button" id="clearBtn" class="btn ghost" aria-label="Bersihkan PIN">Clear</button>
                 </div>
             </form>
         </div>

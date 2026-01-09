@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('parent_id')->constrained('parents')->onDelete('cascade');
             $table->string('activity');
             $table->unsignedTinyInteger('score'); // 1-100
+            $table->string('deskripsi')->nullable();
             $table->timestamps();
         });
     }
