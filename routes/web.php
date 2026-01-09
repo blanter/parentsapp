@@ -3,26 +3,46 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccessController;
 use App\Http\Controllers\ParentScoreController;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
-    return redirect()->route('access.index');
+    return redirect()->route('dashboard');
 });
 
-// Login dengan PIN
-Route::get('/access', [AccessController::class, 'index'])->name('access.index');
-Route::post('/access', [AccessController::class, 'store'])->name('access.store');
+// Auth Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+});
 
-// Halaman utama
-Route::middleware('check.pin')->group(function () {
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Approved Users Dashboard
+Route::middleware(['auth', 'approved'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard'); // We'll create this simple view
+    })->name('dashboard');
+});
+
+// Admin Only Routes
+Route::middleware(['auth', 'approved', 'admin'])->group(function () {
+    // Login dengan PIN (if still needed, but now protected by admin)
+    Route::get('/access', [AccessController::class, 'index'])->name('access.index');
+    Route::post('/access', [AccessController::class, 'store'])->name('access.store');
+
     Route::get('/parents-score', [ParentScoreController::class, 'index'])->name('parents.index');
     Route::post('/parents-score', [ParentScoreController::class, 'store'])->name('parents.store');
     Route::delete('/parents-score/{id}', [ParentScoreController::class, 'destroy'])->name('scores.destroy');
-    
+
     // Edit Score
     Route::get('/edit-score/{id}', [ParentScoreController::class, 'editscore'])->name('score.edit');
     Route::put('/edit-score/{id}', [ParentScoreController::class, 'updatescore'])->name('score.update');
-    
+    // User Management
+    Route::get('/manage-users', [AuthController::class, 'listUsers'])->name('admin.users');
+    Route::patch('/manage-users/{id}/approve', [AuthController::class, 'approveUser'])->name('admin.users.approve');
 });
 
-// Public No PIN
+// Public No PIN / Guest
 Route::get('/leaderboard-parents', [ParentScoreController::class, 'leaderboard'])->name('parents.leaderboard');
