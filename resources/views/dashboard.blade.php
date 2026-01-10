@@ -49,15 +49,15 @@
             </a>
             <a href="#" class="db-menu-item children-tracker">
                 <i data-lucide="activity"></i>
-                <span>Lifebook Tracker</span>
+                <span>Lifebook Children Tracker</span>
             </a>
             <a href="#" class="db-menu-item learning-tracker">
                 <i data-lucide="book-open"></i>
-                <span>Learning Tracker</span>
+                <span>My Kids Learning Tracker</span>
             </a>
             <a href="#" class="db-menu-item journey">
                 <i data-lucide="map"></i>
-                <span>Lifebook Journey</span>
+                <span>Parents Lifebook Journey</span>
             </a>
         </div>
     </div>

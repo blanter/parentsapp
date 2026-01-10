@@ -71,6 +71,11 @@
                 <span>Keluar dari Aplikasi</span>
             </button>
         </form>
+
+        <div
+            style="text-align: center; margin-top: 30px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark);">
+            Version 1.0.4 • Parents App
+        </div>
     </div>
 
     <!-- Bottom Navigation -->
