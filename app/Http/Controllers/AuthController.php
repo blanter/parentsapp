@@ -43,7 +43,8 @@ class AuthController extends Controller
 
     public function showRegisterForm()
     {
-        return view('auth.register');
+        $students = \App\Models\Student::active()->orderBy('name')->get();
+        return view('auth.register', compact('students'));
     }
 
     public function register(Request $request)
@@ -52,15 +53,23 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'student_ids' => 'required|array|min:1',
+            'student_ids.*' => 'exists:lifebook_users.users,id',
+        ], [
+            'student_ids.required' => 'Pilih setidaknya satu nama anak.',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'user',
             'is_approved' => false,
         ]);
+
+        if ($request->has('student_ids')) {
+            $user->students()->attach($request->student_ids);
+        }
 
         return redirect()->route('login')->with('success', 'Registration successful. Please wait for admin approval.');
     }

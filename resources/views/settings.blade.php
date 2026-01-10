@@ -9,7 +9,80 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
         rel="stylesheet">
     <link href="{{asset('/file/style.css')}}?v=13" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .select2-container {
+            width: 100% !important;
+        }
+
+        .select2-container--default .select2-selection--multiple {
+            background: #fff;
+            border: 2px solid #F3F4F6;
+            border-radius: 15px;
+            padding: 8px 12px;
+            min-height: 55px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .select2-container--default.select2-container--focus .select2-selection--multiple {
+            border-color: var(--db-purple);
+            box-shadow: 0 0 0 4px rgba(108, 136, 224, 0.1);
+            outline: none;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: rgba(108, 136, 224, 0.1);
+            border: none;
+            border-radius: 10px;
+            padding: 4px 10px;
+            color: var(--db-purple);
+            font-weight: 700;
+            font-size: 13px;
+            margin: 2px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: var(--db-purple);
+            border-right: none;
+            margin-right: 0;
+            font-weight: 900;
+            font-size: 16px;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+            background: none;
+            opacity: 1;
+        }
+
+        .select2-dropdown {
+            border: 2px solid var(--db-purple);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .select2-results__option {
+            padding: 12px 15px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: var(--db-purple);
+        }
+    </style>
 </head>
 
 <body class="db-body">
@@ -83,6 +156,17 @@
                         required>
                 </div>
 
+                <div class="auth-form-group">
+                    <label>Daftar Nama Anak</label>
+                    <select name="student_ids[]" class="auth-form-control select2" multiple="multiple" required>
+                        @foreach($students as $student)
+                            <option value="{{ $student->id }}" {{ Auth::user()->students->contains($student->id) ? 'selected' : '' }}>
+                                {{ $student->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <button type="submit" class="auth-btn-primary" style="margin-top: 10px;">
                     <i data-lucide="save"></i>
                     <span>Simpan Perubahan</span>
@@ -153,6 +237,13 @@
 
     <script>
         lucide.createIcons();
+
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Cari nama anak...",
+                allowClear: true
+            });
+        });
 
         function previewImage(input) {
             if (input.files && input.files[0]) {

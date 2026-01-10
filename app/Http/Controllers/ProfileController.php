@@ -17,7 +17,8 @@ class ProfileController extends Controller
 
     public function settings()
     {
-        return view('settings');
+        $students = \App\Models\Student::active()->orderBy('name')->get();
+        return view('settings', compact('students'));
     }
 
     public function update(Request $request)
@@ -28,6 +29,10 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'student_ids' => 'required|array|min:1',
+            'student_ids.*' => 'exists:lifebook_users.users,id',
+        ], [
+            'student_ids.required' => 'Pilih setidaknya satu nama anak.',
         ]);
 
         $user->name = $request->name;
@@ -48,6 +53,7 @@ class ProfileController extends Controller
         }
 
         $user->save();
+        $user->students()->sync($request->student_ids);
 
         return back()->with('success', 'Profil berhasil diperbarui!');
     }

@@ -47,4 +47,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function students()
+    {
+        $database = $this->getConnection()->getDatabaseName();
+        return $this->belongsToMany(Student::class, "$database.parent_student", 'user_id', 'student_id');
+    }
 }
