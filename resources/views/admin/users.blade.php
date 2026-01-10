@@ -27,7 +27,6 @@
             height: 100%;
             margin: 0;
             color: #111827;
-            background: #f9fafb;
         }
 
         .page {
@@ -140,22 +139,50 @@
     </style>
 </head>
 
-<body>
-    <div class="page">
-        <div class="header">
-            <div>
-                <a href="{{ route('parents.index') }}" class="back-link">← Back to Scores</a>
-                <h1 class="title">User Management</h1>
+<body class="db-body">
+    <!-- Background Elements -->
+    <img src="{{ asset('/file/bee.png') }}" class="db-bg-pattern db-bee" alt="">
+    <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
+
+    <div class="adm-page-container">
+        <div class="adm-header">
+            <div class="adm-brand">
+                <h1>Admin Panel</h1>
+                <p>User Management</p>
             </div>
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="btn"
-                    style="background: transparent; color: var(--muted); border: 1px solid var(--box-border);">Logout</button>
-            </form>
+            <a href="{{ route('profile') }}" class="db-avatar-section" style="width: 50px; height: 50px;">
+                @if(Auth::user()->avatar)
+                    <img src="{{ asset('avatars/' . Auth::user()->avatar) }}" alt="Avatar"
+                        style="width: 100%; height: 100%; object-fit: cover;">
+                @else
+                    <i data-lucide="user"></i>
+                @endif
+            </a>
+        </div>
+
+        <div class="adm-menu-wrapper">
+            <a href="{{ route('admin.dashboard') }}" class="adm-menu-item {{ Route::is('admin.dashboard') ? 'active' : '' }}">
+                <i data-lucide="layout-grid"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="{{ route('parents.index') }}"
+                class="adm-menu-item {{ Route::is('parents.index') || Route::is('score.edit') ? 'active' : '' }}">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Parents Score</span>
+            </a>
+            <a href="{{ route('admin.users') }}" class="adm-menu-item {{ Route::is('admin.users') ? 'active' : '' }}">
+                <i data-lucide="users"></i>
+                <span>Manage Users</span>
+            </a>
+            <a href="{{ route('admin.settings') }}"
+                class="adm-menu-item {{ Route::is('admin.settings') ? 'active' : '' }}">
+                <i data-lucide="settings"></i>
+                <span>System Settings</span>
+            </a>
         </div>
 
         @if(session('success'))
-            <div class="msg msg-success">{{ session('success') }}</div>
+            <div class="msg msg-success" style="margin-bottom: 20px;">{{ session('success') }}</div>
         @endif
 
         <div class="card">
@@ -202,7 +229,17 @@
                 </tbody>
             </table>
         </div>
+
+        <div
+            style="text-align: center; margin-top: 40px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark);">
+            Version {{ $appVersion }} • Parents App
+        </div>
     </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 
 </html>

@@ -30,7 +30,7 @@ class AuthController extends Controller
             }
 
             if (Auth::user()->role === 'admin') {
-                return redirect()->intended('parents-score');
+                return redirect()->intended('/admin/dashboard');
             }
 
             return redirect()->intended('dashboard');

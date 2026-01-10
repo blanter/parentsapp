@@ -25,6 +25,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Approved Users Dashboard
 Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/dashboard', function () {
+        if (Auth::user()->role === 'admin') {
+            return redirect()->intended('/admin/dashboard');
+        }
         return view('dashboard');
     })->name('dashboard');
 
@@ -54,6 +57,8 @@ Route::middleware(['auth', 'approved'])->group(function () {
 
 // Admin Only Routes
 Route::middleware(['auth', 'approved', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', [\App\Http\Controllers\AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
     // Login dengan PIN (if still needed, but now protected by admin)
     Route::get('/access', [AccessController::class, 'index'])->name('access.index');
     Route::post('/access', [AccessController::class, 'store'])->name('access.store');

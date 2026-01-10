@@ -17,14 +17,41 @@
     <img src="{{ asset('/file/bee.png') }}" class="db-bg-pattern db-bee" alt="">
     <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
 
-    <div class="db-container">
-        <div class="db-header">
-            <div class="db-brand-section">
-                <h1 style="font-size: 24px;">Sistem Settings</h1>
+    <div class="adm-page-container">
+        <div class="adm-header">
+            <div class="adm-brand">
+                <h1>Admin Panel</h1>
+                <p>System Settings</p>
             </div>
-            <a href="{{ route('dashboard') }}" class="db-avatar-section"
-                style="width: 45px; height: 45px; text-decoration: none;">
-                <i data-lucide="home" style="font-size: 24px; opacity: 1;"></i>
+            <a href="{{ route('profile') }}" class="db-avatar-section" style="width: 50px; height: 50px;">
+                @if(Auth::user()->avatar)
+                    <img src="{{ asset('avatars/' . Auth::user()->avatar) }}" alt="Avatar"
+                        style="width: 100%; height: 100%; object-fit: cover;">
+                @else
+                    <i data-lucide="user"></i>
+                @endif
+            </a>
+        </div>
+
+        <div class="adm-menu-wrapper">
+            <a href="{{ route('admin.dashboard') }}"
+                class="adm-menu-item {{ Route::is('admin.dashboard') ? 'active' : '' }}">
+                <i data-lucide="layout-grid"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="{{ route('parents.index') }}"
+                class="adm-menu-item {{ Route::is('parents.index') || Route::is('score.edit') ? 'active' : '' }}">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Parents Score</span>
+            </a>
+            <a href="{{ route('admin.users') }}" class="adm-menu-item {{ Route::is('admin.users') ? 'active' : '' }}">
+                <i data-lucide="users"></i>
+                <span>Manage Users</span>
+            </a>
+            <a href="{{ route('admin.settings') }}"
+                class="adm-menu-item {{ Route::is('admin.settings') ? 'active' : '' }}">
+                <i data-lucide="settings"></i>
+                <span>System Settings</span>
             </a>
         </div>
 
@@ -58,7 +85,7 @@
 
         <div
             style="text-align: center; margin-top: 30px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark); margin-bottom: 100px;">
-            Admin Panel • Parents App
+            Version {{ $appVersion }} • Parents App
         </div>
     </div>
 

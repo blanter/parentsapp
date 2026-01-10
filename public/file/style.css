@@ -2117,6 +2117,7 @@ a.btn.btn-warning {
     font-size: 11px;
     font-weight: 800;
 }
+
 /* Volunteer Mission Styles */
 .vm-container {
     max-width: 480px;
@@ -2152,7 +2153,7 @@ a.btn.btn-warning {
     background: #fff;
     border-radius: 24px;
     padding: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
     border: 2px solid #F3F4F6;
     transition: transform 0.2s;
 }
@@ -2246,19 +2247,57 @@ a.btn.btn-warning {
 }
 
 /* Card Variants Colors */
-.vm-card:nth-child(4n+1) .vm-checkbox.checked { background: #FF9F9F; border-color: #FF9F9F; }
-.vm-card:nth-child(4n+2) .vm-checkbox.checked { background: #A0C4FF; border-color: #A0C4FF; }
-.vm-card:nth-child(4n+3) .vm-checkbox.checked { background: #B9FBC0; border-color: #B9FBC0; }
-.vm-card:nth-child(4n+4) .vm-checkbox.checked { background: #FFD6A5; border-color: #FFD6A5; }
+.vm-card:nth-child(4n+1) .vm-checkbox.checked {
+    background: #FF9F9F;
+    border-color: #FF9F9F;
+}
 
-.vm-card:nth-child(4n+1) .vm-mission-icon { background: rgba(255, 159, 159, 0.1); }
-.vm-card:nth-child(4n+1) .vm-mission-icon i { color: #FF9F9F; }
-.vm-card:nth-child(4n+2) .vm-mission-icon { background: rgba(160, 196, 255, 0.1); }
-.vm-card:nth-child(4n+2) .vm-mission-icon i { color: #A0C4FF; }
-.vm-card:nth-child(4n+3) .vm-mission-icon { background: rgba(185, 251, 192, 0.1); }
-.vm-card:nth-child(4n+3) .vm-mission-icon i { color: #B9FBC0; }
-.vm-card:nth-child(4n+4) .vm-mission-icon { background: rgba(255, 214, 165, 0.1); }
-.vm-card:nth-child(4n+4) .vm-mission-icon i { color: #FFD6A5; }
+.vm-card:nth-child(4n+2) .vm-checkbox.checked {
+    background: #A0C4FF;
+    border-color: #A0C4FF;
+}
+
+.vm-card:nth-child(4n+3) .vm-checkbox.checked {
+    background: #B9FBC0;
+    border-color: #B9FBC0;
+}
+
+.vm-card:nth-child(4n+4) .vm-checkbox.checked {
+    background: #FFD6A5;
+    border-color: #FFD6A5;
+}
+
+.vm-card:nth-child(4n+1) .vm-mission-icon {
+    background: rgba(255, 159, 159, 0.1);
+}
+
+.vm-card:nth-child(4n+1) .vm-mission-icon i {
+    color: #FF9F9F;
+}
+
+.vm-card:nth-child(4n+2) .vm-mission-icon {
+    background: rgba(160, 196, 255, 0.1);
+}
+
+.vm-card:nth-child(4n+2) .vm-mission-icon i {
+    color: #A0C4FF;
+}
+
+.vm-card:nth-child(4n+3) .vm-mission-icon {
+    background: rgba(185, 251, 192, 0.1);
+}
+
+.vm-card:nth-child(4n+3) .vm-mission-icon i {
+    color: #B9FBC0;
+}
+
+.vm-card:nth-child(4n+4) .vm-mission-icon {
+    background: rgba(255, 214, 165, 0.1);
+}
+
+.vm-card:nth-child(4n+4) .vm-mission-icon i {
+    color: #FFD6A5;
+}
 
 /* Coming Soon Page Styles */
 .cs-container {
@@ -2274,7 +2313,7 @@ a.btn.btn-warning {
     background: #fff;
     padding: 40px 30px;
     border-radius: 40px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
     border: 2px solid #F3F4F6;
     width: 100%;
 }
@@ -2320,4 +2359,195 @@ a.btn.btn-warning {
     font-size: 10px;
     font-weight: 700;
     color: var(--db-text-dark);
+}
+
+/* Admin Header & Menu Styles */
+.adm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px 20px;
+    margin-top: 10px;
+}
+
+.adm-brand h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    margin: 0;
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
+
+.adm-brand p {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--db-text-dark);
+    opacity: 0.4;
+    margin: 5px 0 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.adm-menu-wrapper {
+    background: #fff;
+    padding: 10px;
+    border-radius: 25px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+    margin-bottom: 30px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    border: 2px solid #F3F4F6;
+}
+
+.adm-menu-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.adm-menu-item {
+    padding: 12px 20px;
+    border-radius: 18px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    white-space: nowrap;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.adm-menu-item i {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.5px;
+}
+
+.adm-menu-item:hover {
+    background: #F9FAFB;
+    transform: translateY(-1px);
+}
+
+.adm-menu-item.active {
+    background: var(--db-purple);
+    color: #fff !important;
+    box-shadow: 0 8px 15px rgba(108, 136, 224, 0.2);
+}
+
+.adm-menu-item.logout {
+    color: #ef4444;
+    background: #FFF5F5;
+}
+
+.adm-menu-item.logout:hover {
+    background: #FEE2E2;
+}
+
+@media screen and (max-width: 600px) {
+    .adm-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .adm-brand h1 {
+        font-size: 22px;
+    }
+}
+
+.adm-page-container {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 20px 20px 100px;
+    position: relative;
+    z-index: 1;
+}
+
+@media screen and (max-width: 1150px) {
+    .adm-page-container {
+        max-width: 100%;
+    }
+}
+/* Admin Dashboard Styles */
+.adm-dash-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.adm-dash-card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 30px;
+    border: 2px solid #F3F4F6;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: all 0.2s;
+}
+
+.adm-dash-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+}
+
+.adm-dash-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.adm-dash-icon i {
+    width: 24px;
+    height: 24px;
+}
+
+.adm-dash-info h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--db-text-dark);
+    opacity: 0.5;
+    margin: 0 0 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.adm-dash-info .value {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    line-height: 1;
+}
+
+.adm-dash-stat {
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.adm-dash-stat.up { color: #10B981; }
+.adm-dash-stat.pending { color: #f59e0b; }
+
+/* Colors for cards */
+.adm-dash-card.users .adm-dash-icon { background: rgba(108, 136, 224, 0.1); color: var(--db-purple); }
+.adm-dash-card.gardening .adm-dash-icon { background: rgba(185, 251, 192, 0.1); color: #10B981; }
+.adm-dash-card.missions .adm-dash-icon { background: rgba(255, 214, 165, 0.1); color: #f59e0b; }
+.adm-dash-card.coming .adm-dash-icon { background: rgba(243, 244, 246, 1); color: #9CA3AF; }
+
+@media screen and (max-width: 600px) {
+    .adm-dash-grid {
+        grid-template-columns: 1fr;
+    }
 }
