@@ -47,7 +47,7 @@
                 <i data-lucide="sprout"></i>
                 <span>Home Gardening</span>
             </a>
-            <a href="#" class="db-menu-item mission">
+            <a href="{{ route('volunteer.index') }}" class="db-menu-item mission">
                 <i data-lucide="award"></i>
                 <span>Volunteer Mission</span>
             </a>

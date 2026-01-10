@@ -42,6 +42,10 @@ Route::middleware(['auth', 'approved'])->group(function () {
     // Gardening Progress
     Route::post('/gardening/{id}/progress', [GardeningController::class, 'storeProgress'])->name('gardening.progress.store');
     Route::delete('/gardening/progress/{id}', [GardeningController::class, 'destroyProgress'])->name('gardening.progress.destroy');
+
+    // Volunteer Mission
+    Route::get('/volunteer-mission', [\App\Http\Controllers\VolunteerMissionController::class, 'index'])->name('volunteer.index');
+    Route::post('/volunteer-mission/toggle', [\App\Http\Controllers\VolunteerMissionController::class, 'toggle'])->name('volunteer.toggle');
 });
 
 // Admin Only Routes

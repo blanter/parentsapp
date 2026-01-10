@@ -2117,3 +2117,145 @@ a.btn.btn-warning {
     font-size: 11px;
     font-weight: 800;
 }
+/* Volunteer Mission Styles */
+.vm-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 30px 20px 100px;
+    position: relative;
+    z-index: 1;
+}
+
+.vm-header h1 {
+    font-size: 34px;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.1;
+    color: var(--db-text-dark);
+}
+
+.vm-subtitle {
+    font-size: 14px;
+    color: var(--db-text-dark);
+    opacity: 0.6;
+    margin: 10px 0 30px;
+    font-weight: 600;
+}
+
+.vm-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.vm-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+    border: 2px solid #F3F4F6;
+    transition: transform 0.2s;
+}
+
+.vm-card:hover {
+    transform: translateY(-2px);
+}
+
+.vm-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    gap: 12px;
+}
+
+.vm-mission-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    line-height: 1.3;
+}
+
+.vm-mission-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(108, 136, 224, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.vm-mission-icon i {
+    width: 18px;
+    height: 18px;
+    color: var(--db-purple);
+}
+
+.vm-days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
+.vm-day-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.vm-day-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--db-text-dark);
+    opacity: 0.4;
+}
+
+.vm-checkbox {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid #E5E7EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #F9FAFB;
+}
+
+.vm-checkbox i {
+    width: 18px;
+    height: 18px;
+    color: #fff;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.2s;
+}
+
+.vm-checkbox.checked {
+    background: var(--db-secondary);
+    border-color: var(--db-secondary);
+}
+
+.vm-checkbox.checked i {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Card Variants Colors */
+.vm-card:nth-child(4n+1) .vm-checkbox.checked { background: #FF9F9F; border-color: #FF9F9F; }
+.vm-card:nth-child(4n+2) .vm-checkbox.checked { background: #A0C4FF; border-color: #A0C4FF; }
+.vm-card:nth-child(4n+3) .vm-checkbox.checked { background: #B9FBC0; border-color: #B9FBC0; }
+.vm-card:nth-child(4n+4) .vm-checkbox.checked { background: #FFD6A5; border-color: #FFD6A5; }
+
+.vm-card:nth-child(4n+1) .vm-mission-icon { background: rgba(255, 159, 159, 0.1); }
+.vm-card:nth-child(4n+1) .vm-mission-icon i { color: #FF9F9F; }
+.vm-card:nth-child(4n+2) .vm-mission-icon { background: rgba(160, 196, 255, 0.1); }
+.vm-card:nth-child(4n+2) .vm-mission-icon i { color: #A0C4FF; }
+.vm-card:nth-child(4n+3) .vm-mission-icon { background: rgba(185, 251, 192, 0.1); }
+.vm-card:nth-child(4n+3) .vm-mission-icon i { color: #B9FBC0; }
+.vm-card:nth-child(4n+4) .vm-mission-icon { background: rgba(255, 214, 165, 0.1); }
+.vm-card:nth-child(4n+4) .vm-mission-icon i { color: #FFD6A5; }

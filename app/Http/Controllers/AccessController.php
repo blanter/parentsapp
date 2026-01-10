@@ -10,7 +10,7 @@ class AccessController extends Controller
     // INDEX ACCESS
     public function index()
     {
-        return view('access');
+        return view('admin.access');
     }
 
     // CHECK ACCESS
@@ -21,8 +21,8 @@ class AccessController extends Controller
         ]);
 
         $pin = AccessPin::where('pin', $request->pin)
-                        ->where('is_active', true)
-                        ->first();
+            ->where('is_active', true)
+            ->first();
 
         if (!$pin) {
             return redirect()->route('access.index')->with('error', 'PIN tidak valid');
