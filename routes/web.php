@@ -22,8 +22,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Approved Users Dashboard
 Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard'); // We'll create this simple view
+        return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/profile', function () {
+        return view('profile');
+    })->name('profile');
 });
 
 // Admin Only Routes
