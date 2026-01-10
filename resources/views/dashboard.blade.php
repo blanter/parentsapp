@@ -24,7 +24,8 @@
             </div>
             <a href="{{ route('profile') }}" class="db-avatar-section">
                 @if(Auth::user()->avatar)
-                    <img src="{{ asset('avatars/' . Auth::user()->avatar) }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                    <img src="{{ asset('avatars/' . Auth::user()->avatar) }}" alt="Avatar"
+                        style="width: 100%; height: 100%; object-fit: cover;">
                 @else
                     <i data-lucide="user"></i>
                 @endif
@@ -51,7 +52,7 @@
                 <i data-lucide="award"></i>
                 <span>Volunteer Mission</span>
             </a>
-            <a href="{{ route('coming-soon') }}" class="db-menu-item children-tracker">
+            <a href="{{ route('children-tracker.index') }}" class="db-menu-item children-tracker">
                 <i data-lucide="activity"></i>
                 <span>Lifebook Children Tracker</span>
             </a>

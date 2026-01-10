@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GardeningController;
 use App\Http\Controllers\AdminSettingController;
+use App\Http\Controllers\ChildrenTrackerController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -49,6 +50,9 @@ Route::middleware(['auth', 'approved'])->group(function () {
     // Gardening Progress
     Route::post('/gardening/{id}/progress', [GardeningController::class, 'storeProgress'])->name('gardening.progress.store');
     Route::delete('/gardening/progress/{id}', [GardeningController::class, 'destroyProgress'])->name('gardening.progress.destroy');
+
+    // Children Tracker
+    Route::get('/children-tracker', [ChildrenTrackerController::class, 'index'])->name('children-tracker.index');
 
     // Volunteer Mission
     Route::get('/volunteer-mission', [\App\Http\Controllers\VolunteerMissionController::class, 'index'])->name('volunteer.index');
