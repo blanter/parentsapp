@@ -31,13 +31,26 @@
         <div class="profile-card">
             <div class="profile-header-info">
                 <div class="profile-avatar-large">
-                    <i data-lucide="user"></i>
+                    @if(Auth::user()->avatar)
+                        <img src="{{ asset('avatars/' . Auth::user()->avatar) }}" alt="Avatar"
+                            style="width: 100%; height: 100%; object-fit: cover;">
+                    @else
+                        <i data-lucide="user"></i>
+                    @endif
                 </div>
                 <h2 class="profile-name">{{ Auth::user()->name }}</h2>
                 <p class="profile-email">{{ Auth::user()->email }}</p>
             </div>
 
             <div class="profile-info-grid">
+                <a href="{{ route('profile.settings') }}" class="profile-info-item"
+                    style="text-decoration: none; border-color: var(--db-purple); background: rgba(108, 136, 224, 0.05);">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <i data-lucide="settings" style="color: var(--db-purple); width: 20px; height: 20px;"></i>
+                        <span class="profile-info-label" style="opacity: 1; font-size: 14px;">Pengaturan Akun</span>
+                    </div>
+                    <i data-lucide="chevron-right" style="color: var(--db-purple); width: 20px; height: 20px;"></i>
+                </a>
                 <div class="profile-info-item">
                     <span class="profile-info-label">Status Akun</span>
                     <span class="profile-info-value" style="color: var(--db-secondary);">Terverifikasi</span>

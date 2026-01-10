@@ -23,7 +23,11 @@
                 <h1>Lifebook<br>Parents</h1>
             </div>
             <a href="{{ route('profile') }}" class="db-avatar-section">
-                <i data-lucide="user"></i>
+                @if(Auth::user()->avatar)
+                    <img src="{{ asset('avatars/' . Auth::user()->avatar) }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                @else
+                    <i data-lucide="user"></i>
+                @endif
             </a>
         </div>
 
