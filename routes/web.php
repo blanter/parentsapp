@@ -5,6 +5,7 @@ use App\Http\Controllers\AccessController;
 use App\Http\Controllers\ParentScoreController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\GardeningController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -30,6 +31,16 @@ Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+
+    // Gardening
+    Route::get('/gardening', [GardeningController::class, 'index'])->name('gardening.index');
+    Route::get('/gardening/{id}', [GardeningController::class, 'show'])->name('gardening.show');
+    Route::post('/gardening', [GardeningController::class, 'store'])->name('gardening.store');
+    Route::delete('/gardening/{id}', [GardeningController::class, 'destroy'])->name('gardening.destroy');
+
+    // Gardening Progress
+    Route::post('/gardening/{id}/progress', [GardeningController::class, 'storeProgress'])->name('gardening.progress.store');
+    Route::delete('/gardening/progress/{id}', [GardeningController::class, 'destroyProgress'])->name('gardening.progress.destroy');
 });
 
 // Admin Only Routes

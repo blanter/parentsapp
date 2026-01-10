@@ -1718,3 +1718,402 @@ a.btn.btn-warning {
     align-items: center;
     justify-content: center;
 }
+
+/* Gardening Page Styles */
+.gn-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 30px 20px 100px;
+    position: relative;
+    z-index: 1;
+}
+
+.gn-header h1 {
+    font-size: 34px;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1;
+    color: var(--db-text-dark);
+}
+
+.gn-subtitle {
+    font-size: 14px;
+    color: var(--db-text-dark);
+    opacity: 0.6;
+    margin: 10px 0 30px;
+    font-weight: 600;
+}
+
+.gn-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.gn-item {
+    background: #F9FAFB;
+    border: 2px solid #E5E7EB;
+    border-radius: 25px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.2s;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+}
+
+.gn-item:hover {
+    border-color: var(--db-purple);
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.gn-item-img {
+    width: 65px;
+    height: 65px;
+    background: #E5E7EB;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.gn-item-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gn-item-img i {
+    font-size: 30px;
+    color: var(--db-text-dark);
+    opacity: 0.3;
+}
+
+.gn-item-info {
+    flex: 1;
+}
+
+.gn-item-method {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--db-text-dark);
+    opacity: 0.6;
+}
+
+.gn-item-name {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--db-text-dark);
+    margin-top: 2px;
+}
+
+.gn-add-btn {
+    width: 100%;
+    padding: 20px;
+    background: #fff;
+    border: 2px solid #E5E7EB;
+    border-radius: 25px;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--db-text-dark);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.gn-add-btn:hover {
+    border-color: var(--db-purple);
+    color: var(--db-purple);
+}
+
+/* Modal for Add Plant */
+.gn-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    align-items: flex-end;
+}
+
+.gn-modal-content {
+    background: #fff;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    border-radius: 35px 35px 0 0;
+    padding: 30px;
+    box-sizing: border-box;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.gn-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.gn-modal-title {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--db-text-dark);
+}
+
+.gn-close-modal {
+    background: #F3F4F6;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.gn-form-group {
+    margin-bottom: 20px;
+}
+
+.gn-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--db-text-dark);
+}
+
+.gn-input,
+.gn-select {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 20px;
+    border: 2px solid #E5E7EB;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.gn-input:focus,
+.gn-select:focus {
+    outline: none;
+    border-color: var(--db-purple);
+}
+
+.gn-method-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+
+.gn-method-opt {
+    border: 2px solid #E5E7EB;
+    border-radius: 15px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 700;
+    transition: all 0.2s;
+}
+
+.gn-method-opt.active {
+    background: var(--db-purple);
+    border-color: var(--db-purple);
+    color: #fff;
+}
+
+.gn-method-opt input {
+    display: none;
+}
+
+/* Icon Selector Styles */
+.gn-icon-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.gn-icon-opt {
+    border: 2px solid #E5E7EB;
+    border-radius: 15px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fff;
+}
+
+.gn-icon-opt i {
+    width: 24px;
+    height: 24px;
+    color: var(--db-text-dark);
+    opacity: 0.5;
+}
+
+.gn-icon-opt.active {
+    background: rgba(54, 179, 126, 0.1);
+    border-color: var(--db-secondary);
+}
+
+.gn-icon-opt.active i {
+    color: var(--db-secondary);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.gn-icon-opt input {
+    display: none;
+}
+
+/* Gardening Calendar Styles */
+.gn-cal-container {
+    background: #fff;
+    border-radius: 30px;
+    padding: 20px;
+    border: 2px solid #F3F4F6;
+    margin-bottom: 25px;
+}
+
+.gn-cal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.gn-cal-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+}
+
+.gn-cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.gn-cal-day-label {
+    text-align: center;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    opacity: 0.3;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+}
+
+.gn-cal-cell {
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.gn-cal-cell:hover {
+    background: #F9FAFB;
+    border-color: #E5E7EB;
+}
+
+.gn-cal-cell.today {
+    color: var(--db-purple);
+    font-weight: 900;
+    background: rgba(108, 136, 224, 0.1);
+}
+
+.gn-cal-cell.has-data {
+    background: var(--db-secondary);
+    color: #fff;
+    box-shadow: 0 4px 0px rgba(54, 179, 126, 0.3);
+}
+
+.gn-cal-cell.other-month {
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+/* Progress Detail Styles */
+.gn-progress-card {
+    background: #fff;
+    border-radius: 25px;
+    padding: 20px;
+    border: 2px solid #F3F4F6;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.gn-progress-img {
+    width: 100%;
+    border-radius: 20px;
+    max-height: 250px;
+    object-fit: cover;
+    border: 2px solid #F3F4F6;
+}
+
+.gn-progress-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--db-text-dark);
+}
+
+.gn-progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 2px solid #F9FAFB;
+}
+
+.gn-progress-date {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--db-text-dark);
+    opacity: 0.5;
+}
+
+.gn-progress-score {
+    background: var(--db-primary);
+    color: var(--db-text-dark);
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 800;
+}

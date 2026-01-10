@@ -43,7 +43,7 @@
         </a>
 
         <div class="db-menu-container">
-            <a href="#" class="db-menu-item gardening">
+            <a href="{{ route('gardening.index') }}" class="db-menu-item gardening">
                 <i data-lucide="sprout"></i>
                 <span>Home Gardening</span>
             </a>
