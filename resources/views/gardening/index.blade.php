@@ -83,7 +83,7 @@
 
         <div
             style="text-align: center; margin-top: 40px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark); margin-bottom: 100px;">
-            Version 1.0.4 • Parents App
+            Version {{ $appVersion }} • Parents App
         </div>
     </div>
 

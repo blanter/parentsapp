@@ -21,12 +21,16 @@
         <!-- Header -->
         <div class="db-header" style="margin-bottom: 5px;">
             <div class="db-brand-section">
-                <h1 style="font-size: 32px; font-weight: 800; line-height: 1.1;">Hi {{ explode(' ', Auth::user()->name)[0] }}</h1>
-                <p style="font-size: 14px; opacity: 0.6; font-weight: 600; margin-top: 5px;">Apa rencana kamu hari ini?</p>
+                <h1 style="font-size: 32px; font-weight: 800; line-height: 1.1;">Hi
+                    {{ explode(' ', Auth::user()->name)[0] }}</h1>
+                <p style="font-size: 14px; opacity: 0.6; font-weight: 600; margin-top: 5px;">Apa rencana kamu hari ini?
+                </p>
             </div>
-            <a href="{{ route('profile') }}" class="db-avatar-section" style="width: 60px; height: 60px; background: #E5E7EB; border: none;">
+            <a href="{{ route('profile') }}" class="db-avatar-section"
+                style="width: 60px; height: 60px; background: #E5E7EB; border: none;">
                 @if(Auth::user()->avatar)
-                    <img src="{{ asset('avatars/' . Auth::user()->avatar) }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                    <img src="{{ asset('avatars/' . Auth::user()->avatar) }}" alt="Avatar"
+                        style="width: 100%; height: 100%; object-fit: cover;">
                 @else
                     <i data-lucide="user" style="width: 30px; height: 30px; opacity: 0.2;"></i>
                 @endif
@@ -96,7 +100,7 @@
 
         <div
             style="text-align: center; margin-top: 40px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark); margin-bottom: 100px;">
-            Version 1.0.4 • Parents App
+            Version {{ $appVersion }} • Parents App
         </div>
     </div>
 

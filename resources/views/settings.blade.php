@@ -32,7 +32,8 @@
             @if(session('success'))
                 <div class="msg success"
                     style="background: #F0FFF4; color: #2D8A4E; border: 2px solid #E0FFE8; padding: 15px; border-radius: 15px; margin-bottom: 20px; font-size: 14px; font-weight: 600;">
-                    {{ session('success') }}</div>
+                    {{ session('success') }}
+                </div>
             @endif
             @if($errors->any())
                 <div class="msg error"
@@ -124,7 +125,7 @@
 
         <div
             style="text-align: center; margin-top: 30px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark); margin-bottom: 100px;">
-            Version 1.0.4 • Parents App
+            Version {{ $appVersion }} • Parents App
         </div>
     </div>
 

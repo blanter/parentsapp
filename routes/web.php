@@ -6,6 +6,7 @@ use App\Http\Controllers\ParentScoreController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GardeningController;
+use App\Http\Controllers\AdminSettingController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -59,6 +60,10 @@ Route::middleware(['auth', 'approved', 'admin'])->group(function () {
     // User Management
     Route::get('/manage-users', [AuthController::class, 'listUsers'])->name('admin.users');
     Route::patch('/manage-users/{id}/approve', [AuthController::class, 'approveUser'])->name('admin.users.approve');
+
+    // System Settings
+    Route::get('/admin/settings', [AdminSettingController::class, 'index'])->name('admin.settings');
+    Route::post('/admin/settings', [AdminSettingController::class, 'update'])->name('admin.settings.update');
 });
 
 // Public No PIN / Guest

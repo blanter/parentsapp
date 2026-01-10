@@ -51,6 +51,17 @@
                     </div>
                     <i data-lucide="chevron-right" style="color: var(--db-purple); width: 20px; height: 20px;"></i>
                 </a>
+                
+                @if(Auth::user()->role === 'admin')
+                <a href="{{ route('admin.settings') }}" class="profile-info-item"
+                    style="text-decoration: none; border-color: var(--db-accent); background: rgba(255, 107, 74, 0.05);">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <i data-lucide="shield" style="color: var(--db-accent); width: 20px; height: 20px;"></i>
+                        <span class="profile-info-label" style="opacity: 1; font-size: 14px;">Sistem Settings</span>
+                    </div>
+                    <i data-lucide="chevron-right" style="color: var(--db-accent); width: 20px; height: 20px;"></i>
+                </a>
+                @endif
                 <div class="profile-info-item">
                     <span class="profile-info-label">Status Akun</span>
                     <span class="profile-info-value" style="color: var(--db-secondary);">Terverifikasi</span>
@@ -86,8 +97,8 @@
         </form>
 
         <div
-            style="text-align: center; margin-top: 30px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark);">
-            Version 1.0.4 • Parents App
+            style="text-align: center; margin-top: 30px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark); margin-bottom: 100px;">
+            Version {{ $appVersion }} • Parents App
         </div>
     </div>
 
