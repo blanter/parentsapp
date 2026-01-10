@@ -28,6 +28,10 @@ Route::middleware(['auth', 'approved'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
+    Route::get('/coming-soon', function () {
+        return view('coming-soon');
+    })->name('coming-soon');
+
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');

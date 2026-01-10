@@ -2259,3 +2259,65 @@ a.btn.btn-warning {
 .vm-card:nth-child(4n+3) .vm-mission-icon i { color: #B9FBC0; }
 .vm-card:nth-child(4n+4) .vm-mission-icon { background: rgba(255, 214, 165, 0.1); }
 .vm-card:nth-child(4n+4) .vm-mission-icon i { color: #FFD6A5; }
+
+/* Coming Soon Page Styles */
+.cs-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+}
+
+.cs-box {
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: 40px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+    border: 2px solid #F3F4F6;
+    width: 100%;
+}
+
+.cs-icon-wrapper {
+    width: 100px;
+    height: 100px;
+    background: rgba(108, 136, 224, 0.1);
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 30px;
+}
+
+.cs-icon-wrapper i {
+    width: 50px;
+    height: 50px;
+    color: var(--db-purple);
+}
+
+.cs-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+.cs-subtitle {
+    font-size: 15px;
+    color: var(--db-text-dark);
+    opacity: 0.6;
+    line-height: 1.6;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.cs-footer {
+    text-align: center;
+    margin-top: 40px;
+    opacity: 0.3;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--db-text-dark);
+}
