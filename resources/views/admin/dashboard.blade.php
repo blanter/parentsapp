@@ -59,18 +59,21 @@
         </div>
 
         <!-- Coming Soon Card -->
-        <div class="adm-dash-card coming">
-            <div class="adm-dash-icon">
-                <i data-lucide="activity"></i>
+        <a href="{{ route('children-tracker.index') }}" style="text-decoration: none; color: inherit;">
+            <div class="adm-dash-card coming">
+                <div class="adm-dash-icon">
+                    <i data-lucide="activity"></i>
+                </div>
+                <div class="adm-dash-info">
+                    <h3>Children Tracker</h3>
+                    <div class="value">{{ $totalJournals }}</div>
+                </div>
+                <div class="adm-dash-stat up">
+                    <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
+                    <span>+{{ $recentJournals }} new this week</span>
+                </div>
             </div>
-            <div class="adm-dash-info">
-                <h3>Coming Soon</h3>
-                <div class="value">-</div>
-            </div>
-            <div class="adm-dash-stat">
-                <span>Children tracker monitor</span>
-            </div>
-        </div>
+        </a>
     </div>
 
     <div class="db-menu-container"
@@ -79,11 +82,11 @@
             <i data-lucide="sprout"></i>
             <span>Home Gardening</span>
         </a>
-        <a href="{{ route('volunteer.index') }}" class="db-menu-item mission">
+        <a href="{{ route('admin.volunteer.index') }}" class="db-menu-item mission">
             <i data-lucide="award"></i>
             <span>Volunteer Mission</span>
         </a>
-        <a href="{{ route('coming-soon') }}" class="db-menu-item children-tracker">
+        <a href="{{ route('children-tracker.index') }}" class="db-menu-item children-tracker">
             <i data-lucide="activity"></i>
             <span>Lifebook Children Tracker</span>
         </a>

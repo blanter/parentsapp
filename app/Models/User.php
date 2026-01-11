@@ -53,4 +53,9 @@ class User extends Authenticatable
         $database = $this->getConnection()->getDatabaseName();
         return $this->belongsToMany(Student::class, "$database.parent_student", 'user_id', 'student_id');
     }
+
+    public function volunteerCompletions()
+    {
+        return $this->hasMany(VolunteerMissionCompletion::class);
+    }
 }

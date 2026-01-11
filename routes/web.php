@@ -86,6 +86,12 @@ Route::middleware(['auth', 'approved', 'admin'])->group(function () {
     Route::get('/admin/gardening', [\App\Http\Controllers\AdminGardeningController::class, 'index'])->name('admin.gardening.index');
     Route::post('/admin/gardening/update-score', [\App\Http\Controllers\AdminGardeningController::class, 'updateScore'])->name('admin.gardening.update-score');
 
+    // Volunteer Mission Admin
+    Route::get('/admin/volunteer-data', [\App\Http\Controllers\AdminVolunteerController::class, 'index'])->name('admin.volunteer.index');
+
+    // Children Tracker Admin
+    Route::get('/admin/children-tracker', [\App\Http\Controllers\AdminChildrenTrackerController::class, 'index'])->name('children-tracker.index');
+
     // System Settings
     Route::get('/admin/settings', [AdminSettingController::class, 'index'])->name('admin.settings');
     Route::post('/admin/settings', [AdminSettingController::class, 'update'])->name('admin.settings.update');
