@@ -61,7 +61,7 @@
             </div>
         @endif
 
-        @if($isAdmin || $isLifebookTeacher)
+        @if($isAdmin || $isTeacher)
             <h2 class="ct-section-title">Laporan Jurnal Masuk</h2>
             <div class="ct-list">
                 @forelse($submissions as $sub)

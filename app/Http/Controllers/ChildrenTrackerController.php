@@ -27,27 +27,33 @@ class ChildrenTrackerController extends Controller
         $isLifebookTeacher = $isTeacher && ($user->id == $lifebookTeacherId);
 
         $submissions = [];
-        if ($isAdmin || $isLifebookTeacher) {
+        if ($isAdmin || $isTeacher) {
             $mainDb = config('database.connections.mysql.database');
             $userDb = config('database.connections.lifebook_users.database');
 
-            $submissions = DB::table($mainDb . '.parent_journals as j')
+            $query = DB::table($mainDb . '.parent_journals as j')
                 ->where('j.bulan', $bulan)
                 ->where('j.tahun', $tahun)
                 ->join($mainDb . '.users as p', 'j.user_id', '=', 'p.id')
                 ->join($userDb . '.users as s', 'j.student_id', '=', 's.id')
                 ->leftJoin($mainDb . '.teacher_student as ts', 'j.student_id', '=', 'ts.student_id')
-                ->leftJoin($userDb . '.users as t', 'ts.teacher_id', '=', 't.id')
-                ->select(
-                    'j.id',
-                    'j.student_id',
-                    'p.name as parent_name',
-                    's.name as student_name',
-                    't.name as teacher_wali',
-                    'j.parent_filled_at',
-                    'j.teacher_reply',
-                    'j.lifebook_teacher_reply'
-                )
+                ->leftJoin($userDb . '.users as t', 'ts.teacher_id', '=', 't.id');
+
+            // Regular teacher only sees their assigned students' journals
+            if ($isTeacher && !$isLifebookTeacher && !$isAdmin) {
+                $query->where('ts.teacher_id', $user->id);
+            }
+
+            $submissions = $query->select(
+                'j.id',
+                'j.student_id',
+                'p.name as parent_name',
+                's.name as student_name',
+                't.name as teacher_wali',
+                'j.parent_filled_at',
+                'j.teacher_reply',
+                'j.lifebook_teacher_reply'
+            )
                 ->orderBy('j.id')
                 ->get()
                 ->groupBy('id')
@@ -100,7 +106,7 @@ class ChildrenTrackerController extends Controller
             }
         }
 
-        $appVersion = '1.2.0';
+        $appVersion = \App\Models\WebSetting::where('key', 'app_version')->value('value') ?? '1.2.0';
 
         return view('children-tracker.index', compact('aspects', 'selectedMonthName', 'selectedDate', 'isTeacher', 'isAdmin', 'isLifebookTeacher', 'submissions', 'appVersion'));
     }
