@@ -26,7 +26,7 @@
             </div>
 
             <h1 class="auth-title">Welcome Back!</h1>
-            <p class="auth-subtitle">Masuk untuk melihat perkembangan si kecil</p>
+            <p class="auth-subtitle">Masuk untuk mengelola misi dan jurnal.</p>
 
             <!-- Teacher Login Notification -->
             <div
