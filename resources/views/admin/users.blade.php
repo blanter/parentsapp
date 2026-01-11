@@ -1,248 +1,227 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{asset('/file/lifebookicon.png')}}" rel='icon' type='image/x-icon' />
-    <title>Manage Users - Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link href="{{asset('/file/style.css')}}?v=6" rel="stylesheet" />
-    <style>
-        :root {
-            --accent: #6366f1;
-            --muted: #6b7280;
-            --bg: #ffffff;
-            --box-bg: #fff;
-            --box-border: #e5e7eb;
-            --box-radius: 12px;
-            --success: #10b981;
-            --danger: #ef4444;
-            font-family: Poppins, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-        }
+@section('title', 'Manage Users')
+@section('header_title', 'Admin Panel')
+@section('header_subtitle', 'User Management')
 
-        body,
-        html {
-            height: 100%;
-            margin: 0;
-            color: #111827;
-        }
+@section('styles')
+<style>
+    /* Responsive Table Refined */
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 16px 16px 0 0;
+    }
 
-        .page {
-            padding: 40px 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        text-align: left;
+        table-layout: auto;
+    }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-        }
+    th {
+        background: #f8fafc;
+        padding: 14px 16px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--muted);
+        border-bottom: 1px solid var(--box-border);
+        letter-spacing: 0.05em;
+        white-space: nowrap;
+    }
 
-        .title {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--accent);
-            margin: 0;
-        }
+    td {
+        padding: 16px;
+        font-size: 13px;
+        border-bottom: 1px solid var(--box-border);
+        vertical-align: middle;
+        color: #374151;
+    }
 
-        .back-link {
-            text-decoration: none;
-            color: var(--muted);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
+    .card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        border: 1px solid var(--box-border);
+        overflow: hidden;
+    }
 
-        .card {
-            background: var(--bg);
-            border-radius: 16px;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            overflow: hidden;
-        }
+    .status-badge {
+        padding: 4px 8px;
+        border-radius: 9999px;
+        font-size: 11px;
+        font-weight: 600;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
+    .status-approved {
+        background: #ecfdf5;
+        color: #059669;
+    }
 
-        th {
-            background: #f8fafc;
-            padding: 16px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: var(--muted);
-            border-bottom: 1px solid var(--box-border);
-        }
+    .status-blocked {
+        background: #ffe4e6;
+        color: #e11d48;
+    }
+</style>
+@endsection
 
-        td {
-            padding: 16px;
-            font-size: 14px;
-            border-bottom: 1px solid var(--box-border);
-        }
+@section('header_title', 'Admin Panel')
+@section('header_subtitle', 'User Management')
 
-        .status-badge {
-            padding: 4px 8px;
-            border-radius: 9999px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .status-approved {
-            background: #ecfdf5;
-            color: #059669;
-        }
-
-        .status-pending {
-            background: #fff7ed;
-            color: #c2410c;
-        }
-
-        .btn {
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: 0;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 12px;
-            transition: all 0.2s;
-            text-decoration: none;
-        }
-
-        .btn-approve {
-            background: var(--accent);
-            color: #fff;
-        }
-
-        .btn-approve:hover {
-            background: #4f46e5;
-        }
-
-        .msg {
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 16px;
-            font-size: 13px;
-        }
-
-        .msg-success {
-            background: #ecfdf5;
-            color: #059669;
-            border: 1px solid rgba(16, 185, 129, 0.08);
-        }
-    </style>
-</head>
-
-<body class="db-body">
-    <!-- Background Elements -->
-    <img src="{{ asset('/file/bee.png') }}" class="db-bg-pattern db-bee" alt="">
-    <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
-
-    <div class="adm-page-container">
-        <div class="adm-header">
-            <div class="adm-brand">
-                <h1>Admin Panel</h1>
-                <p>User Management</p>
-            </div>
-            <a href="{{ route('profile') }}" class="db-avatar-section" style="width: 50px; height: 50px;">
-                @if(Auth::user()->avatar)
-                    <img src="{{ asset('avatars/' . Auth::user()->avatar) }}" alt="Avatar"
-                        style="width: 100%; height: 100%; object-fit: cover;">
-                @else
-                    <i data-lucide="user"></i>
-                @endif
-            </a>
-        </div>
-
-        <div class="adm-menu-wrapper">
-            <a href="{{ route('admin.dashboard') }}"
-                class="adm-menu-item {{ Route::is('admin.dashboard') ? 'active' : '' }}">
-                <i data-lucide="layout-grid"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="{{ route('parents.index') }}"
-                class="adm-menu-item {{ Route::is('parents.index') || Route::is('score.edit') ? 'active' : '' }}">
-                <i data-lucide="layout-dashboard"></i>
-                <span>Parents Score</span>
-            </a>
-            <a href="{{ route('admin.users') }}" class="adm-menu-item {{ Route::is('admin.users') ? 'active' : '' }}">
-                <i data-lucide="users"></i>
-                <span>Manage Users</span>
-            </a>
-            <a href="{{ route('admin.settings') }}"
-                class="adm-menu-item {{ Route::is('admin.settings') ? 'active' : '' }}">
-                <i data-lucide="settings"></i>
-                <span>System Settings</span>
-            </a>
-        </div>
-
-        @if(session('success'))
-            <div class="msg msg-success" style="margin-bottom: 20px;">{{ session('success') }}</div>
-        @endif
-
-        <div class="card">
-            <table>
-                <thead>
+@section('content')
+<div class="card">
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Children</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($users as $user)
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <td style="font-weight: 500;">{{ $user->name }}</td>
+                        <td style="color: var(--muted);">{{ $user->email }}</td>
+                        <td style="min-width: 180px;">
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                @foreach($user->students as $student)
+                                    <span
+                                        style="font-size: 11px; background: rgba(0, 74, 173, 0.05); color: #004AAD; padding: 2px 8px; border-radius: 4px; font-weight: 600;">{{ $student->name }}</span>
+                                @endforeach
+                                @if($user->students->isEmpty())
+                                    <span style="font-size: 11px; color: var(--muted); font-style: italic;">No children linked</span>
+                                @endif
+                            </div>
+                        </td>
+                        <td>
+                            @if($user->is_approved)
+                                <span class="status-badge status-approved">Active</span>
+                            @else
+                                <span class="status-badge status-blocked">Blocked</span>
+                            @endif
+                        </td>
+                        <td>
+                            <div class="btn-group" style="white-space: nowrap;">
+                                <button onclick="openEditModal({{ json_encode($user->load('students')) }})" class="btn btn-edit">
+                                    <i data-lucide="edit-2" style="width: 14px; height: 14px;"></i> Edit
+                                </button>
+
+                                <form action="{{ route('admin.users.toggle', $user->id) }}" method="POST"
+                                    onsubmit="return confirm('Change user status?')" style="margin: 0;">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="btn {{ $user->is_approved ? 'btn-block' : 'btn-approve' }}">
+                                        @if($user->is_approved)
+                                            <i data-lucide="slash" style="width: 14px; height: 14px;"></i> Block
+                                        @else
+                                            <i data-lucide="check" style="width: 14px; height: 14px;"></i> Unblock
+                                        @endif
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach($users as $user)
-                        <tr>
-                            <td style="font-weight: 500;">{{ $user->name }}</td>
-                            <td style="color: var(--muted);">{{ $user->email }}</td>
-                            <td>
-                                @if($user->is_approved)
-                                    <span class="status-badge status-approved">Approved</span>
-                                @else
-                                    <span class="status-badge status-pending">Pending</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if(!$user->is_approved)
-                                    <form action="{{ route('admin.users.approve', $user->id) }}" method="POST">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="btn btn-approve">Approve</button>
-                                    </form>
-                                @else
-                                    <span style="color: var(--muted); font-size: 12px;">No actions</span>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-
-            @if($users->isEmpty())
-                <div style="text-align: center; color: var(--muted); padding: 32px;">No users found.</div>
-            @endif
-
-            <div style="padding: 20px;">
-                {{ $users->links('vendor.pagination.custom') }}
-            </div>
-        </div>
-
-        <div
-            style="text-align: center; margin-top: 50px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark); margin-bottom: 100px;">
-            Version {{ $appVersion }} • Parents App
-        </div>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        lucide.createIcons();
-    </script>
-</body>
+    @if($users->isEmpty())
+        <div style="text-align: center; color: var(--muted); padding: 32px;">No users found.</div>
+    @endif
 
-</html>
+    <div style="padding: 20px;">
+        {{ $users->links('vendor.pagination.custom') }}
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Edit User Account</h2>
+            <div class="close" onclick="closeEditModal()">
+                <i data-lucide="x"></i>
+            </div>
+        </div>
+        <form id="editForm" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="name" id="edit_name" class="form-control" placeholder="Enter full name" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" id="edit_email" class="form-control" placeholder="name@example.com" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Linked Children</label>
+                <select name="student_ids[]" id="edit_students" class="form-control select2" multiple="multiple">
+                    @foreach($students as $student)
+                        <option value="{{ $student->id }}">{{ $student->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Security</label>
+                <input type="password" name="password" class="form-control" placeholder="New password (optional)" autocomplete="new-password">
+                <small style="font-size: 10px; color: #9ca3af; display: block; mt: 4px;">Leave empty to keep current password</small>
+            </div>
+            <div class="modal-actions" style="margin-top: 30px; display: flex; gap: 12px;">
+                <button type="submit" class="auth-btn-primary" style="flex: 2; padding: 14px; margin: 0;">
+                    <i data-lucide="save"></i> Update User
+                </button>
+                <button type="button" onclick="closeEditModal()" class="btn btn-edit" style="flex: 1; padding: 14px; justify-content: center;">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: "Select children...",
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('#editModal')
+        });
+    });
+
+    function openEditModal(user) {
+        document.getElementById('edit_name').value = user.name;
+        document.getElementById('edit_email').value = user.email;
+
+        // Set selected students
+        let studentIds = user.students.map(s => s.id.toString());
+        $('#edit_students').val(studentIds).trigger('change');
+
+        document.getElementById('editForm').action = "/manage-users/" + user.id;
+        document.getElementById('editModal').style.display = "block";
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        let modal = document.getElementById('editModal');
+        if (event.target == modal) {
+            closeEditModal();
+        }
+    }
+</script>
+@endsection

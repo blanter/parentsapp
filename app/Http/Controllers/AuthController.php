@@ -105,14 +105,49 @@ class AuthController extends Controller
     public function listUsers()
     {
         $users = User::where('role', '!=', 'admin')->latest()->paginate(15);
-        return view('admin.users', compact('users'));
+        $students = \App\Models\Student::active()->orderBy('name')->get();
+        return view('admin.users', compact('users', 'students'));
     }
 
-    // Admin: Approve User
-    public function approveUser($id)
+    // Admin: Toggle User Status (Approve/Block)
+    public function toggleUserStatus($id)
     {
         $user = User::findOrFail($id);
-        $user->update(['is_approved' => true]);
-        return back()->with('success', 'User approved successfully.');
+        $user->is_approved = !$user->is_approved;
+        $user->save();
+
+        $status = $user->is_approved ? 'approved' : 'blocked';
+        return back()->with('success', "User $status successfully.");
+    }
+
+    // Admin: Update User
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8',
+            'student_ids' => 'sometimes|array',
+            'student_ids.*' => 'exists:lifebook_users.users,id'
+        ]);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        if ($request->has('student_ids')) {
+            $user->students()->sync($request->student_ids);
+        } else {
+            $user->students()->detach();
+        }
+
+        return back()->with('success', 'User updated successfully.');
     }
 }

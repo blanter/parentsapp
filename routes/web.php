@@ -75,7 +75,8 @@ Route::middleware(['auth', 'approved', 'admin'])->group(function () {
     Route::put('/edit-score/{id}', [ParentScoreController::class, 'updatescore'])->name('score.update');
     // User Management
     Route::get('/manage-users', [AuthController::class, 'listUsers'])->name('admin.users');
-    Route::patch('/manage-users/{id}/approve', [AuthController::class, 'approveUser'])->name('admin.users.approve');
+    Route::patch('/manage-users/{id}/toggle', [AuthController::class, 'toggleUserStatus'])->name('admin.users.toggle');
+    Route::put('/manage-users/{id}', [AuthController::class, 'updateUser'])->name('admin.users.update');
 
     // System Settings
     Route::get('/admin/settings', [AdminSettingController::class, 'index'])->name('admin.settings');
