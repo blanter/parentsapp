@@ -90,7 +90,7 @@ Route::middleware(['auth', 'approved', 'admin'])->group(function () {
     Route::get('/admin/volunteer-data', [\App\Http\Controllers\AdminVolunteerController::class, 'index'])->name('admin.volunteer.index');
 
     // Children Tracker Admin
-    Route::get('/admin/children-tracker', [\App\Http\Controllers\AdminChildrenTrackerController::class, 'index'])->name('children-tracker.index');
+    Route::get('/admin/children-tracker', [\App\Http\Controllers\AdminChildrenTrackerController::class, 'index'])->name('admin.children-tracker.index');
 
     // System Settings
     Route::get('/admin/settings', [AdminSettingController::class, 'index'])->name('admin.settings');

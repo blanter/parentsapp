@@ -59,7 +59,7 @@
         </div>
 
         <!-- Coming Soon Card -->
-        <a href="{{ route('children-tracker.index') }}" style="text-decoration: none; color: inherit;">
+        <a href="{{ route('admin.children-tracker.index') }}" style="text-decoration: none; color: inherit;">
             <div class="adm-dash-card coming">
                 <div class="adm-dash-icon">
                     <i data-lucide="activity"></i>
@@ -86,7 +86,7 @@
             <i data-lucide="award"></i>
             <span>Volunteer Mission</span>
         </a>
-        <a href="{{ route('children-tracker.index') }}" class="db-menu-item children-tracker">
+        <a href="{{ route('admin.children-tracker.index') }}" class="db-menu-item children-tracker">
             <i data-lucide="activity"></i>
             <span>Lifebook Children Tracker</span>
         </a>
