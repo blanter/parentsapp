@@ -19,8 +19,29 @@
 
     <div class="auth-container">
         <div class="auth-card">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <span
+                    style="background: var(--db-purple); color: #fff; padding: 5px 15px; border-radius: 99px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Akses
+                    Orang Tua / Admin</span>
+            </div>
+
             <h1 class="auth-title">Welcome Back!</h1>
             <p class="auth-subtitle">Masuk untuk melihat perkembangan si kecil</p>
+
+            <!-- Teacher Login Notification -->
+            <div
+                style="background: rgba(108, 136, 224, 0.08); border: 1px dashed var(--db-purple); padding: 12px; border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                <div
+                    style="background: var(--db-purple); width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0;">
+                    <i data-lucide="graduation-cap" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div style="font-size: 11px; font-weight: 600; color: var(--db-text-dark); flex-grow: 1;">
+                    Anda seorang guru?
+                    <a href="{{ route('teacher.login') }}"
+                        style="color: var(--db-purple); font-weight: 800; text-decoration: underline;">Masuk di Halaman
+                        Guru</a>
+                </div>
+            </div>
 
             <div class="auth-messages">
                 @if(session('error'))
@@ -53,12 +74,18 @@
 
                 <button type="submit" class="auth-btn-primary">
                     <i data-lucide="log-in"></i>
-                    <span>Masuk</span>
+                    <span>Masuk Dashboard</span>
                 </button>
             </form>
 
-            <div class="auth-footer">
-                Belum punya akun? <a href="{{ route('register') }}">Daftar Sekarang</a>
+            <div class="auth-footer" style="margin-top: 30px; padding-top: 20px; border-top: 2px dashed #F3F4F6;">
+                <p style="font-size: 13px; color: #6B7280; font-weight: 600; margin-bottom: 12px;">Belum memiliki akun
+                    orang tua?</p>
+                <a href="{{ route('register') }}" class="auth-btn-primary"
+                    style="background: #fff; color: var(--db-purple); border: 2px solid var(--db-purple); box-shadow: 0 6px 0px rgba(108, 136, 224, 0.2); text-decoration: none; width: auto; display: inline-flex; padding: 10px 25px;">
+                    <i data-lucide="user-plus" style="width: 18px; height: 18px;"></i>
+                    <span>Daftar Sekarang</span>
+                </a>
             </div>
         </div>
     </div>
