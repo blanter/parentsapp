@@ -13,6 +13,10 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
+Route::get('/download', function () {
+    return view('page.download');
+})->name('app.download');
+
 // Auth Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

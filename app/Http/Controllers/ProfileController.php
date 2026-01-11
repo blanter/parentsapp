@@ -12,7 +12,8 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        return view('profile');
+        $appVersion = "1.2.0";
+        return view('profile', compact('appVersion'));
     }
 
     public function settings()

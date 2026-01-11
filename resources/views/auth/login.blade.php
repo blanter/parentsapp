@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{asset('/file/lifebookicon.png')}}" rel='icon' type='image/x-icon' />
+    <link rel="manifest" href="{{ asset('/manifest.json') }}">
+    <meta name="theme-color" content="#FFD64B">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Parents App">
+    <link rel="apple-touch-icon" href="{{ asset('/file/lifebookicon.png') }}">
     <title>Login - Lifebook Parents</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
         rel="stylesheet">
@@ -86,6 +92,13 @@
                     <i data-lucide="user-plus" style="width: 18px; height: 18px;"></i>
                     <span>Daftar Sekarang</span>
                 </a>
+                
+                <div style="margin-top: 20px;">
+                    <a href="{{ route('app.download') }}" style="color: #6B7280; font-size: 11px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                        <i data-lucide="download" style="width: 12px; height: 12px;"></i>
+                        Cara Pasang Aplikasi di HP (PWA)
+                    </a>
+                </div>
             </div>
         </div>
     </div>

@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{asset('/file/lifebookicon.png')}}" rel='icon' type='image/x-icon' />
+    <link rel="manifest" href="{{ asset('/manifest.json') }}">
+    <meta name="theme-color" content="#FFD64B">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Parents App">
+    <link rel="apple-touch-icon" href="{{ asset('/file/lifebookicon.png') }}">
     <title>Profile - Lifebook Parents</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
         rel="stylesheet">
@@ -51,16 +57,16 @@
                     </div>
                     <i data-lucide="chevron-right" style="color: var(--db-purple); width: 20px; height: 20px;"></i>
                 </a>
-                
+
                 @if(Auth::user()->role === 'admin')
-                <a href="{{ route('admin.settings') }}" class="profile-info-item"
-                    style="text-decoration: none; border-color: var(--db-accent); background: rgba(255, 107, 74, 0.05);">
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <i data-lucide="shield" style="color: var(--db-accent); width: 20px; height: 20px;"></i>
-                        <span class="profile-info-label" style="opacity: 1; font-size: 14px;">Sistem Settings</span>
-                    </div>
-                    <i data-lucide="chevron-right" style="color: var(--db-accent); width: 20px; height: 20px;"></i>
-                </a>
+                    <a href="{{ route('admin.settings') }}" class="profile-info-item"
+                        style="text-decoration: none; border-color: var(--db-accent); background: rgba(255, 107, 74, 0.05);">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <i data-lucide="shield" style="color: var(--db-accent); width: 20px; height: 20px;"></i>
+                            <span class="profile-info-label" style="opacity: 1; font-size: 14px;">Sistem Settings</span>
+                        </div>
+                        <i data-lucide="chevron-right" style="color: var(--db-accent); width: 20px; height: 20px;"></i>
+                    </a>
                 @endif
                 <div class="profile-info-item">
                     <span class="profile-info-label">Status Akun</span>
@@ -87,6 +93,20 @@
                 <div class="profile-stat-label">Peringkat</div>
             </div>
         </div>
+
+        <!-- Premium PWA Download Banner -->
+        <a href="{{ route('app.download') }}" class="pwa-download-banner">
+            <div class="pwa-download-icon">
+                <i data-lucide="download-cloud" style="width: 32px; height: 32px;"></i>
+            </div>
+            <div class="pwa-download-text">
+                <h4>Pasang Aplikasi HP</h4>
+                <p>Klik untuk panduan instalasi (PWA)</p>
+            </div>
+            <div class="pwa-download-arrow">
+                <i data-lucide="chevron-right"></i>
+            </div>
+        </a>
 
         <form action="{{ route('logout') }}" method="POST">
             @csrf
