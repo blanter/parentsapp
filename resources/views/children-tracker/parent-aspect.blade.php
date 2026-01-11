@@ -18,6 +18,23 @@
     <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
 
     <div class="db-container pa-container">
+        <!-- Success Alert Popup -->
+        <div id="successPopup" class="pa-popup-overlay" style="display: none;">
+            <div class="pa-popup-card">
+                <div class="pa-popup-icon">
+                    <i data-lucide="check-circle-2"></i>
+                </div>
+                <h3 class="pa-popup-title">Berhasil Disimpan!</h3>
+                <p class="pa-popup-message">
+                    @if($isTeacher)
+                        Data respon Anda telah aman disimpan ke sistem. Tetap semangat membimbing murid!
+                    @else
+                        Data jurnal Anda telah aman disimpan ke sistem. Terima kasih Ayah / Bunda!
+                    @endif
+                </p>
+                <button class="pa-popup-btn" onclick="closePopup()">Siap, Terima Kasih</button>
+            </div>
+        </div>
         <div class="db-header">
             <div class="db-brand-section">
                 <h1 style="font-size: 28px;">Aspek<br>Orang Tua</h1>
@@ -52,9 +69,32 @@
             </div>
         </div>
 
-        @php
-            $isLifebookTeacher = $isTeacher && $activeLifebookTeacher && (Auth::guard('teacher')->id() == $activeLifebookTeacher->id);
-        @endphp
+        @if($isTeacher || (Auth::check() && Auth::user()->role === 'admin'))
+            <div style="background: white; border-radius: 20px; padding: 15px 20px; margin-bottom: 25px; border: 2px solid #F3F4F6;">
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 32px; height: 32px; background: rgba(108, 136, 224, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--db-purple);">
+                            <i data-lucide="users" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <div>
+                            <p style="font-size: 10px; font-weight: 700; opacity: 0.5; text-transform: uppercase;">Orang Tua</p>
+                            <p style="font-size: 14px; font-weight: 800; color: var(--db-text-dark);">{{ $parentName }}</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 32px; height: 32px; background: rgba(54, 179, 126, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--db-secondary);">
+                            <i data-lucide="user-check" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <div>
+                            <p style="font-size: 10px; font-weight: 700; opacity: 0.5; text-transform: uppercase;">Guru Wali</p>
+                            <p style="font-size: 14px; font-weight: 800; color: var(--db-text-dark);">{{ $teacherWali }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+
 
         <!-- Parent Section -->
         <div class="pa-form-section">
@@ -66,7 +106,7 @@
                 <textarea class="pa-textarea" id="pendekatan" {{ $isTeacher ? 'readonly' : '' }}
                     placeholder="Tulis jawaban ayah / bunda disini...">{{ $journal->pendekatan ?? '' }}</textarea>
                 @if(!$isTeacher)
-                    <button class="pa-save-btn" onclick="saveField('pendekatan')">Simpan</button>
+                    <button class="pa-save-btn" onclick="saveField('pendekatan', event)">Simpan</button>
                 @endif
             </div>
         </div>
@@ -80,7 +120,7 @@
                 <textarea class="pa-textarea" id="interaksi" {{ $isTeacher ? 'readonly' : '' }}
                     placeholder="Tulis jawaban ayah / bunda disini...">{{ $journal->interaksi ?? '' }}</textarea>
                 @if(!$isTeacher)
-                    <button class="pa-save-btn" onclick="saveField('interaksi')">Simpan</button>
+                    <button class="pa-save-btn" onclick="saveField('interaksi', event)">Simpan</button>
                 @endif
             </div>
         </div>
@@ -90,14 +130,18 @@
 
         <div class="pa-form-section">
             <p class="pa-question">
-                Saran dari guru antara harapan orangtua dengan apa yang terjadi di sekolah dan strategi yang bisa
+                Saran dari <b>Guru Wali ({{ $teacherWali }})</b> antara harapan orangtua dengan apa yang terjadi di sekolah dan strategi yang bisa
                 digunakan dari pihak rumah maupun pihak sekolah!
             </p>
             <div class="pa-textarea-wrapper">
-                @if($isTeacher)
+                @php
+                    $canEditTeacherReply = $isTeacher && !$isLifebookTeacher;
+                @endphp
+
+                @if($canEditTeacherReply)
                     <textarea class="pa-textarea" id="teacher_reply"
                         placeholder="Berikan saran atau feedback untuk orang tua murid...">{{ $journal->teacher_reply ?? '' }}</textarea>
-                    <button class="pa-save-btn" onclick="saveField('teacher_reply')">Simpan</button>
+                    <button class="pa-save-btn" onclick="saveField('teacher_reply', event)">Simpan</button>
                 @else
                     <div
                         style="padding: 20px; font-size: 14px; font-weight: 600; color: var(--db-text-dark); opacity: 0.7;">
@@ -108,7 +152,7 @@
                             <div style="font-size: 10px; margin-top: 10px; opacity: 0.5;">Dibalas pada:
                                 {{ $journal->teacher_replied_at->format('d M Y H:i') }}</div>
                         @else
-                            <i>Menunggu respon guru wali...</i>
+                            <i>Menunggu saran dari Guru Wali...</i>
                         @endif
                     </div>
                 @endif
@@ -117,15 +161,13 @@
 
         <div class="pa-form-section">
             <p class="pa-question">
-                Konfirmasi dari guru journaling my lifebook!
+                Konfirmasi dari <b>Guru Lifebook ({{ $activeLifebookTeacher->name ?? '-' }})</b> journaling my lifebook!
             </p>
             <div class="pa-textarea-wrapper">
-                @if($isTeacher)
-                    <textarea class="pa-textarea" id="lifebook_teacher_reply" {{ !$isLifebookTeacher ? 'readonly' : '' }}
-                        placeholder="{{ $isLifebookTeacher ? 'Konfirmasi jurnal ini sebagai Guru Lifebook...' : 'Hanya Guru Lifebook yang bisa mengisi ini.' }}">{{ $journal->lifebook_teacher_reply ?? '' }}</textarea>
-                    @if($isLifebookTeacher)
-                        <button class="pa-save-btn" onclick="saveField('lifebook_teacher_reply')">Simpan</button>
-                    @endif
+                @if($isLifebookTeacher)
+                    <textarea class="pa-textarea" id="lifebook_teacher_reply"
+                        placeholder="Konfirmasi jurnal ini sebagai Guru Lifebook...">{{ $journal->lifebook_teacher_reply ?? '' }}</textarea>
+                    <button class="pa-save-btn" onclick="saveField('lifebook_teacher_reply', event)">Simpan</button>
                 @else
                     <div
                         style="padding: 20px; font-size: 14px; font-weight: 600; color: var(--db-text-dark); opacity: 0.7;">
@@ -136,7 +178,7 @@
                             <div style="font-size: 10px; margin-top: 10px; opacity: 0.5;">Dibalas pada:
                                 {{ $journal->lifebook_teacher_replied_at->format('d M Y H:i') }}</div>
                         @else
-                            <i>Menunggu konfirmasi {{ $activeLifebookTeacher->name ?? 'guru lifebook' }}...</i>
+                            <i>Menunggu konfirmasi Guru Lifebook...</i>
                         @endif
                     </div>
                 @endif
@@ -182,12 +224,17 @@
         });
 
         // AJAX Save Field
-        function saveField(field) {
+        function saveField(field, event) {
             const value = $('#' + field).val();
             const childId = $('#childSelector').val();
             const monthYear = "{{ $selectedMonth }}";
-            const btn = event.target;
+            const btn = event.currentTarget;
             const originalText = $(btn).text();
+
+            if (!childId) {
+                alert('Silakan pilih murid terlebih dahulu.');
+                return;
+            }
 
             $(btn).prop('disabled', true).text('...');
 
@@ -204,16 +251,25 @@
                 success: function (response) {
                     if (response.success) {
                         $(btn).text('Saved!').css('background', '#10B981');
+                        showSuccessPopup();
                         setTimeout(() => {
                             $(btn).text(originalText).prop('disabled', false).css('background', '');
                         }, 2000);
                     }
                 },
                 error: function (xhr) {
-                    alert('Gagal menyimpan data.');
+                    const msg = xhr.responseJSON ? xhr.responseJSON.message : 'Gagal menyimpan data.';
+                    alert(msg);
                     $(btn).text(originalText).prop('disabled', false);
                 }
             });
+        }
+        function showSuccessPopup() {
+            $('#successPopup').fadeIn(300).css('display', 'flex');
+        }
+
+        function closePopup() {
+            $('#successPopup').fadeOut(300);
         }
     </script>
 </body>
