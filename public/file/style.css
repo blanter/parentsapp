@@ -2692,15 +2692,21 @@ a.btn.btn-warning {
     text-overflow: ellipsis;
 }
 
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 500px) {
     .ct-card {
         padding: 12px 15px;
         gap: 12px;
     }
 
     .ct-card-icon {
-        width: 50px;
-        height: 50px;
+        width: 48px;
+        height: 48px;
+        border-radius: 15px;
+    }
+
+    .ct-card-icon i {
+        width: 20px;
+        height: 20px;
     }
 
     .ct-card-info h3 {
@@ -2717,42 +2723,42 @@ a.btn.btn-warning {
     }
 }
 
-/* Enhanced Colorful Variants for Children Tracker - Matching Dashboard Vibe */
+/* Enhanced Colorful Variants for Children Tracker - Matching Dashboard 3D Style */
 .ct-card-icon.color-purple {
-    background: linear-gradient(135deg, #6C88E0, #4A63B3);
+    background: var(--db-purple);
     color: #fff;
-    box-shadow: 0 5px 15px rgba(108, 136, 224, 0.3);
+    box-shadow: 0 4px 0px #4A63B3;
 }
 
 .ct-card-icon.color-green {
-    background: linear-gradient(135deg, #10B981, #059669);
+    background: var(--db-secondary);
     color: #fff;
-    box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+    box-shadow: 0 4px 0px #227552;
 }
 
 .ct-card-icon.color-orange {
-    background: linear-gradient(135deg, #FF6B4A, #C9462B);
+    background: var(--db-accent);
     color: #fff;
-    box-shadow: 0 5px 15px rgba(255, 107, 74, 0.3);
+    box-shadow: 0 4px 0px #C9462B;
 }
 
 .ct-card-icon.color-blue {
-    background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+    background: var(--db-dark-blue);
     color: #fff;
-    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 0px #003680;
 }
 
 .ct-card-icon.color-yellow {
-    background: linear-gradient(135deg, #FCD12A, #D9AF26);
+    background: var(--db-primary);
     color: var(--db-text-dark);
-    box-shadow: 0 5px 15px rgba(252, 209, 42, 0.3);
+    box-shadow: 0 4px 0px #D9AF26;
 }
 
 /* Selesai Diisi Checkbox Icon */
 .ct-card-icon.color-success {
-    background: linear-gradient(135deg, #10B981, #059669);
+    background: var(--db-secondary);
     color: #fff;
-    box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+    box-shadow: 0 4px 0px #227552;
 }
 
 /* Parent Aspect Styles */
