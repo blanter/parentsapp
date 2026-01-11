@@ -3623,6 +3623,7 @@ a.btn.btn-warning {
 .modal .select2-container {
     width: 100% !important;
 }
+
 /* Download Page & App Install Styles */
 .header-simple {
     text-align: center;
@@ -3640,17 +3641,17 @@ a.btn.btn-warning {
     justify-content: center;
     margin: 0 auto 15px;
     border: 2px solid #E5E7EB;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
 }
 
 .dl-content-card {
-    background: rgba(255,255,255,0.9);
+    background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 24px;
     padding: 30px;
     border: 2px solid #fff;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
 }
 
 .dl-step-item {
@@ -3714,64 +3715,15 @@ a.btn.btn-warning {
 }
 
 /* Premium Call-to-Action for PWA Download */
-.pwa-download-banner {
-    background: linear-gradient(135deg, #FFD64B 0%, #FFB800 100%);
-    border-radius: 24px;
-    padding: 25px;
-    margin: 20px 0;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    text-decoration: none;
-    box-shadow: 0 12px 24px rgba(255, 214, 75, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
 
-.pwa-download-banner:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(255, 214, 75, 0.4);
-}
-
-.pwa-download-icon {
-    width: 60px;
-    height: 60px;
-    background: #fff;
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #FFB800;
-    flex-shrink: 0;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-.pwa-download-text {
-    flex-grow: 1;
-}
-
-.pwa-download-text h4 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 800;
-    color: #1a1a1a;
-}
-
-.pwa-download-text p {
-    margin: 4px 0 0 0;
-    font-size: 12px;
-    color: #1a1a1a;
-    opacity: 0.7;
-    font-weight: 600;
-}
-
-.pwa-download-arrow {
-    width: 32px;
-    height: 32px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #1a1a1a;
+/* Profile Version Footer */
+.profile-footer-version {
+    text-align: center;
+    margin-top: 30px;
+    opacity: 0.4;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--db-text-dark);
+    margin-bottom: 100px;
+    letter-spacing: 0.5px;
 }

@@ -12,7 +12,7 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        $appVersion = "1.2.0";
+        $appVersion = \App\Models\WebSetting::where('key', 'app_version')->first()->value ?? '1.0.0';
         return view('profile', compact('appVersion'));
     }
 

@@ -94,18 +94,23 @@
             </div>
         </div>
 
-        <!-- Premium PWA Download Banner -->
-        <a href="{{ route('app.download') }}" class="pwa-download-banner">
-            <div class="pwa-download-icon">
-                <i data-lucide="download-cloud" style="width: 32px; height: 32px;"></i>
+        <!-- PWA Download Item -->
+        <a href="{{ route('app.download') }}" class="profile-info-item"
+            style="text-decoration: none; border-color: var(--db-primary); background: #ffffff; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div
+                    style="background: var(--db-primary); width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--db-text-dark); box-shadow: 0 4px 10px rgba(255, 214, 75, 0.3);">
+                    <i data-lucide="download-cloud" style="width: 22px; height: 22px;"></i>
+                </div>
+                <div>
+                    <span class="profile-info-label"
+                        style="opacity: 1; font-size: 14px; font-weight: 800; display: block; color: var(--db-text-dark);">Pasang
+                        Aplikasi HP</span>
+                    <span style="font-size: 11px; opacity: 0.6; font-weight: 600; color: var(--db-text-dark);">Panduan
+                        instalasi resmi PWA</span>
+                </div>
             </div>
-            <div class="pwa-download-text">
-                <h4>Pasang Aplikasi HP</h4>
-                <p>Klik untuk panduan instalasi (PWA)</p>
-            </div>
-            <div class="pwa-download-arrow">
-                <i data-lucide="chevron-right"></i>
-            </div>
+            <i data-lucide="chevron-right" style="color: var(--db-primary); width: 22px; height: 22px;"></i>
         </a>
 
         <form action="{{ route('logout') }}" method="POST">
@@ -116,8 +121,7 @@
             </button>
         </form>
 
-        <div
-            style="text-align: center; margin-top: 30px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark); margin-bottom: 100px;">
+        <div class="profile-footer-version">
             Version {{ $appVersion }} • Parents App
         </div>
     </div>
