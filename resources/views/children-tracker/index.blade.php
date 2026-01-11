@@ -65,38 +65,115 @@
             <h2 class="ct-section-title">Laporan Jurnal Masuk</h2>
             <div class="ct-list">
                 @forelse($submissions as $sub)
-                    <a href="{{ route('children-tracker.parent-aspect', ['month' => $selectedMonthName, 'child_id' => $sub->student_id]) }}"
-                        class="ct-card">
-                        <div class="ct-card-icon color-purple">
-                            <i data-lucide="user"></i>
-                        </div>
-                        <div class="ct-card-info">
-                            <h3 style="font-size: 15px;">{{ $sub->parent_name }}</h3>
-                            <p style="font-size: 11px; opacity: 0.7; font-weight: 600; line-height: 1.4; margin-top: 2px;">
-                                <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="baby" style="width: 12px; height: 12px;"></i> {{ $sub->student_name }}</span>
-                                <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="user-check" style="width: 12px; height: 12px;"></i> Wali: {{ $sub->teacher_wali ?: '-' }}</span>
-                            </p>
-                            <div class="ct-indicator-wrapper" style="margin-top: 8px;">
-                                @if($sub->lifebook_teacher_reply)
-                                    <span class="ct-indicator-pill success">
-                                        <i data-lucide="check-circle" style="width: 10px; height: 10px;"></i>
-                                        Selesai Konfirmasi
-                                    </span>
-                                @elseif($sub->teacher_reply)
-                                    <span class="ct-indicator-pill info">
-                                        <i data-lucide="message-square" style="width: 10px; height: 10px;"></i>
-                                        Dibalas Guru Wali
-                                    </span>
-                                @else
-                                    <span class="ct-indicator-pill warning">
-                                        <i data-lucide="clock" style="width: 10px; height: 10px;"></i>
-                                        Menunggu Respon
-                                    </span>
-                                @endif
+                    {{-- Card for Aspek Orang Tua --}}
+                    @if($sub->parent_aspect_filled)
+                        <a href="{{ route('children-tracker.parent-aspect', ['month' => $selectedMonthName, 'child_id' => $sub->student_id]) }}"
+                            class="ct-card">
+                            <div class="ct-card-icon color-purple">
+                                <i data-lucide="user"></i>
                             </div>
-                        </div>
-                        <i data-lucide="arrow-right" style="opacity: 0.3;"></i>
-                    </a>
+                            <div class="ct-card-info">
+                                <h3 style="font-size: 15px;">{{ $sub->parent_name }}</h3>
+                                <p style="font-size: 10px; opacity: 0.6; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">Aspek Orang Tua</p>
+                                <p style="font-size: 11px; opacity: 0.7; font-weight: 600; line-height: 1.4; margin-top: 2px;">
+                                    <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="baby" style="width: 12px; height: 12px;"></i> {{ $sub->student_name }}</span>
+                                    <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="user-check" style="width: 12px; height: 12px;"></i> Wali: {{ $sub->teacher_wali ?: '-' }}</span>
+                                </p>
+                                <div class="ct-indicator-wrapper" style="margin-top: 8px;">
+                                    @if($sub->lifebook_teacher_reply)
+                                        <span class="ct-indicator-pill success">
+                                            <i data-lucide="check-circle" style="width: 10px; height: 10px;"></i>
+                                            Selesai Konfirmasi
+                                        </span>
+                                    @elseif($sub->teacher_reply)
+                                        <span class="ct-indicator-pill info">
+                                            <i data-lucide="message-square" style="width: 10px; height: 10px;"></i>
+                                            Dibalas Guru Wali
+                                        </span>
+                                    @else
+                                        <span class="ct-indicator-pill warning">
+                                            <i data-lucide="clock" style="width: 10px; height: 10px;"></i>
+                                            Menunggu Respon
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <i data-lucide="arrow-right" style="opacity: 0.3;"></i>
+                        </a>
+                    @endif
+
+                    {{-- Card for Aspek Anak --}}
+                    @if($sub->child_aspect_filled)
+                        <a href="{{ route('children-tracker.child-aspect', ['month' => $selectedMonthName, 'child_id' => $sub->student_id]) }}"
+                            class="ct-card">
+                            <div class="ct-card-icon color-orange">
+                                <i data-lucide="users"></i>
+                            </div>
+                            <div class="ct-card-info">
+                                <h3 style="font-size: 15px;">{{ $sub->parent_name }}</h3>
+                                <p style="font-size: 10px; opacity: 0.6; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">Aspek Anak</p>
+                                <p style="font-size: 11px; opacity: 0.7; font-weight: 600; line-height: 1.4; margin-top: 2px;">
+                                    <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="baby" style="width: 12px; height: 12px;"></i> {{ $sub->student_name }}</span>
+                                    <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="user-check" style="width: 12px; height: 12px;"></i> Wali: {{ $sub->teacher_wali ?: '-' }}</span>
+                                </p>
+                                <div class="ct-indicator-wrapper" style="margin-top: 8px;">
+                                    @if($sub->lifebook_child_reply)
+                                        <span class="ct-indicator-pill success">
+                                            <i data-lucide="check-circle" style="width: 10px; height: 10px;"></i>
+                                            Selesai Konfirmasi
+                                        </span>
+                                    @elseif($sub->teacher_report)
+                                        <span class="ct-indicator-pill info">
+                                            <i data-lucide="message-square" style="width: 10px; height: 10px;"></i>
+                                            Dilaporkan Guru Wali
+                                        </span>
+                                    @else
+                                        <span class="ct-indicator-pill warning">
+                                            <i data-lucide="clock" style="width: 10px; height: 10px;"></i>
+                                            Menunggu Respon
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <i data-lucide="arrow-right" style="opacity: 0.3;"></i>
+                        </a>
+                    @endif
+                    {{-- Card for Aspek Internal/Eksternal --}}
+                    @if($sub->internal_external_filled)
+                        <a href="{{ route('children-tracker.internal-external-aspect', ['month' => $selectedMonthName, 'child_id' => $sub->student_id]) }}"
+                            class="ct-card">
+                            <div class="ct-card-icon color-green">
+                                <i data-lucide="calendar"></i>
+                            </div>
+                            <div class="ct-card-info">
+                                <h3 style="font-size: 15px;">{{ $sub->parent_name }}</h3>
+                                <p style="font-size: 10px; opacity: 0.6; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">Aspek Internal/Eksternal</p>
+                                <p style="font-size: 11px; opacity: 0.7; font-weight: 600; line-height: 1.4; margin-top: 2px;">
+                                    <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="baby" style="width: 12px; height: 12px;"></i> {{ $sub->student_name }}</span>
+                                    <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="user-check" style="width: 12px; height: 12px;"></i> Wali: {{ $sub->teacher_wali ?: '-' }}</span>
+                                </p>
+                                <div class="ct-indicator-wrapper" style="margin-top: 8px;">
+                                    @if($sub->strategi_baru)
+                                        <span class="ct-indicator-pill success">
+                                            <i data-lucide="check-circle" style="width: 10px; height: 10px;"></i>
+                                            Selesai Konfirmasi
+                                        </span>
+                                    @elseif($sub->internal_teacher_reply || $sub->external_teacher_reply)
+                                        <span class="ct-indicator-pill info">
+                                            <i data-lucide="message-square" style="width: 10px; height: 10px;"></i>
+                                            Dibalas Guru Wali
+                                        </span>
+                                    @else
+                                        <span class="ct-indicator-pill warning">
+                                            <i data-lucide="clock" style="width: 10px; height: 10px;"></i>
+                                            Menunggu Respon
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <i data-lucide="arrow-right" style="opacity: 0.3;"></i>
+                        </a>
+                    @endif
                 @empty
                     <div style="text-align: center; padding: 60px 20px; opacity: 0.4;">
                         <i data-lucide="file-search" style="width: 48px; height: 48px; margin-bottom: 15px;"></i>

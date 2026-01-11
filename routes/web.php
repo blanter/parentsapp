@@ -102,5 +102,8 @@ Route::middleware(['auth:web,teacher', 'approved'])->group(function () {
     // Children Tracker
     Route::get('/children-tracker', [ChildrenTrackerController::class, 'index'])->name('children-tracker.index');
     Route::get('/children-tracker/parent-aspect', [ChildrenTrackerController::class, 'parentAspect'])->name('children-tracker.parent-aspect');
+    Route::get('/children-tracker/child-aspect', [ChildrenTrackerController::class, 'childAspect'])->name('children-tracker.child-aspect');
+    Route::get('/children-tracker/internal-external-aspect', [ChildrenTrackerController::class, 'internalExternalAspect'])->name('children-tracker.internal-external-aspect');
     Route::post('/children-tracker/save-journal', [ChildrenTrackerController::class, 'saveJournal'])->name('children-tracker.save-journal');
+    Route::post('/children-tracker/save-reflection', [ChildrenTrackerController::class, 'saveReflection'])->name('children-tracker.save-reflection');
 });

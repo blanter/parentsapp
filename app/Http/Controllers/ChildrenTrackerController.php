@@ -52,7 +52,17 @@ class ChildrenTrackerController extends Controller
                 't.name as teacher_wali',
                 'j.parent_filled_at',
                 'j.teacher_reply',
-                'j.lifebook_teacher_reply'
+                'j.lifebook_teacher_reply',
+                'j.rutinitas',
+                'j.child_filled_at',
+                'j.teacher_report',
+                'j.lifebook_child_reply',
+                'j.aspek_internal',
+                'j.aspek_external',
+                'j.internal_external_filled_at',
+                'j.internal_teacher_reply',
+                'j.external_teacher_reply',
+                'j.strategi_baru'
             )
                 ->orderBy('j.id')
                 ->get()
@@ -60,6 +70,12 @@ class ChildrenTrackerController extends Controller
                 ->map(function ($items) {
                     $first = $items->first();
                     $first->teacher_wali = $items->pluck('teacher_wali')->filter()->unique()->implode(', ');
+
+                    // Count filled aspects for this journal
+                    $first->parent_aspect_filled = $first->parent_filled_at != null;
+                    $first->child_aspect_filled = $first->child_filled_at != null;
+                    $first->internal_external_filled = $first->internal_external_filled_at != null;
+
                     return $first;
                 });
         }
@@ -79,7 +95,7 @@ class ChildrenTrackerController extends Controller
                 'icon' => 'users',
                 'color' => 'color-orange',
                 'status' => 'unfilled',
-                'route' => '#'
+                'route' => 'children-tracker.child-aspect'
             ],
             'internal_external' => [
                 'name' => 'Aspek Internal/Eksternal',
@@ -87,7 +103,7 @@ class ChildrenTrackerController extends Controller
                 'icon' => 'calendar',
                 'color' => 'color-green',
                 'status' => 'unfilled',
-                'route' => '#'
+                'route' => 'children-tracker.internal-external-aspect'
             ]
         ];
 
@@ -98,10 +114,23 @@ class ChildrenTrackerController extends Controller
                     ->where('tahun', $tahun)
                     ->first();
                 if ($j) {
+                    // Parent Aspect Status
                     if ($j->teacher_reply)
                         $aspects['parent']['status'] = 'replied';
-                    else
+                    else if ($j->parent_filled_at)
                         $aspects['parent']['status'] = 'filled';
+
+                    // Child Aspect Status
+                    if ($j->teacher_report)
+                        $aspects['child']['status'] = 'replied';
+                    else if ($j->child_filled_at)
+                        $aspects['child']['status'] = 'filled';
+
+                    // Internal/External Status
+                    if ($j->internal_teacher_reply || $j->external_teacher_reply)
+                        $aspects['internal_external']['status'] = 'replied';
+                    else if ($j->internal_external_filled_at)
+                        $aspects['internal_external']['status'] = 'filled';
                 }
             }
         }
@@ -113,6 +142,21 @@ class ChildrenTrackerController extends Controller
 
     public function parentAspect(Request $request)
     {
+        return $this->loadAspectView($request, 'children-tracker.parent-aspect');
+    }
+
+    public function childAspect(Request $request)
+    {
+        return $this->loadAspectView($request, 'children-tracker.child-aspect');
+    }
+
+    public function internalExternalAspect(Request $request)
+    {
+        return $this->loadAspectView($request, 'children-tracker.internal-external-aspect');
+    }
+
+    private function loadAspectView(Request $request, $viewName)
+    {
         $isTeacher = Auth::guard('teacher')->check();
         $user = $isTeacher ? Auth::guard('teacher')->user() : Auth::user();
 
@@ -121,8 +165,6 @@ class ChildrenTrackerController extends Controller
         $isAdmin = !$isTeacher && $user && $user->role === 'admin';
         $isLifebookTeacher = ($isTeacher && ($user->id == $lifebookTeacherId)) || $isAdmin;
 
-        // If Lifebook Teacher, show ALL active students to allow system-wide confirmation
-        // Otherwise show assigned students (for regular teachers) or own children (for parents)
         if ($isLifebookTeacher) {
             $children = Student::active()->orderBy('name')->get();
         } else {
@@ -130,14 +172,12 @@ class ChildrenTrackerController extends Controller
         }
 
         $selectedMonthStr = $request->get('month', Carbon::now()->subMonth()->translatedFormat('F Y'));
-        // Parse "Bulan Tahun" string
         $monthDate = Carbon::createFromFormat('F Y', $selectedMonthStr);
         $bulan = $monthDate->translatedFormat('F');
         $tahun = $monthDate->format('Y');
 
         $selectedChildId = $request->get('child_id', $children->first()->id ?? null);
 
-        // Fetch journal by student, month, and year
         $journal = ParentJournal::where('student_id', $selectedChildId)
             ->where('bulan', $bulan)
             ->where('tahun', $tahun)
@@ -145,7 +185,6 @@ class ChildrenTrackerController extends Controller
 
         $selectedMonth = $selectedMonthStr;
 
-        // Fetch parent and teacher wali for display
         $mainDb = config('database.connections.mysql.database');
         $userDb = config('database.connections.lifebook_users.database');
 
@@ -161,7 +200,7 @@ class ChildrenTrackerController extends Controller
         $parentName = $childInfo->pluck('parent_name')->filter()->first() ?: '-';
         $teacherWali = $childInfo->pluck('teacher_name')->filter()->unique()->implode(', ') ?: '-';
 
-        return view('children-tracker.parent-aspect', compact('children', 'selectedMonth', 'selectedChildId', 'journal', 'activeLifebookTeacher', 'isTeacher', 'isLifebookTeacher', 'parentName', 'teacherWali'));
+        return view($viewName, compact('children', 'selectedMonth', 'selectedChildId', 'journal', 'activeLifebookTeacher', 'isTeacher', 'isLifebookTeacher', 'parentName', 'teacherWali'));
     }
 
     public function saveJournal(Request $request)
@@ -169,14 +208,32 @@ class ChildrenTrackerController extends Controller
         $isTeacher = Auth::guard('teacher')->check();
         $user = $isTeacher ? Auth::guard('teacher')->user() : Auth::user();
 
+        $validFields = [
+            'pendekatan',
+            'interaksi',
+            'teacher_reply',
+            'lifebook_teacher_reply',
+            'rutinitas',
+            'hubungan_keluarga',
+            'hubungan_teman',
+            'aspek_sosial',
+            'teacher_report',
+            'lifebook_child_reply',
+            'aspek_internal',
+            'internal_teacher_reply',
+            'aspek_external',
+            'external_teacher_reply',
+            'strategi_baru',
+            'strategi_parent_reply'
+        ];
+
         $request->validate([
             'student_id' => 'required',
-            'month_year' => 'required', // String like "Januari 2026"
-            'field' => 'required|in:pendekatan,interaksi,teacher_reply,lifebook_teacher_reply',
+            'month_year' => 'required',
+            'field' => 'required|in:' . implode(',', $validFields),
             'value' => 'nullable|string'
         ]);
 
-        // Manually parse Indonesian month name to avoid locale issues
         $monthYearParts = explode(' ', $request->month_year);
         $bulan = $monthYearParts[0] ?? '';
         $tahun = $monthYearParts[1] ?? '';
@@ -185,63 +242,126 @@ class ChildrenTrackerController extends Controller
             return response()->json(['success' => false, 'message' => 'Format bulan/tahun tidak valid.'], 422);
         }
 
-        // Identify the parent ID for this student
         $parentId = DB::table('parent_student')
             ->where('student_id', $request->student_id)
             ->value('user_id');
 
         if (!$parentId) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Murid ini belum terhubung dengan akun orang tua. Mohon hubungkan terlebih dahulu melalui pendaftaran orang tua.'
-            ], 422);
+            return response()->json(['success' => false, 'message' => 'Murid ini belum terhubung dengan akun orang tua.'], 422);
         }
 
         $isAdmin = !$isTeacher && $user && $user->role === 'admin';
+        $lifebookTeacherId = \App\Models\WebSetting::where('key', 'lifebook_teacher_id')->value('value');
+        $isLifebookTeacher = ($isTeacher && ($user->id == $lifebookTeacherId)) || $isAdmin;
 
         $data = [];
+        $childParentFields = ['rutinitas', 'hubungan_keluarga', 'hubungan_teman', 'aspek_sosial'];
+        $internalExternalParentFields = ['aspek_internal', 'aspek_external', 'strategi_parent_reply'];
+
         if ($isTeacher) {
+            $data['teacher_name'] = $user->name;
             if ($request->field === 'teacher_reply') {
                 $data['teacher_id'] = $user->id;
-                $data['teacher_name'] = $user->name;
                 $data['teacher_reply'] = $request->value;
                 $data['teacher_replied_at'] = now();
-            } else if ($request->field === 'lifebook_teacher_reply') {
-                $data['lifebook_teacher_id'] = $user->id;
-                $data['lifebook_teacher_name'] = $user->name;
-                $data['lifebook_teacher_reply'] = $request->value;
-                $data['lifebook_teacher_replied_at'] = now();
+            } else if ($request->field === 'teacher_report') {
+                $data['teacher_report'] = $request->value;
+                $data['teacher_report_at'] = now();
+            } else if ($request->field === 'internal_teacher_reply') {
+                $data['internal_teacher_reply'] = $request->value;
+                $data['internal_teacher_replied_at'] = now();
+            } else if ($request->field === 'external_teacher_reply') {
+                $data['external_teacher_reply'] = $request->value;
+                $data['external_teacher_replied_at'] = now();
+            } else if ($isLifebookTeacher) {
+                if ($request->field === 'lifebook_teacher_reply') {
+                    $data['lifebook_teacher_id'] = $user->id;
+                    $data['lifebook_teacher_name'] = $user->name;
+                    $data['lifebook_teacher_reply'] = $request->value;
+                    $data['lifebook_teacher_replied_at'] = now();
+                } else if ($request->field === 'lifebook_child_reply') {
+                    $data['lifebook_teacher_id'] = $user->id;
+                    $data['lifebook_teacher_name'] = $user->name;
+                    $data['lifebook_child_reply'] = $request->value;
+                    $data['lifebook_child_replied_at'] = now();
+                } else if ($request->field === 'strategi_baru') {
+                    $data['lifebook_teacher_id'] = $user->id;
+                    $data['lifebook_teacher_name'] = $user->name;
+                    $data['strategi_baru'] = $request->value;
+                    $data['lifebook_strategy_at'] = now();
+                }
             }
         } elseif ($isAdmin) {
-            if ($request->field === 'lifebook_teacher_reply') {
+            if (in_array($request->field, ['lifebook_teacher_reply', 'lifebook_child_reply', 'strategi_baru'])) {
                 $data['lifebook_teacher_id'] = $user->id;
                 $data['lifebook_teacher_name'] = $user->name . ' (Admin)';
-                $data['lifebook_teacher_reply'] = $request->value;
-                $data['lifebook_teacher_replied_at'] = now();
+                if ($request->field === 'lifebook_teacher_reply') {
+                    $data['lifebook_teacher_reply'] = $request->value;
+                    $data['lifebook_teacher_replied_at'] = now();
+                } else if ($request->field === 'lifebook_child_reply') {
+                    $data['lifebook_child_reply'] = $request->value;
+                    $data['lifebook_child_replied_at'] = now();
+                } else {
+                    $data['strategi_baru'] = $request->value;
+                    $data['lifebook_strategy_at'] = now();
+                }
             } else {
                 $data[$request->field] = $request->value;
-                $data['parent_filled_at'] = now();
+                if (in_array($request->field, $childParentFields))
+                    $data['child_filled_at'] = now();
+                else if (in_array($request->field, $internalExternalParentFields))
+                    $data['internal_external_filled_at'] = now();
+                else
+                    $data['parent_filled_at'] = now();
             }
         } else {
-            // Parent
             $data[$request->field] = $request->value;
-            $data['parent_filled_at'] = now();
+            if (in_array($request->field, $childParentFields))
+                $data['child_filled_at'] = now();
+            else if (in_array($request->field, $internalExternalParentFields))
+                $data['internal_external_filled_at'] = now();
+            else
+                $data['parent_filled_at'] = now();
         }
 
         try {
-            $journal = ParentJournal::updateOrCreate(
-                [
-                    'user_id' => $parentId,
-                    'student_id' => $request->student_id,
-                    'bulan' => $bulan,
-                    'tahun' => $tahun,
-                ],
+            ParentJournal::updateOrCreate(
+                ['user_id' => $parentId, 'student_id' => $request->student_id, 'bulan' => $bulan, 'tahun' => $tahun],
                 $data
             );
-
             return response()->json(['success' => true, 'message' => 'Journal berhasil disimpan!']);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Gagal menyimpan ke database: ' . $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Gagal menyimpan: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function saveReflection(Request $request)
+    {
+        $request->validate([
+            'student_id' => 'required',
+            'month_year' => 'required',
+            'ratings' => 'required|array'
+        ]);
+
+        $monthYearParts = explode(' ', $request->month_year);
+        $bulan = $monthYearParts[0] ?? '';
+        $tahun = $monthYearParts[1] ?? '';
+
+        $parentId = DB::table('parent_student')->where('student_id', $request->student_id)->value('user_id');
+        if (!$parentId)
+            return response()->json(['success' => false], 422);
+
+        $data = $request->ratings;
+        $data['refleksi_filled_at'] = now();
+
+        try {
+            ParentJournal::updateOrCreate(
+                ['user_id' => $parentId, 'student_id' => $request->student_id, 'bulan' => $bulan, 'tahun' => $tahun],
+                $data
+            );
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false], 500);
         }
     }
 }
