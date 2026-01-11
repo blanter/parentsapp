@@ -37,29 +37,38 @@
         </div>
 
         <div class="db-menu-container">
-            <a href="#" class="db-menu-item mission">
+            <a href="{{ route('children-tracker.index') }}" class="db-menu-item gardening">
                 <i data-lucide="book-open"></i>
-                <span>Review Jurnal Murid</span>
+                <span>Lifebook Children Tracker</span>
             </a>
-            <a href="#" class="db-menu-item gardening">
-                <i data-lucide="users"></i>
-                <span>Data Murid & Orang Tua</span>
+            <a href="{{ route('teacher.profile') }}" class="db-menu-item journey"
+                style="background: var(--db-purple); box-shadow: 0 8px 0px #4A63B3;">
+                <i data-lucide="user-cog"></i>
+                <span>Halaman Profil</span>
             </a>
-            <a href="#" class="db-menu-item journey">
-                <i data-lucide="settings"></i>
-                <span>Pengaturan Akun</span>
-            </a>
+        </div>
 
-            <form action="{{ route('teacher.logout') }}" method="POST" style="width: 100%;">
-                @csrf
-                <button type="submit" class="db-menu-item"
-                    style="width: 100%; border: none; background: #EF4444; box-shadow: 0 8px 0px #991B1B; color: #fff; text-align: left;">
-                    <i data-lucide="log-out"></i>
-                    <span>Keluar Aplikasi</span>
-                </button>
-            </form>
+        <div
+            style="text-align: center; margin-top: 50px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark); margin-bottom: 100px;">
+            Version {{ $appVersion ?? '1.0.0' }} • Teacher Hub
         </div>
     </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="db-bottom-nav">
+        <a href="{{ route('teacher.dashboard') }}" class="db-nav-item active">
+            <div class="db-nav-icon">
+                <i data-lucide="home"></i>
+            </div>
+            <span>Home</span>
+        </a>
+        <a href="{{ route('teacher.profile') }}" class="db-nav-item">
+            <div class="db-nav-icon">
+                <i data-lucide="user"></i>
+            </div>
+            <span>Profile</span>
+        </a>
+    </nav>
 
     <script>
         lucide.createIcons();

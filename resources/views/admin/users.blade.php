@@ -161,7 +161,8 @@
         </div>
 
         <div class="adm-menu-wrapper">
-            <a href="{{ route('admin.dashboard') }}" class="adm-menu-item {{ Route::is('admin.dashboard') ? 'active' : '' }}">
+            <a href="{{ route('admin.dashboard') }}"
+                class="adm-menu-item {{ Route::is('admin.dashboard') ? 'active' : '' }}">
                 <i data-lucide="layout-grid"></i>
                 <span>Dashboard</span>
             </a>
@@ -220,18 +221,20 @@
                             </td>
                         </tr>
                     @endforeach
-                    @if($users->isEmpty())
-                        <tr>
-                            <td colspan="4" style="text-align: center; color: var(--muted); padding: 32px;">No users found.
-                            </td>
-                        </tr>
-                    @endif
                 </tbody>
             </table>
+
+            @if($users->isEmpty())
+                <div style="text-align: center; color: var(--muted); padding: 32px;">No users found.</div>
+            @endif
+
+            <div style="padding: 20px;">
+                {{ $users->links('vendor.pagination.custom') }}
+            </div>
         </div>
 
         <div
-            style="text-align: center; margin-top: 40px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark);">
+            style="text-align: center; margin-top: 50px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark); margin-bottom: 100px;">
             Version {{ $appVersion }} • Parents App
         </div>
     </div>

@@ -17,15 +17,21 @@
     <img src="{{ asset('/file/bee.png') }}" class="db-bg-pattern db-bee" alt="">
     <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
 
+    @php
+        $isTeacher = Auth::guard('teacher')->check();
+        $displayUser = $isTeacher ? Auth::guard('teacher')->user() : Auth::user();
+        $backRoute = $isTeacher ? route('teacher.dashboard') : route('dashboard');
+    @endphp
     <div class="db-container">
         <div class="db-header">
             <div class="db-brand-section">
                 <h1 style="font-size: 28px;">Hello<br><span
-                        style="color: var(--db-purple)">{{ Auth::user()->name }}</span></h1>
-                <p style="font-size: 14px; font-weight: 600; opacity: 0.6; margin-top: 5px;">Have a great day with your
-                    children, parents</p>
+                        style="color: var(--db-purple)">{{ $displayUser->name }}</span></h1>
+                <p style="font-size: 14px; font-weight: 600; opacity: 0.6; margin-top: 5px;">
+                    {{ $isTeacher ? 'Pantau perkembangan anak didik Anda' : 'Have a great day with your children, parents' }}
+                </p>
             </div>
-            <a href="{{ route('dashboard') }}" class="db-avatar-section"
+            <a href="{{ $backRoute }}" class="db-avatar-section"
                 style="width: 50px; height: 50px; text-decoration: none;">
                 <i data-lucide="chevron-left" style="font-size: 24px; opacity: 1;"></i>
             </a>
@@ -98,24 +104,29 @@
 
     <!-- Bottom Navigation -->
     <nav class="db-bottom-nav">
-        <a href="{{ route('dashboard') }}" class="db-nav-item active">
-            <div class="db-nav-icon">
-                <i data-lucide="home"></i>
-            </div>
-            <span>Home</span>
-        </a>
-        <a href="{{ route('parents.leaderboard') }}" class="db-nav-item">
-            <div class="db-nav-icon">
-                <i data-lucide="trophy"></i>
-            </div>
-            <span>Scores</span>
-        </a>
-        <a href="{{ route('profile') }}" class="db-nav-item">
-            <div class="db-nav-icon">
-                <i data-lucide="user"></i>
-            </div>
-            <span>Profile</span>
-        </a>
+        @if($isTeacher)
+            <a href="{{ route('teacher.dashboard') }}" class="db-nav-item active">
+                <div class="db-nav-icon"><i data-lucide="home"></i></div>
+                <span>Home</span>
+            </a>
+            <a href="{{ route('teacher.profile') }}" class="db-nav-item">
+                <div class="db-nav-icon"><i data-lucide="user"></i></div>
+                <span>Profile</span>
+            </a>
+        @else
+            <a href="{{ route('dashboard') }}" class="db-nav-item active">
+                <div class="db-nav-icon"><i data-lucide="home"></i></div>
+                <span>Home</span>
+            </a>
+            <a href="{{ route('parents.leaderboard') }}" class="db-nav-item">
+                <div class="db-nav-icon"><i data-lucide="trophy"></i></div>
+                <span>Scores</span>
+            </a>
+            <a href="{{ route('profile') }}" class="db-nav-item">
+                <div class="db-nav-icon"><i data-lucide="user"></i></div>
+                <span>Profile</span>
+            </a>
+        @endif
     </nav>
 
     <script>

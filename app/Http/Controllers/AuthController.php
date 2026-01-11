@@ -104,7 +104,7 @@ class AuthController extends Controller
     // Admin: List Users
     public function listUsers()
     {
-        $users = User::where('role', '!=', 'admin')->latest()->get();
+        $users = User::where('role', '!=', 'admin')->latest()->paginate(15);
         return view('admin.users', compact('users'));
     }
 

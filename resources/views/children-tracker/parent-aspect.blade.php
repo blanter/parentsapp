@@ -52,6 +52,10 @@
             </div>
         </div>
 
+        @php
+            $isLifebookTeacher = $isTeacher && $activeLifebookTeacher && (Auth::guard('teacher')->id() == $activeLifebookTeacher->id);
+        @endphp
+
         <!-- Parent Section -->
         <div class="pa-form-section">
             <p class="pa-question">
@@ -59,9 +63,11 @@
                 orangtua, untuk mewujudkan suatu karakter yang diharapkan?
             </p>
             <div class="pa-textarea-wrapper">
-                <textarea class="pa-textarea" id="pendekatan"
+                <textarea class="pa-textarea" id="pendekatan" {{ $isTeacher ? 'readonly' : '' }}
                     placeholder="Tulis jawaban ayah / bunda disini...">{{ $journal->pendekatan ?? '' }}</textarea>
-                <button class="pa-save-btn" onclick="saveField('pendekatan')">Simpan</button>
+                @if(!$isTeacher)
+                    <button class="pa-save-btn" onclick="saveField('pendekatan')">Simpan</button>
+                @endif
             </div>
         </div>
 
@@ -71,9 +77,11 @@
                 Dan bagaimana bentuk interaksinya?
             </p>
             <div class="pa-textarea-wrapper">
-                <textarea class="pa-textarea" id="interaksi"
+                <textarea class="pa-textarea" id="interaksi" {{ $isTeacher ? 'readonly' : '' }}
                     placeholder="Tulis jawaban ayah / bunda disini...">{{ $journal->interaksi ?? '' }}</textarea>
-                <button class="pa-save-btn" onclick="saveField('interaksi')">Simpan</button>
+                @if(!$isTeacher)
+                    <button class="pa-save-btn" onclick="saveField('interaksi')">Simpan</button>
+                @endif
             </div>
         </div>
 
@@ -85,19 +93,25 @@
                 Saran dari guru antara harapan orangtua dengan apa yang terjadi di sekolah dan strategi yang bisa
                 digunakan dari pihak rumah maupun pihak sekolah!
             </p>
-            <div class="pa-textarea-wrapper" style="background: #F9FAFB; padding-bottom: 20px;">
-                <div
-                    style="padding: 20px; font-size: 14px; font-weight: 600; color: var(--db-text-dark); opacity: 0.7;">
-                    @if($journal && $journal->teacher_reply)
-                        <div style="margin-bottom: 5px; color: var(--db-purple); font-weight: 800;">Guru:
-                            {{ $journal->teacher_name }}</div>
-                        {{ $journal->teacher_reply }}
-                        <div style="font-size: 10px; margin-top: 10px; opacity: 0.5;">Dibalas pada:
-                            {{ $journal->teacher_replied_at->format('d M Y H:i') }}</div>
-                    @else
-                        <i>Menunggu respon guru wali...</i>
-                    @endif
-                </div>
+            <div class="pa-textarea-wrapper">
+                @if($isTeacher)
+                    <textarea class="pa-textarea" id="teacher_reply"
+                        placeholder="Berikan saran atau feedback untuk orang tua murid...">{{ $journal->teacher_reply ?? '' }}</textarea>
+                    <button class="pa-save-btn" onclick="saveField('teacher_reply')">Simpan</button>
+                @else
+                    <div
+                        style="padding: 20px; font-size: 14px; font-weight: 600; color: var(--db-text-dark); opacity: 0.7;">
+                        @if($journal && $journal->teacher_reply)
+                            <div style="margin-bottom: 5px; color: var(--db-purple); font-weight: 800;">Guru:
+                                {{ $journal->teacher_name }}</div>
+                            {{ $journal->teacher_reply }}
+                            <div style="font-size: 10px; margin-top: 10px; opacity: 0.5;">Dibalas pada:
+                                {{ $journal->teacher_replied_at->format('d M Y H:i') }}</div>
+                        @else
+                            <i>Menunggu respon guru wali...</i>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -105,46 +119,56 @@
             <p class="pa-question">
                 Konfirmasi dari guru journaling my lifebook!
             </p>
-            <div class="pa-textarea-wrapper" style="background: #F9FAFB; padding-bottom: 20px;">
-                <div
-                    style="padding: 20px; font-size: 14px; font-weight: 600; color: var(--db-text-dark); opacity: 0.7;">
-                    @if($journal && $journal->lifebook_teacher_reply)
-                        <div style="margin-bottom: 5px; color: var(--db-purple); font-weight: 800;">Guru Lifebook:
-                            {{ $journal->lifebook_teacher_name }}</div>
-                        {{ $journal->lifebook_teacher_reply }}
-                        <div style="font-size: 10px; margin-top: 10px; opacity: 0.5;">Dibalas pada:
-                            {{ $journal->lifebook_teacher_replied_at->format('d M Y H:i') }}</div>
-                    @else
-                        <i>Menunggu konfirmasi guru lifebook...</i>
+            <div class="pa-textarea-wrapper">
+                @if($isTeacher)
+                    <textarea class="pa-textarea" id="lifebook_teacher_reply" {{ !$isLifebookTeacher ? 'readonly' : '' }}
+                        placeholder="{{ $isLifebookTeacher ? 'Konfirmasi jurnal ini sebagai Guru Lifebook...' : 'Hanya Guru Lifebook yang bisa mengisi ini.' }}">{{ $journal->lifebook_teacher_reply ?? '' }}</textarea>
+                    @if($isLifebookTeacher)
+                        <button class="pa-save-btn" onclick="saveField('lifebook_teacher_reply')">Simpan</button>
                     @endif
-                </div>
+                @else
+                    <div
+                        style="padding: 20px; font-size: 14px; font-weight: 600; color: var(--db-text-dark); opacity: 0.7;">
+                        @if($journal && $journal->lifebook_teacher_reply)
+                            <div style="margin-bottom: 5px; color: var(--db-purple); font-weight: 800;">Guru Lifebook:
+                                {{ $journal->lifebook_teacher_name }}</div>
+                            {{ $journal->lifebook_teacher_reply }}
+                            <div style="font-size: 10px; margin-top: 10px; opacity: 0.5;">Dibalas pada:
+                                {{ $journal->lifebook_teacher_replied_at->format('d M Y H:i') }}</div>
+                        @else
+                            <i>Menunggu konfirmasi {{ $activeLifebookTeacher->name ?? 'guru lifebook' }}...</i>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
-
-
-
     </div>
 
     <!-- Bottom Navigation -->
     <nav class="db-bottom-nav">
-        <a href="{{ route('dashboard') }}" class="db-nav-item active">
-            <div class="db-nav-icon">
-                <i data-lucide="home"></i>
-            </div>
-            <span>Home</span>
-        </a>
-        <a href="{{ route('parents.leaderboard') }}" class="db-nav-item">
-            <div class="db-nav-icon">
-                <i data-lucide="trophy"></i>
-            </div>
-            <span>Scores</span>
-        </a>
-        <a href="{{ route('profile') }}" class="db-nav-item">
-            <div class="db-nav-icon">
-                <i data-lucide="user"></i>
-            </div>
-            <span>Profile</span>
-        </a>
+        @if($isTeacher)
+            <a href="{{ route('teacher.dashboard') }}" class="db-nav-item active">
+                <div class="db-nav-icon"><i data-lucide="home"></i></div>
+                <span>Home</span>
+            </a>
+            <a href="{{ route('teacher.profile') }}" class="db-nav-item">
+                <div class="db-nav-icon"><i data-lucide="user"></i></div>
+                <span>Profile</span>
+            </a>
+        @else
+            <a href="{{ route('dashboard') }}" class="db-nav-item active">
+                <div class="db-nav-icon"><i data-lucide="home"></i></div>
+                <span>Home</span>
+            </a>
+            <a href="{{ route('parents.leaderboard') }}" class="db-nav-item">
+                <div class="db-nav-icon"><i data-lucide="trophy"></i></div>
+                <span>Scores</span>
+            </a>
+            <a href="{{ route('profile') }}" class="db-nav-item">
+                <div class="db-nav-icon"><i data-lucide="user"></i></div>
+                <span>Profile</span>
+            </a>
+        @endif
     </nav>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

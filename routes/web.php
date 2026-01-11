@@ -51,10 +51,7 @@ Route::middleware(['auth', 'approved'])->group(function () {
     Route::post('/gardening/{id}/progress', [GardeningController::class, 'storeProgress'])->name('gardening.progress.store');
     Route::delete('/gardening/progress/{id}', [GardeningController::class, 'destroyProgress'])->name('gardening.progress.destroy');
 
-    // Children Tracker
-    Route::get('/children-tracker', [ChildrenTrackerController::class, 'index'])->name('children-tracker.index');
-    Route::get('/children-tracker/parent-aspect', [ChildrenTrackerController::class, 'parentAspect'])->name('children-tracker.parent-aspect');
-    Route::post('/children-tracker/save-journal', [ChildrenTrackerController::class, 'saveJournal'])->name('children-tracker.save-journal');
+
 
     // Volunteer Mission
     Route::get('/volunteer-mission', [\App\Http\Controllers\VolunteerMissionController::class, 'index'])->name('volunteer.index');
@@ -95,5 +92,15 @@ Route::prefix('guru')->group(function () {
 
     Route::middleware(['auth:teacher'])->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\TeacherAuthController::class, 'dashboard'])->name('teacher.dashboard');
+        Route::get('/profile', [App\Http\Controllers\TeacherProfileController::class, 'index'])->name('teacher.profile');
+        Route::post('/profile/students', [App\Http\Controllers\TeacherProfileController::class, 'updateStudents'])->name('teacher.profile.students');
     });
+});
+
+// Shared Routes (Accessible by Parents 'web' and Teachers 'teacher')
+Route::middleware(['auth:web,teacher', 'approved'])->group(function () {
+    // Children Tracker
+    Route::get('/children-tracker', [ChildrenTrackerController::class, 'index'])->name('children-tracker.index');
+    Route::get('/children-tracker/parent-aspect', [ChildrenTrackerController::class, 'parentAspect'])->name('children-tracker.parent-aspect');
+    Route::post('/children-tracker/save-journal', [ChildrenTrackerController::class, 'saveJournal'])->name('children-tracker.save-journal');
 });

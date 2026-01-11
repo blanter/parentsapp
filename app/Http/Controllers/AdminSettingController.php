@@ -10,7 +10,8 @@ class AdminSettingController extends Controller
     public function index()
     {
         $settings = WebSetting::all()->pluck('value', 'key');
-        return view('admin.settings', compact('settings'));
+        $teachers = \App\Models\Teacher::activeTeacher()->orderBy('name')->get();
+        return view('admin.settings', compact('settings', 'teachers'));
     }
 
     public function update(Request $request)

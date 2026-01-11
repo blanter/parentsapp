@@ -34,4 +34,10 @@ class Teacher extends Authenticatable
     {
         return $query->where('role', 'guru');
     }
+
+    public function students()
+    {
+        $mainDatabase = config('database.connections.mysql.database');
+        return $this->belongsToMany(Student::class, $mainDatabase . '.teacher_student', 'teacher_id', 'student_id');
+    }
 }

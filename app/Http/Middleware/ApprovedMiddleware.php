@@ -16,6 +16,11 @@ class ApprovedMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Skip check for teachers
+        if (Auth::guard('teacher')->check()) {
+            return $next($request);
+        }
+
         if (Auth::check() && Auth::user()->is_approved) {
             return $next($request);
         }
