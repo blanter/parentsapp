@@ -31,76 +31,63 @@
             </a>
         </div>
 
+        <!-- Month Selector -->
+        <div class="pa-month-selector" style="margin-top: 5px;">
+            <a href="{{ route('children-tracker.index', ['date' => $selectedDate->copy()->subMonth()->format('Y-m-d')]) }}"
+                class="pa-month-btn">
+                <i data-lucide="chevron-left"></i>
+            </a>
+            <span>{{ $selectedMonthName }}</span>
+            <a href="{{ route('children-tracker.index', ['date' => $selectedDate->copy()->addMonth()->format('Y-m-d')]) }}"
+                class="pa-month-btn">
+                <i data-lucide="chevron-right"></i>
+            </a>
+        </div>
+
+        @if(!empty($alerts))
+            <div style="margin: 20px 0;">
+                @foreach($alerts as $alert)
+                    <div class="ct-alert {{ $alert['type'] }}">
+                        <i data-lucide="{{ $alert['icon'] }}"></i>
+                        <span>{{ $alert['message'] }}</span>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
         <h2 class="ct-section-title">Lifebook Children Tracker</h2>
 
         <div class="ct-list">
-            <!-- Aspek Orang Tua -->
-            <a href="#" class="ct-card">
-                <div class="ct-card-icon active">
-                    <i data-lucide="user"></i>
-                </div>
-                <div class="ct-card-info">
-                    <h3>Aspek Orang Tua</h3>
-                    <p>Monitoring peran orang tua</p>
-                </div>
-                <i data-lucide="chevron-right" style="margin-left: auto; opacity: 0.3;"></i>
-            </a>
-
-            <!-- Aspek Anak -->
-            <a href="#" class="ct-card">
-                <div class="ct-card-icon active">
-                    <i data-lucide="users"></i>
-                </div>
-                <div class="ct-card-info">
-                    <h3>Aspek Anak</h3>
-                    <p>Monitoring perkembangan anak</p>
-                </div>
-                <i data-lucide="chevron-right" style="margin-left: auto; opacity: 0.3;"></i>
-            </a>
-
-            @foreach($months as $month)
-                @if($loop->first || (!$month['completed'] && !$month['is_current']))
-                    <a href="#" class="ct-card">
-                        <div class="ct-card-icon {{ $month['is_current'] ? 'active' : '' }}">
-                            <i data-lucide="calendar"></i>
+            @foreach($aspects as $key => $aspect)
+                <a href="{{ $aspect['route'] != '#' ? route($aspect['route'], ['month' => $selectedMonthName]) : '#' }}"
+                    class="ct-card">
+                    <div class="ct-card-icon {{ $aspect['color'] }}">
+                        <i data-lucide="{{ $aspect['icon'] }}"></i>
+                    </div>
+                    <div class="ct-card-info">
+                        <h3>{{ $aspect['name'] }}</h3>
+                        <div class="ct-indicator-wrapper">
+                            @if($aspect['status'] === 'unfilled')
+                                <span class="ct-indicator-pill warning">
+                                    <i data-lucide="alert-circle" style="width: 10px; height: 10px;"></i>
+                                    Belum Diisi
+                                </span>
+                            @elseif($aspect['status'] === 'filled')
+                                <span class="ct-indicator-pill success">
+                                    <i data-lucide="check-circle" style="width: 10px; height: 10px;"></i>
+                                    Sudah Diisi
+                                </span>
+                            @elseif($aspect['status'] === 'replied')
+                                <span class="ct-indicator-pill info">
+                                    <i data-lucide="message-square" style="width: 10px; height: 10px;"></i>
+                                    Ada Balasan Guru
+                                </span>
+                            @endif
                         </div>
-                        <div class="ct-card-info">
-                            <h3>{{ $month['name'] }}</h3>
-                            <p>{{ $month['is_current'] ? 'Bulan ini (Sedang berjalan)' : 'Bulan lalu' }}</p>
-                        </div>
-                        @if($month['is_current'])
-                            <div class="ct-badge" style="background: var(--db-purple); color: #fff;">Sedang Diisi</div>
-                        @endif
-                        <i data-lucide="chevron-right"
-                            style="{{ $month['is_current'] ? '' : 'margin-left: auto;' }} opacity: 0.3;"></i>
-                    </a>
-                @endif
+                    </div>
+                    <i data-lucide="chevron-right" style="opacity: 0.3;"></i>
+                </a>
             @endforeach
-        </div>
-
-        <h2 class="ct-section-title">Selesai Diisi</h2>
-        <div class="ct-list">
-            @foreach($months as $month)
-                @if($month['completed'])
-                    <a href="#" class="ct-card">
-                        <div class="ct-card-icon" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">
-                            <i data-lucide="check-circle-2"></i>
-                        </div>
-                        <div class="ct-card-info">
-                            <h3>{{ $month['name'] }}</h3>
-                            <p>Data sudah tersimpan</p>
-                        </div>
-                        <div class="ct-badge completed">Selesai</div>
-                    </a>
-                @endif
-            @endforeach
-
-            @if(collect($months)->where('completed', true)->isEmpty())
-                <div style="text-align: center; padding: 40px; opacity: 0.4;">
-                    <i data-lucide="inbox" style="width: 40px; height: 40px; margin-bottom: 15px;"></i>
-                    <p style="font-weight: 700; font-size: 14px;">Belum ada data yang selesai</p>
-                </div>
-            @endif
         </div>
 
         <div

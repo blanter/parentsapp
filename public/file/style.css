@@ -2472,6 +2472,7 @@ a.btn.btn-warning {
         max-width: 100%;
     }
 }
+
 /* Admin Dashboard Styles */
 .adm-dash-grid {
     display: grid;
@@ -2537,14 +2538,34 @@ a.btn.btn-warning {
     gap: 5px;
 }
 
-.adm-dash-stat.up { color: #10B981; }
-.adm-dash-stat.pending { color: #f59e0b; }
+.adm-dash-stat.up {
+    color: #10B981;
+}
+
+.adm-dash-stat.pending {
+    color: #f59e0b;
+}
 
 /* Colors for cards */
-.adm-dash-card.users .adm-dash-icon { background: rgba(108, 136, 224, 0.1); color: var(--db-purple); }
-.adm-dash-card.gardening .adm-dash-icon { background: rgba(185, 251, 192, 0.1); color: #10B981; }
-.adm-dash-card.missions .adm-dash-icon { background: rgba(255, 214, 165, 0.1); color: #f59e0b; }
-.adm-dash-card.coming .adm-dash-icon { background: rgba(243, 244, 246, 1); color: #9CA3AF; }
+.adm-dash-card.users .adm-dash-icon {
+    background: rgba(108, 136, 224, 0.1);
+    color: var(--db-purple);
+}
+
+.adm-dash-card.gardening .adm-dash-icon {
+    background: rgba(185, 251, 192, 0.1);
+    color: #10B981;
+}
+
+.adm-dash-card.missions .adm-dash-icon {
+    background: rgba(255, 214, 165, 0.1);
+    color: #f59e0b;
+}
+
+.adm-dash-card.coming .adm-dash-icon {
+    background: rgba(243, 244, 246, 1);
+    color: #9CA3AF;
+}
 
 @media screen and (max-width: 600px) {
     .adm-dash-grid {
@@ -2580,7 +2601,7 @@ a.btn.btn-warning {
 
 .ct-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
     border-color: var(--db-purple);
 }
 
@@ -2629,4 +2650,335 @@ a.btn.btn-warning {
 .ct-badge.completed {
     background: rgba(16, 185, 129, 0.1);
     color: #10B981;
+}
+
+/* Colorful variants for Children Tracker */
+.ct-card-icon.color-purple {
+    background: rgba(108, 136, 224, 0.1);
+    color: var(--db-purple);
+}
+
+.ct-card-icon.color-green {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+}
+
+.ct-card-icon.color-orange {
+    background: rgba(255, 107, 74, 0.1);
+    color: var(--db-accent);
+}
+
+.ct-card-icon.color-blue {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3B82F6;
+}
+
+/* Improved layout for cramped text */
+.ct-card {
+    min-height: 80px;
+    padding: 15px 20px;
+}
+
+.ct-card-info {
+    flex: 1;
+    min-width: 0;
+    /* Prevents text overflow issues */
+}
+
+.ct-card-info h3 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 380px) {
+    .ct-card {
+        padding: 12px 15px;
+        gap: 12px;
+    }
+
+    .ct-card-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .ct-card-info h3 {
+        font-size: 14px;
+    }
+
+    .ct-card-info p {
+        font-size: 11px;
+    }
+
+    .ct-badge {
+        font-size: 10px;
+        padding: 4px 10px;
+    }
+}
+
+/* Enhanced Colorful Variants for Children Tracker - Matching Dashboard Vibe */
+.ct-card-icon.color-purple {
+    background: linear-gradient(135deg, #6C88E0, #4A63B3);
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(108, 136, 224, 0.3);
+}
+
+.ct-card-icon.color-green {
+    background: linear-gradient(135deg, #10B981, #059669);
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+}
+
+.ct-card-icon.color-orange {
+    background: linear-gradient(135deg, #FF6B4A, #C9462B);
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(255, 107, 74, 0.3);
+}
+
+.ct-card-icon.color-blue {
+    background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+}
+
+.ct-card-icon.color-yellow {
+    background: linear-gradient(135deg, #FCD12A, #D9AF26);
+    color: var(--db-text-dark);
+    box-shadow: 0 5px 15px rgba(252, 209, 42, 0.3);
+}
+
+/* Selesai Diisi Checkbox Icon */
+.ct-card-icon.color-success {
+    background: linear-gradient(135deg, #10B981, #059669);
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+}
+
+/* Parent Aspect Styles */
+.pa-container {
+    padding-bottom: 120px;
+}
+
+.pa-month-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--db-text-dark);
+}
+
+.pa-month-btn {
+    background: #F3F4F6;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pa-month-btn:hover {
+    background: var(--db-purple);
+    color: #fff;
+}
+
+.pa-child-selector {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.pa-child-label {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.pa-select-wrapper {
+    position: relative;
+    max-width: 250px;
+    margin: 0 auto;
+}
+
+.pa-select {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 15px;
+    border: 2px solid #F3F4F6;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--db-text-dark);
+    appearance: none;
+    background: #fff;
+    cursor: pointer;
+    text-align: center;
+}
+
+.pa-select:focus {
+    border-color: var(--db-purple);
+    outline: none;
+}
+
+.pa-form-section {
+    margin-bottom: 30px;
+}
+
+.pa-question {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.5;
+    color: var(--db-text-dark);
+    margin-bottom: 15px;
+}
+
+.pa-textarea-wrapper {
+    position: relative;
+    background: #fff;
+    border-radius: 20px;
+    border: 2px solid #F3F4F6;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.pa-textarea-wrapper:focus-within {
+    border-color: var(--db-purple);
+    box-shadow: 0 10px 25px rgba(108, 136, 224, 0.1);
+}
+
+.pa-textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 20px;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: var(--db-text-dark);
+    resize: vertical;
+}
+
+.pa-textarea:focus {
+    outline: none;
+}
+
+.pa-textarea:disabled {
+    background: #FAFAFA;
+    cursor: not-allowed;
+}
+
+.pa-save-btn {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    padding: 6px 15px;
+    background: var(--db-purple);
+    border: none;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 800;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 0px #4A63B3;
+}
+
+.pa-save-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+.pa-save-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0px #4A63B3;
+}
+
+.pa-response-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    margin: 40px 0 20px;
+}
+
+.pa-notif-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #EF4444;
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    border: 2px solid #fff;
+}
+
+/* Indicators for List */
+.ct-indicator-wrapper {
+    display: flex;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.ct-indicator-pill {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ct-indicator-pill.warning {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+}
+
+.ct-indicator-pill.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+}
+/* Additional indicator pill variants */
+.ct-indicator-pill.info {
+    background: rgba(108, 136, 224, 0.1);
+    color: var(--db-purple);
+}
+
+/* Alert Box Styles */
+.ct-alert {
+    padding: 15px 20px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.ct-alert.warning {
+    background: rgba(239, 68, 68, 0.08);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.1);
+}
+
+.ct-alert.info {
+    background: rgba(108, 136, 224, 0.08);
+    color: var(--db-purple);
+    border: 1px solid rgba(108, 136, 224, 0.1);
+}
+
+.ct-alert i {
+    width: 18px;
+    height: 18px;
 }

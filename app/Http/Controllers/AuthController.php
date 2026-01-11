@@ -44,6 +44,13 @@ class AuthController extends Controller
     public function showRegisterForm()
     {
         $students = \App\Models\Student::active()->orderBy('name')->get();
+        $takenStudentIds = \Illuminate\Support\Facades\DB::table('parent_student')->pluck('student_id')->toArray();
+
+        $students->map(function ($student) use ($takenStudentIds) {
+            $student->is_taken = in_array($student->id, $takenStudentIds);
+            return $student;
+        });
+
         return view('auth.register', compact('students'));
     }
 
@@ -54,7 +61,19 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'student_ids' => 'required|array|min:1',
-            'student_ids.*' => 'exists:lifebook_users.users,id',
+            'student_ids.*' => [
+                'exists:lifebook_users.users,id',
+                function ($attribute, $value, $fail) {
+                    $isTaken = \Illuminate\Support\Facades\DB::table('parent_student')
+                        ->where('student_id', $value)
+                        ->exists();
+                    if ($isTaken) {
+                        $student = \App\Models\Student::find($value);
+                        $name = $student ? $student->name : $value;
+                        $fail("Murid $name sudah memiliki akun orang tua terdaftar.");
+                    }
+                },
+            ],
         ], [
             'student_ids.required' => 'Pilih setidaknya satu nama anak.',
         ]);

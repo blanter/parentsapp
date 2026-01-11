@@ -53,6 +53,8 @@ Route::middleware(['auth', 'approved'])->group(function () {
 
     // Children Tracker
     Route::get('/children-tracker', [ChildrenTrackerController::class, 'index'])->name('children-tracker.index');
+    Route::get('/children-tracker/parent-aspect', [ChildrenTrackerController::class, 'parentAspect'])->name('children-tracker.parent-aspect');
+    Route::post('/children-tracker/save-journal', [ChildrenTrackerController::class, 'saveJournal'])->name('children-tracker.save-journal');
 
     // Volunteer Mission
     Route::get('/volunteer-mission', [\App\Http\Controllers\VolunteerMissionController::class, 'index'])->name('volunteer.index');

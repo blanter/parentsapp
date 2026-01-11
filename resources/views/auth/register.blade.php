@@ -147,8 +147,8 @@
                     <select name="student_ids[]" id="student_ids" class="auth-form-control select2" multiple="multiple"
                         required>
                         @foreach($students as $student)
-                            <option value="{{ $student->id }}" {{ (is_array(old('student_ids')) && in_array($student->id, old('student_ids'))) ? 'selected' : '' }}>
-                                {{ $student->name }}
+                            <option value="{{ $student->id }}" {{ (is_array(old('student_ids')) && in_array($student->id, old('student_ids'))) ? 'selected' : '' }} {{ $student->is_taken ? 'disabled' : '' }}>
+                                {{ $student->name }} {{ $student->is_taken ? '(Sudah Ada Akun)' : '' }}
                             </option>
                         @endforeach
                     </select>
