@@ -87,3 +87,13 @@ Route::middleware(['auth', 'approved', 'admin'])->group(function () {
 
 // Public No PIN / Guest
 Route::get('/leaderboard-parents', [ParentScoreController::class, 'leaderboard'])->name('parents.leaderboard');
+// Teacher Routes
+Route::prefix('guru')->group(function () {
+    Route::get('/login', [App\Http\Controllers\TeacherAuthController::class, 'showLoginForm'])->name('teacher.login');
+    Route::post('/login', [App\Http\Controllers\TeacherAuthController::class, 'login'])->name('teacher.login.post');
+    Route::post('/logout', [App\Http\Controllers\TeacherAuthController::class, 'logout'])->name('teacher.logout');
+
+    Route::middleware(['auth:teacher'])->group(function () {
+        Route::get('/dashboard', [App\Http\Controllers\TeacherAuthController::class, 'dashboard'])->name('teacher.dashboard');
+    });
+});

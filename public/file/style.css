@@ -916,6 +916,7 @@ a.btn.btn-warning {
     gap: 12px;
     transition: all 0.1s;
     position: relative;
+    font-family: 'Poppins', sans-serif;
 }
 
 .db-menu-item i {
@@ -2948,6 +2949,7 @@ a.btn.btn-warning {
     background: rgba(16, 185, 129, 0.1);
     color: #10B981;
 }
+
 /* Additional indicator pill variants */
 .ct-indicator-pill.info {
     background: rgba(108, 136, 224, 0.1);
