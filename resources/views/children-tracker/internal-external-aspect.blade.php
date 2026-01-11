@@ -86,12 +86,20 @@
             </div>
         </div>
 
-        <!-- Month Label -->
-        <div style="text-align: center; margin-bottom: 20px;">
-            <span
-                style="font-weight: 800; font-size: 16px; color: var(--db-text-dark); background: #F3F4F6; padding: 8px 20px; border-radius: 99px;">
-                {{ $selectedMonth }}
-            </span>
+        <!-- Month Selector -->
+        <div class="pa-month-selector" style="margin-top: 5px;">
+            @php
+                $timeDate = Carbon\Carbon::createFromFormat('F Y', $selectedTime);
+            @endphp
+            <a href="{{ route('children-tracker.internal-external-aspect', ['month' => $timeDate->copy()->subMonth()->translatedFormat('F Y'), 'child_id' => $selectedChildId]) }}"
+                class="pa-month-btn">
+                <i data-lucide="chevron-left"></i>
+            </a>
+            <span>{{ $selectedTime }}</span>
+            <a href="{{ route('children-tracker.internal-external-aspect', ['month' => $timeDate->copy()->addMonth()->translatedFormat('F Y'), 'child_id' => $selectedChildId]) }}"
+                class="pa-month-btn">
+                <i data-lucide="chevron-right"></i>
+            </a>
         </div>
 
         <!-- Child Selector -->
@@ -306,7 +314,7 @@
         // Handle child selector change
         $('#childSelector').on('change', function () {
             const childId = $(this).val();
-            window.location.href = "{{ route('children-tracker.internal-external-aspect') }}?month={{ $selectedMonth }}&child_id=" + childId;
+            window.location.href = "{{ route('children-tracker.internal-external-aspect') }}?month={{ $selectedTime }}&child_id=" + childId;
         });
 
         // Set emoji rating
@@ -352,7 +360,7 @@
 
         function submitReflection() {
             const childId = $('#childSelector').val();
-            const monthYear = "{{ $selectedMonth }}";
+            const monthYear = "{{ $selectedTime }}";
             const ratings = {};
             let allSet = true;
 
@@ -391,11 +399,10 @@
             });
         }
 
-        // AJAX Save Field
+        // AJAX Save Fields (Batch)
         function saveField(field, event) {
-            const value = $('#' + field).val();
             const childId = $('#childSelector').val();
-            const monthYear = "{{ $selectedMonth }}";
+            const monthYear = "{{ $selectedTime }}";
             const btn = event.currentTarget;
             const originalText = $(btn).text();
 
@@ -403,6 +410,16 @@
                 alert('Silakan pilih murid terlebih dahulu.');
                 return;
             }
+
+            // Collect all editable fields
+            const data = {};
+            $('.pa-textarea').each(function() {
+                if (!$(this).prop('readonly')) {
+                    const id = $(this).attr('id');
+                    const val = $(this).val();
+                    data[id] = val;
+                }
+            });
 
             $(btn).prop('disabled', true).text('...');
 
@@ -413,8 +430,7 @@
                     _token: "{{ csrf_token() }}",
                     student_id: childId,
                     month_year: monthYear,
-                    field: field,
-                    value: value
+                    data: data
                 },
                 success: function (response) {
                     if (response.success) {

@@ -37,44 +37,26 @@
             </a>
         </div>
 
-        <!-- Month Selector -->
-        <div class="pa-month-selector" style="margin-top: 5px;">
-            <a href="{{ route('children-tracker.index', ['date' => $selectedDate->copy()->subMonth()->format('Y-m-d')]) }}"
-                class="pa-month-btn">
-                <i data-lucide="chevron-left"></i>
-            </a>
-            <span>{{ $selectedMonthName }}</span>
-            <a href="{{ route('children-tracker.index', ['date' => $selectedDate->copy()->addMonth()->format('Y-m-d')]) }}"
-                class="pa-month-btn">
-                <i data-lucide="chevron-right"></i>
-            </a>
-        </div>
-
-        @if(!empty($alerts))
-            <div style="margin: 20px 0;">
-                @foreach($alerts as $alert)
-                    <div class="ct-alert {{ $alert['type'] }}">
-                        <i data-lucide="{{ $alert['icon'] }}"></i>
-                        <span>{{ $alert['message'] }}</span>
-                    </div>
-                @endforeach
-            </div>
-        @endif
-
         @if($isAdmin || $isTeacher)
             <h2 class="ct-section-title">Laporan Jurnal Masuk</h2>
             <div class="ct-list">
                 @forelse($submissions as $sub)
+                    @php
+                        $isQuarterly = str_contains($sub->bulan, 'Kuartal');
+                    @endphp
+
                     {{-- Card for Aspek Orang Tua --}}
-                    @if($sub->parent_aspect_filled)
-                        <a href="{{ route('children-tracker.parent-aspect', ['month' => $selectedMonthName, 'child_id' => $sub->student_id]) }}"
+                    @if($sub->parent_aspect_filled && ($isQuarterly || $sub->bulan == 'Orang Tua')) {{-- Handling potential old data or identifying quarterly --}}
+                        <a href="{{ route('children-tracker.parent-aspect', ['time' => $sub->bulan . ' ' . $currentYear, 'child_id' => $sub->student_id]) }}"
                             class="ct-card">
                             <div class="ct-card-icon color-purple">
                                 <i data-lucide="user"></i>
                             </div>
                             <div class="ct-card-info">
                                 <h3 style="font-size: 15px;">{{ $sub->parent_name }}</h3>
-                                <p style="font-size: 10px; opacity: 0.6; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">Aspek Orang Tua</p>
+                                <p style="font-size: 10px; opacity: 0.6; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">
+                                    Aspek Orang Tua <span style="background: var(--db-purple); color: white; padding: 2px 6px; border-radius: 4px; font-size: 8px;">{{ $sub->bulan }}</span>
+                                </p>
                                 <p style="font-size: 11px; opacity: 0.7; font-weight: 600; line-height: 1.4; margin-top: 2px;">
                                     <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="baby" style="width: 12px; height: 12px;"></i> {{ $sub->student_name }}</span>
                                     <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="user-check" style="width: 12px; height: 12px;"></i> Wali: {{ $sub->teacher_wali ?: '-' }}</span>
@@ -103,15 +85,17 @@
                     @endif
 
                     {{-- Card for Aspek Anak --}}
-                    @if($sub->child_aspect_filled)
-                        <a href="{{ route('children-tracker.child-aspect', ['month' => $selectedMonthName, 'child_id' => $sub->student_id]) }}"
+                    @if($sub->child_aspect_filled && $isQuarterly)
+                        <a href="{{ route('children-tracker.child-aspect', ['time' => $sub->bulan . ' ' . $currentYear, 'child_id' => $sub->student_id]) }}"
                             class="ct-card">
                             <div class="ct-card-icon color-orange">
                                 <i data-lucide="users"></i>
                             </div>
                             <div class="ct-card-info">
                                 <h3 style="font-size: 15px;">{{ $sub->parent_name }}</h3>
-                                <p style="font-size: 10px; opacity: 0.6; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">Aspek Anak</p>
+                                <p style="font-size: 10px; opacity: 0.6; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">
+                                    Aspek Anak <span style="background: var(--db-secondary); color: white; padding: 2px 6px; border-radius: 4px; font-size: 8px;">{{ $sub->bulan }}</span>
+                                </p>
                                 <p style="font-size: 11px; opacity: 0.7; font-weight: 600; line-height: 1.4; margin-top: 2px;">
                                     <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="baby" style="width: 12px; height: 12px;"></i> {{ $sub->student_name }}</span>
                                     <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="user-check" style="width: 12px; height: 12px;"></i> Wali: {{ $sub->teacher_wali ?: '-' }}</span>
@@ -138,16 +122,19 @@
                             <i data-lucide="arrow-right" style="opacity: 0.3;"></i>
                         </a>
                     @endif
+
                     {{-- Card for Aspek Internal/Eksternal --}}
-                    @if($sub->internal_external_filled)
-                        <a href="{{ route('children-tracker.internal-external-aspect', ['month' => $selectedMonthName, 'child_id' => $sub->student_id]) }}"
+                    @if($sub->internal_external_filled && !$isQuarterly)
+                        <a href="{{ route('children-tracker.internal-external-aspect', ['month' => $sub->bulan . ' ' . $currentYear, 'child_id' => $sub->student_id]) }}"
                             class="ct-card">
                             <div class="ct-card-icon color-green">
                                 <i data-lucide="calendar"></i>
                             </div>
                             <div class="ct-card-info">
                                 <h3 style="font-size: 15px;">{{ $sub->parent_name }}</h3>
-                                <p style="font-size: 10px; opacity: 0.6; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">Aspek Internal/Eksternal</p>
+                                <p style="font-size: 10px; opacity: 0.6; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">
+                                    Internal/Eksternal <span style="background: #10B981; color: white; padding: 2px 6px; border-radius: 4px; font-size: 8px;">{{ $sub->bulan }}</span>
+                                </p>
                                 <p style="font-size: 11px; opacity: 0.7; font-weight: 600; line-height: 1.4; margin-top: 2px;">
                                     <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="baby" style="width: 12px; height: 12px;"></i> {{ $sub->student_name }}</span>
                                     <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="user-check" style="width: 12px; height: 12px;"></i> Wali: {{ $sub->teacher_wali ?: '-' }}</span>
@@ -177,22 +164,25 @@
                 @empty
                     <div style="text-align: center; padding: 60px 20px; opacity: 0.4;">
                         <i data-lucide="file-search" style="width: 48px; height: 48px; margin-bottom: 15px;"></i>
-                        <p style="font-weight: 700;">Belum ada data jurnal masuk<br>untuk bulan ini.</p>
+                        <p style="font-weight: 700;">Belum ada data jurnal masuk<br>untuk periode saat ini.</p>
                     </div>
                 @endforelse
             </div>
         @else
-            <h2 class="ct-section-title">Lifebook Children Tracker</h2>
+            <h2 class="ct-section-title">Children Tracker Monitoring</h2>
 
             <div class="ct-list">
                 @foreach($aspects as $key => $aspect)
-                    <a href="{{ $aspect['route'] != '#' ? route($aspect['route'], ['month' => $selectedMonthName]) : '#' }}"
-                        class="ct-card">
+                    @php
+                        $routeParams = ($key === 'internal_external') ? ['month' => $aspect['time_label']] : ['time' => $aspect['time_label']];
+                    @endphp
+                    <a href="{{ route($aspect['route'], $routeParams) }}" class="ct-card">
                         <div class="ct-card-icon {{ $aspect['color'] }}">
                             <i data-lucide="{{ $aspect['icon'] }}"></i>
                         </div>
                         <div class="ct-card-info">
-                            <h3>{{ $aspect['name'] }}</h3>
+                            <h3 style="font-size: 16px;">{{ $aspect['name'] }}</h3>
+                            <p style="font-size: 11px; opacity: 0.6; font-weight: 600; margin-bottom: 5px;">{{ $aspect['time_label'] }}</p>
                             <div class="ct-indicator-wrapper">
                                 @if($aspect['status'] === 'unfilled')
                                     <span class="ct-indicator-pill warning">

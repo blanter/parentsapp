@@ -47,12 +47,40 @@
             </div>
         </div>
 
-        <!-- Month Label -->
-        <div style="text-align: center; margin-bottom: 20px;">
-            <span
-                style="font-weight: 800; font-size: 16px; color: var(--db-text-dark); background: #F3F4F6; padding: 8px 20px; border-radius: 99px;">
-                {{ $selectedMonth }}
-            </span>
+        <!-- Quarter Selector -->
+        <div class="pa-month-selector" style="margin-top: 5px;">
+            @php
+                // Expecting "Kuartal X 2026"
+                $parts = explode(' ', $selectedTime);
+                $qNum = (int) ($parts[1] ?? 1);
+                $year = (int) ($parts[2] ?? date('Y'));
+
+                $prevQ = $qNum - 1;
+                $prevYear = $year;
+                if ($prevQ < 1) {
+                    $prevQ = 4;
+                    $prevYear--;
+                }
+
+                $nextQ = $qNum + 1;
+                $nextYear = $year;
+                if ($nextQ > 4) {
+                    $nextQ = 1;
+                    $nextYear++;
+                }
+
+                $prevTime = "Kuartal $prevQ $prevYear";
+                $nextTime = "Kuartal $nextQ $nextYear";
+            @endphp
+            <a href="{{ route('children-tracker.parent-aspect', ['time' => $prevTime, 'child_id' => $selectedChildId]) }}"
+                class="pa-month-btn">
+                <i data-lucide="chevron-left"></i>
+            </a>
+            <span>{{ $selectedTime }}</span>
+            <a href="{{ route('children-tracker.parent-aspect', ['time' => $nextTime, 'child_id' => $selectedChildId]) }}"
+                class="pa-month-btn">
+                <i data-lucide="chevron-right"></i>
+            </a>
         </div>
 
         <!-- Child Selector -->
@@ -70,23 +98,28 @@
         </div>
 
         @if($isTeacher || (Auth::check() && Auth::user()->role === 'admin'))
-            <div style="background: white; border-radius: 20px; padding: 15px 20px; margin-bottom: 25px; border: 2px solid #F3F4F6;">
+            <div
+                style="background: white; border-radius: 20px; padding: 15px 20px; margin-bottom: 25px; border: 2px solid #F3F4F6;">
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <div style="width: 32px; height: 32px; background: rgba(108, 136, 224, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--db-purple);">
+                        <div
+                            style="width: 32px; height: 32px; background: rgba(108, 136, 224, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--db-purple);">
                             <i data-lucide="users" style="width: 18px; height: 18px;"></i>
                         </div>
                         <div>
-                            <p style="font-size: 10px; font-weight: 700; opacity: 0.5; text-transform: uppercase;">Orang Tua</p>
+                            <p style="font-size: 10px; font-weight: 700; opacity: 0.5; text-transform: uppercase;">Orang Tua
+                            </p>
                             <p style="font-size: 14px; font-weight: 800; color: var(--db-text-dark);">{{ $parentName }}</p>
                         </div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <div style="width: 32px; height: 32px; background: rgba(54, 179, 126, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--db-secondary);">
+                        <div
+                            style="width: 32px; height: 32px; background: rgba(54, 179, 126, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--db-secondary);">
                             <i data-lucide="user-check" style="width: 18px; height: 18px;"></i>
                         </div>
                         <div>
-                            <p style="font-size: 10px; font-weight: 700; opacity: 0.5; text-transform: uppercase;">Guru Wali</p>
+                            <p style="font-size: 10px; font-weight: 700; opacity: 0.5; text-transform: uppercase;">Guru Wali
+                            </p>
                             <p style="font-size: 14px; font-weight: 800; color: var(--db-text-dark);">{{ $teacherWali }}</p>
                         </div>
                     </div>
@@ -130,7 +163,8 @@
 
         <div class="pa-form-section">
             <p class="pa-question">
-                Saran dari <b>Guru Wali ({{ $teacherWali }})</b> antara harapan orangtua dengan apa yang terjadi di sekolah dan strategi yang bisa
+                Saran dari <b>Guru Wali ({{ $teacherWali }})</b> antara harapan orangtua dengan apa yang terjadi di
+                sekolah dan strategi yang bisa
                 digunakan dari pihak rumah maupun pihak sekolah!
             </p>
             <div class="pa-textarea-wrapper">
@@ -147,10 +181,12 @@
                         style="padding: 20px; font-size: 14px; font-weight: 600; color: var(--db-text-dark); opacity: 0.7;">
                         @if($journal && $journal->teacher_reply)
                             <div style="margin-bottom: 5px; color: var(--db-purple); font-weight: 800;">Guru:
-                                {{ $journal->teacher_name }}</div>
+                                {{ $journal->teacher_name }}
+                            </div>
                             {{ $journal->teacher_reply }}
                             <div style="font-size: 10px; margin-top: 10px; opacity: 0.5;">Dibalas pada:
-                                {{ $journal->teacher_replied_at->format('d M Y H:i') }}</div>
+                                {{ $journal->teacher_replied_at->format('d M Y H:i') }}
+                            </div>
                         @else
                             <i>Menunggu saran dari Guru Wali...</i>
                         @endif
@@ -173,10 +209,12 @@
                         style="padding: 20px; font-size: 14px; font-weight: 600; color: var(--db-text-dark); opacity: 0.7;">
                         @if($journal && $journal->lifebook_teacher_reply)
                             <div style="margin-bottom: 5px; color: var(--db-purple); font-weight: 800;">Guru Lifebook:
-                                {{ $journal->lifebook_teacher_name }}</div>
+                                {{ $journal->lifebook_teacher_name }}
+                            </div>
                             {{ $journal->lifebook_teacher_reply }}
                             <div style="font-size: 10px; margin-top: 10px; opacity: 0.5;">Dibalas pada:
-                                {{ $journal->lifebook_teacher_replied_at->format('d M Y H:i') }}</div>
+                                {{ $journal->lifebook_teacher_replied_at->format('d M Y H:i') }}
+                            </div>
                         @else
                             <i>Menunggu konfirmasi Guru Lifebook...</i>
                         @endif
@@ -217,17 +255,15 @@
     <script>
         lucide.createIcons();
 
-        // Handle child selector change
         $('#childSelector').on('change', function () {
             const childId = $(this).val();
-            window.location.href = "{{ route('children-tracker.parent-aspect') }}?month={{ $selectedMonth }}&child_id=" + childId;
+            window.location.href = "{{ route('children-tracker.parent-aspect') }}?time={{ $selectedTime }}&child_id=" + childId;
         });
 
-        // AJAX Save Field
+        // AJAX Save Fields (Batch)
         function saveField(field, event) {
-            const value = $('#' + field).val();
             const childId = $('#childSelector').val();
-            const monthYear = "{{ $selectedMonth }}";
+            const monthYear = "{{ $selectedTime }}";
             const btn = event.currentTarget;
             const originalText = $(btn).text();
 
@@ -235,6 +271,16 @@
                 alert('Silakan pilih murid terlebih dahulu.');
                 return;
             }
+
+            // Collect all editable fields
+            const data = {};
+            $('.pa-textarea').each(function () {
+                if (!$(this).prop('readonly')) {
+                    const id = $(this).attr('id');
+                    const val = $(this).val();
+                    data[id] = val;
+                }
+            });
 
             $(btn).prop('disabled', true).text('...');
 
@@ -245,8 +291,7 @@
                     _token: "{{ csrf_token() }}",
                     student_id: childId,
                     month_year: monthYear,
-                    field: field,
-                    value: value
+                    data: data
                 },
                 success: function (response) {
                     if (response.success) {

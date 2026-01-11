@@ -47,12 +47,34 @@
             </div>
         </div>
 
-        <!-- Month Label -->
-        <div style="text-align: center; margin-bottom: 20px;">
-            <span
-                style="font-weight: 800; font-size: 16px; color: var(--db-text-dark); background: #F3F4F6; padding: 8px 20px; border-radius: 99px;">
-                {{ $selectedMonth }}
-            </span>
+        <!-- Quarter Selector -->
+        <div class="pa-month-selector" style="margin-top: 5px;">
+            @php
+                // Expecting "Kuartal X 2026"
+                $parts = explode(' ', $selectedTime);
+                $qNum = (int)($parts[1] ?? 1);
+                $year = (int)($parts[2] ?? date('Y'));
+                
+                $prevQ = $qNum - 1;
+                $prevYear = $year;
+                if($prevQ < 1) { $prevQ = 4; $prevYear--; }
+                
+                $nextQ = $qNum + 1;
+                $nextYear = $year;
+                if($nextQ > 4) { $nextQ = 1; $nextYear++; }
+                
+                $prevTime = "Kuartal $prevQ $prevYear";
+                $nextTime = "Kuartal $nextQ $nextYear";
+            @endphp
+            <a href="{{ route('children-tracker.child-aspect', ['time' => $prevTime, 'child_id' => $selectedChildId]) }}"
+                class="pa-month-btn">
+                <i data-lucide="chevron-left"></i>
+            </a>
+            <span>{{ $selectedTime }}</span>
+            <a href="{{ route('children-tracker.child-aspect', ['time' => $nextTime, 'child_id' => $selectedChildId]) }}"
+                class="pa-month-btn">
+                <i data-lucide="chevron-right"></i>
+            </a>
         </div>
 
         <!-- Child Selector -->
@@ -242,17 +264,15 @@
     <script>
         lucide.createIcons();
 
-        // Handle child selector change
         $('#childSelector').on('change', function () {
             const childId = $(this).val();
-            window.location.href = "{{ route('children-tracker.child-aspect') }}?month={{ $selectedMonth }}&child_id=" + childId;
+            window.location.href = "{{ route('children-tracker.child-aspect') }}?time={{ $selectedTime }}&child_id=" + childId;
         });
 
-        // AJAX Save Field
+        // AJAX Save Fields (Batch)
         function saveField(field, event) {
-            const value = $('#' + field).val();
             const childId = $('#childSelector').val();
-            const monthYear = "{{ $selectedMonth }}";
+            const monthYear = "{{ $selectedTime }}";
             const btn = event.currentTarget;
             const originalText = $(btn).text();
 
@@ -260,6 +280,16 @@
                 alert('Silakan pilih murid terlebih dahulu.');
                 return;
             }
+
+            // Collect all editable fields
+            const data = {};
+            $('.pa-textarea').each(function() {
+                if (!$(this).prop('readonly')) {
+                    const id = $(this).attr('id');
+                    const val = $(this).val();
+                    data[id] = val;
+                }
+            });
 
             $(btn).prop('disabled', true).text('...');
 
@@ -270,8 +300,7 @@
                     _token: "{{ csrf_token() }}",
                     student_id: childId,
                     month_year: monthYear,
-                    field: field,
-                    value: value
+                    data: data
                 },
                 success: function (response) {
                     if (response.success) {
