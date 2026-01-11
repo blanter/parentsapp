@@ -208,8 +208,30 @@
             </div>
         @endif
 
+        <!-- Note Penjelasan -->
+        <div style="background: rgba(108, 136, 224, 0.05); border: 1px solid rgba(108, 136, 224, 0.1); border-radius: 20px; padding: 20px; margin-top: 40px; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; color: var(--db-purple);">
+                <i data-lucide="info" style="width: 20px; height: 20px;"></i>
+                <h4 style="font-size: 14px; font-weight: 800; margin: 0;">PANDUAN PENGISIAN JURNAL</h4>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; gap: 12px;">
+                    <div style="width: 8px; height: 8px; background: var(--db-purple); border-radius: 50%; margin-top: 5px; flex-shrink: 0;"></div>
+                    <p style="font-size: 12px; color: var(--db-text-dark); opacity: 0.8; margin: 0; line-height: 1.5;">
+                        <b>Kuartalan (Per 3 Bulan):</b> Untuk <b>Aspek Orang Tua & Anak</b>. Bertujuan untuk melihat perkembangan jangka panjang anak di rumah dan sekolah.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <div style="width: 8px; height: 8px; background: var(--db-secondary); border-radius: 50%; margin-top: 5px; flex-shrink: 0;"></div>
+                    <p style="font-size: 12px; color: var(--db-text-dark); opacity: 0.8; margin: 0; line-height: 1.5;">
+                        <b>Bulanan (Per 1 Bulan):</b> Untuk <b>Aspek Internal & Eksternal</b>. Bertujuan untuk monitoring pertumbuhan karakter dan strategi bulanan secara rutin.
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <div
-            style="text-align: center; margin-top: 50px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark); margin-bottom: 100px;">
+            style="text-align: center; margin-top: 20px; opacity: 0.3; font-size: 10px; font-weight: 700; color: var(--db-text-dark); margin-bottom: 100px;">
             Version {{ $appVersion }} • Parents App
         </div>
     </div>
