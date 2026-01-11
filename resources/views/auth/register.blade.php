@@ -14,21 +14,21 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        /* Force Select2 to take full width */
         .select2-container {
             width: 100% !important;
         }
 
+        /* Select2 Premium Styling for Auth Pages */
         .select2-container--default .select2-selection--multiple {
             background: #fff;
-            border: 2px solid #F3F4F6;
-            border-radius: 15px;
-            padding: 8px 12px;
+            border: 2px solid #E5E7EB;
+            border-radius: 20px;
+            padding: 10px 15px;
             min-height: 55px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s;
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 5px;
         }
 
         .select2-container--default.select2-container--focus .select2-selection--multiple {
@@ -40,54 +40,51 @@
         .select2-container--default .select2-selection--multiple .select2-selection__choice {
             background-color: rgba(108, 136, 224, 0.1);
             border: none;
-            border-radius: 10px;
-            padding: 4px 10px;
+            border-radius: 12px;
+            padding: 5px 12px;
             color: var(--db-purple);
             font-weight: 700;
             font-size: 13px;
-            margin: 2px;
+            margin: 4px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
 
         .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
             color: var(--db-purple);
-            border-right: none;
-            margin-right: 0;
+            border: none;
             font-weight: 900;
             font-size: 16px;
             opacity: 0.5;
-            transition: opacity 0.2s;
+            transition: all 0.2s;
+            margin-right: 0;
         }
 
         .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
-            background: none;
             opacity: 1;
-        }
-
-        .select2-container--default .select2-search--inline .select2-search__field {
-            margin-top: 5px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 14px;
+            background: none;
         }
 
         .select2-dropdown {
             border: 2px solid var(--db-purple);
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             z-index: 9999;
+            margin-top: 5px;
         }
 
         .select2-results__option {
-            padding: 12px 15px;
+            padding: 12px 18px;
             font-size: 14px;
             font-weight: 600;
+            color: var(--db-text-dark);
         }
 
         .select2-container--default .select2-results__option--highlighted[aria-selected] {
-            background-color: var(--db-purple);
+            background-color: var(--db-purple) !important;
+            color: #ffffff !important;
         }
 
         .select2-container--default .select2-results__option[aria-selected=true] {
@@ -99,12 +96,10 @@
         .auth-form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 800;
-            font-size: 13px;
+            font-weight: 700;
+            font-size: 14px;
             color: var(--db-text-dark);
-            opacity: 0.7;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            padding-left: 5px;
         }
     </style>
 </head>

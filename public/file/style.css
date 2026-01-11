@@ -3453,6 +3453,7 @@ a.btn.btn-warning {
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
     background-color: #6c88e0 !important;
+    color: #ffffff !important;
 }
 
 /* Specialized Modal Styling for Admin Dashboard */
@@ -3617,6 +3618,7 @@ a.btn.btn-warning {
     background: #ffffff !important;
     border-color: #6c88e0 !important;
 }
+
 /* Force Select2 Full Width in Modals */
 .modal .select2-container {
     width: 100% !important;
