@@ -14,7 +14,7 @@
     <title>Download App - Lifebook Parents</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
         rel="stylesheet">
-    <link href="{{asset('/file/style.css')}}?v=13" rel="stylesheet" />
+    <link href="{{asset('/file/style.css')}}?v=14" rel="stylesheet" />
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
@@ -30,6 +30,17 @@
             </div>
             <h1>Pasang Aplikasi</h1>
             <p>Gunakan aplikasi untuk pengalaman terbaik</p>
+            
+            <!-- Quick Download Section -->
+            <div id="quickInstallContainer" class="pwa-promo-container" style="display: none;">
+                <button id="quickInstallButton" class="pwa-download-btn">
+                    <i data-lucide="download"></i>
+                    <span>UNDUH APLIKASI</span>
+                </button>
+                <p style="font-size: 11px; font-weight: 700; color: var(--db-purple); margin-top: 5px; opacity: 0.8;">
+                    Klik untuk instalasi otomatis
+                </p>
+            </div>
         </div>
 
         <div class="dl-content-card">
@@ -59,16 +70,6 @@
                         aplikasi.</p>
                 </div>
             </div>
-        </div>
-
-        <div id="installContainer" style="margin-top: 30px; display: none;">
-            <button id="installButton" class="auth-btn-primary" style="width: 100%; padding: 18px; font-size: 16px; background: var(--db-purple); box-shadow: 0 6px 0px #4A63B3;">
-                <i data-lucide="plus-circle"></i>
-                <span>PASANG APLIKASI SEKARANG</span>
-            </button>
-            <p style="text-align: center; font-size: 11px; margin-top: 10px; opacity: 0.6; font-weight: 600; color: var(--db-text-dark);">
-                Klik untuk memulai proses instalasi otomatis
-            </p>
         </div>
 
         <div id="iosNotice" style="margin-top: 30px; display: none; background: rgba(108, 136, 224, 0.05); padding: 25px; border-radius: 24px; border: 2px dashed var(--db-purple); text-align: center;">
@@ -101,29 +102,41 @@
 
         // PWA Install Logic
         let deferredPrompt;
-        const installContainer = document.getElementById('installContainer');
-        const installButton = document.getElementById('installButton');
+        const quickInstallContainer = document.getElementById('quickInstallContainer');
+        const quickInstallButton = document.getElementById('quickInstallButton');
 
         window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
             e.preventDefault();
+            // Stash the event so it can be triggered later.
             deferredPrompt = e;
-            installContainer.style.display = 'block';
-            if (iosNotice) iosNotice.style.display = 'none'; // Hide iOS notice if auto-prompt is available
+            // Update UI notify the user they can install the PWA
+            quickInstallContainer.style.display = 'block';
+            
+            // If we have an auto-install prompt, we can hide the iOS manual notice
+            if (iosNotice) iosNotice.style.display = 'none';
         });
 
-        installButton.addEventListener('click', (e) => {
-            installContainer.style.display = 'none';
+        quickInstallButton.addEventListener('click', (e) => {
+            // Hide the app provided install promotion
+            quickInstallContainer.style.display = 'none';
+            // Show the install prompt
             deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
             deferredPrompt.userChoice.then((choiceResult) => {
                 if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the A2HS prompt');
+                    console.log('User accepted the PWA prompt');
+                } else {
+                    console.log('User dismissed the PWA prompt');
                 }
                 deferredPrompt = null;
             });
         });
 
         window.addEventListener('appinstalled', (evt) => {
-            installContainer.style.display = 'none';
+            // Log install to analytics
+            console.log('INSTALL: Success');
+            quickInstallContainer.style.display = 'none';
         });
     </script>
 </body>
