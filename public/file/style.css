@@ -2300,6 +2300,174 @@ a.btn.btn-warning {
     color: #FFD6A5;
 }
 
+/* Volunteer Overview Styles */
+.vm-tabs {
+    display: flex;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    border-radius: 99px;
+    padding: 5px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.vm-tab-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 99px;
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    opacity: 0.5;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.vm-tab-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+.vm-tab-btn.active {
+    background: #fff;
+    opacity: 1;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    color: var(--db-purple);
+}
+
+.vm-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.vm-summary-card {
+    background: white;
+    padding: 15px;
+    border-radius: 20px;
+    border: 2px solid #F3F4F6;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.vm-summary-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--db-text-dark);
+    opacity: 0.4;
+    text-transform: uppercase;
+}
+
+.vm-summary-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+}
+
+.vm-heatmap-card {
+    background: white;
+    border-radius: 24px;
+    padding: 18px;
+    border: 2px solid #F3F4F6;
+    margin-bottom: 15px;
+}
+
+.vm-heatmap-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.vm-heatmap-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vm-heatmap-subtitle {
+    font-size: 10px;
+    font-weight: 700;
+    opacity: 0.4;
+    text-transform: uppercase;
+}
+
+.vm-heatmap-scroll {
+    overflow-x: auto;
+    padding-bottom: 5px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.vm-heatmap-grid {
+    display: flex;
+    gap: 3.5px;
+    min-width: max-content;
+}
+
+.vm-heatmap-week {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5px;
+}
+
+.vm-heatmap-cell {
+    width: 13px;
+    height: 13px;
+    border-radius: 3px;
+    background: #F3F4F6;
+    transition: transform 0.2s;
+}
+
+.vm-heatmap-cell.level-1 {
+    background: #FF9F9F;
+}
+
+.vm-heatmap-cell.level-2 {
+    background: #A0C4FF;
+}
+
+.vm-heatmap-cell.level-3 {
+    background: #B9FBC0;
+}
+
+.vm-heatmap-cell.level-4 {
+    background: #FFD6A5;
+}
+
+.vm-heatmap-cell:hover {
+    transform: scale(1.2);
+    z-index: 10;
+}
+
+.vm-heatmap-labels {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5px;
+    margin-right: 8px;
+    justify-content: space-around;
+}
+
+.vm-heatmap-label {
+    font-size: 8px;
+    font-weight: 700;
+    opacity: 0.3;
+    height: 13px;
+    display: flex;
+    align-items: center;
+}
+
 /* Coming Soon Page Styles */
 .cs-container {
     display: flex;

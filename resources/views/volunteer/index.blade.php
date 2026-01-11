@@ -44,32 +44,122 @@
             <p class="vm-subtitle">Pilih misi yang telah Anda selesaikan!</p>
         </div>
 
-        <div class="vm-list">
-            @foreach($missions as $mission)
-                <div class="vm-card">
-                    <div class="vm-card-header">
-                        <div class="vm-mission-name">{{ $mission->name }}</div>
-                        <div class="vm-mission-icon">
-                            <i
-                                data-lucide="{{ str_contains(strtolower($mission->name), 'peternakan') ? 'dog' : (str_contains(strtolower($mission->name), 'perkebunan') ? 'flower' : (str_contains(strtolower($mission->name), 'karya') ? 'palette' : 'star')) }}"></i>
+        <!-- Tabs -->
+        <div class="vm-tabs">
+            <button class="vm-tab-btn active" onclick="switchTab('checklist')">
+                <i data-lucide="check-square"></i>
+                Checklist
+            </button>
+            <button class="vm-tab-btn" onclick="switchTab('overview')">
+                <i data-lucide="bar-chart-3"></i>
+                Overview
+            </button>
+        </div>
+
+        <!-- Checklist View -->
+        <div id="checklistView" class="tab-content active">
+            <div class="vm-list">
+                @foreach($missions as $mission)
+                    <div class="vm-card">
+                        <div class="vm-card-header">
+                            <div class="vm-mission-name">{{ $mission->name }}</div>
+                            <div class="vm-mission-icon">
+                                <i
+                                    data-lucide="{{ str_contains(strtolower($mission->name), 'peternakan') ? 'dog' : (str_contains(strtolower($mission->name), 'perkebunan') ? 'flower' : (str_contains(strtolower($mission->name), 'karya') ? 'palette' : 'star')) }}"></i>
+                            </div>
+                        </div>
+
+                        <div class="vm-days-grid">
+                            @foreach($weekDays as $day)
+                                @php
+                                    $isCompleted = isset($completions[$mission->id]) && $completions[$mission->id]->contains('completed_at', $day['date']);
+                                @endphp
+                                <div class="vm-day-item">
+                                    <span class="vm-day-label">{{ $day['name'] }}</span>
+                                    <div class="vm-checkbox {{ $isCompleted ? 'checked' : '' }}"
+                                        onclick="toggleMission({{ $mission->id }}, '{{ $day['date'] }}', this)">
+                                        @if($isCompleted)
+                                            <i data-lucide="check"></i>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
+                @endforeach
+            </div>
+        </div>
 
-                    <div class="vm-days-grid">
-                        @foreach($weekDays as $day)
-                            @php
-                                $isCompleted = isset($completions[$mission->id]) && $completions[$mission->id]->contains('completed_at', $day['date']);
-                            @endphp
-                            <div class="vm-day-item">
-                                <span class="vm-day-label">{{ $day['name'] }}</span>
-                                <div class="vm-checkbox {{ $isCompleted ? 'checked' : '' }}"
-                                    onclick="toggleMission({{ $mission->id }}, '{{ $day['date'] }}', this)">
-                                    @if($isCompleted)
-                                        <i data-lucide="check"></i>
-                                    @endif
-                                </div>
+        <!-- Overview View -->
+        <div id="overviewView" class="tab-content" style="display: none;">
+            <!-- Summary Stats -->
+            <div class="vm-summary-grid">
+                <div class="vm-summary-card">
+                    <span class="vm-summary-label">Current Streak</span>
+                    <span class="vm-summary-value" id="summary-streak">{{ $overviewData['current_streak'] }} days</span>
+                </div>
+                <div class="vm-summary-card">
+                    <span class="vm-summary-label">Success Rate</span>
+                    <span class="vm-summary-value" id="summary-rate">{{ $overviewData['success_rate'] }}%</span>
+                </div>
+                <div class="vm-summary-card">
+                    <span class="vm-summary-label">Best Streak</span>
+                    <span class="vm-summary-value" id="summary-best">{{ $overviewData['best_streak'] }} days</span>
+                </div>
+                <div class="vm-summary-card">
+                    <span class="vm-summary-label">Total Completed</span>
+                    <span class="vm-summary-value" id="summary-total">{{ $overviewData['total_completed'] }}</span>
+                </div>
+            </div>
+
+            <!-- Heatmap Grids -->
+            <h2 style="font-size: 16px; font-weight: 800; color: var(--db-text-dark); margin-bottom: 15px;">Habit
+                Progress</h2>
+
+            @foreach($missions as $index => $mission)
+                @php
+                    $missionIndex = ($index % 4) + 1;
+                    $missionCompletions = $overviewData['all_completions'][$mission->id] ?? [];
+                @endphp
+                <div class="vm-heatmap-card">
+                    <div class="vm-heatmap-header">
+                        <div class="vm-heatmap-title">
+                            <i data-lucide="{{ str_contains(strtolower($mission->name), 'peternakan') ? 'dog' : (str_contains(strtolower($mission->name), 'perkebunan') ? 'flower' : (str_contains(strtolower($mission->name), 'karya') ? 'palette' : 'star')) }}"
+                                style="width: 14px; height: 14px; opacity: 0.6;"></i>
+                            {{ $mission->name }}
+                        </div>
+                        <span class="vm-heatmap-subtitle">EVERYDAY</span>
+                    </div>
+
+                    <div class="vm-heatmap-scroll">
+                        <div class="vm-heatmap-grid">
+                            <div class="vm-heatmap-labels" style="justify-content: flex-start;">
+                                <span class="vm-heatmap-label">S</span>
+                                <span class="vm-heatmap-label">S</span>
+                                <span class="vm-heatmap-label">R</span>
+                                <span class="vm-heatmap-label">K</span>
+                                <span class="vm-heatmap-label">J</span>
+                                <span class="vm-heatmap-label">S</span>
+                                <span class="vm-heatmap-label">M</span>
                             </div>
-                        @endforeach
+                            @for($w = 0; $w < $overviewData['grid_weeks']; $w++)
+                                <div class="vm-heatmap-week">
+                                    @for($d = 0; $d < 7; $d++)
+                                        @php
+                                            $currDate = $overviewData['grid_start_date']->copy()->addWeeks($w)->addDays($d);
+                                            $dateStr = $currDate->toDateString();
+                                            $isDone = in_array($dateStr, $missionCompletions);
+                                            $isFuture = $currDate->isFuture();
+                                        @endphp
+                                        <div class="vm-heatmap-cell {{ $isDone ? "level-$missionIndex" : "" }}"
+                                            data-mission="{{ $mission->id }}" data-date="{{ $dateStr }}"
+                                            data-level="{{ $missionIndex }}" title="{{ $currDate->translatedFormat('d M Y') }}"
+                                            style="{{ $isFuture ? "opacity: 0.1;" : "" }}">
+                                        </div>
+                                    @endfor
+                                </div>
+                            @endfor
+                        </div>
                     </div>
                 </div>
             @endforeach
@@ -106,6 +196,24 @@
     <script>
         lucide.createIcons();
 
+        function switchTab(tab) {
+            $('.vm-tab-btn').removeClass('active');
+            $('.tab-content').hide();
+
+            if (tab === 'checklist') {
+                $('.vm-tab-btn:first-child').addClass('active');
+                $('#checklistView').show();
+            } else {
+                $('.vm-tab-btn:last-child').addClass('active');
+                $('#overviewView').show();
+                // Scroll heatmaps to the end
+                $('.vm-heatmap-scroll').each(function () {
+                    $(this).scrollLeft($(this)[0].scrollWidth);
+                });
+            }
+            lucide.createIcons();
+        }
+
         function toggleMission(missionId, date, element) {
             $(element).css('pointer-events', 'none');
 
@@ -121,9 +229,22 @@
                     if (response.status === 'success') {
                         if (response.action === 'checked') {
                             $(element).addClass('checked').html('<i data-lucide="check"></i>');
+                            // Update heatmap
+                            const targetCell = $(`.vm-heatmap-cell[data-mission="${missionId}"][data-date="${date}"]`);
+                            const level = targetCell.data('level');
+                            targetCell.addClass(`level-${level}`);
                         } else {
                             $(element).removeClass('checked').empty();
+                            // Update heatmap
+                            const targetCell = $(`.vm-heatmap-cell[data-mission="${missionId}"][data-date="${date}"]`);
+                            targetCell.removeClass('level-1 level-2 level-3 level-4');
                         }
+
+                        // Update Summary Stats
+                        $('#summary-streak').text(response.stats.current_streak + ' days');
+                        $('#summary-rate').text(response.stats.success_rate + '%');
+                        $('#summary-best').text(response.stats.best_streak + ' days');
+                        $('#summary-total').text(response.stats.total_completed);
                     }
                 },
                 error: function () {
