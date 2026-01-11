@@ -82,6 +82,10 @@ Route::middleware(['auth', 'approved', 'admin'])->group(function () {
     Route::patch('/manage-users/{id}/toggle', [AuthController::class, 'toggleUserStatus'])->name('admin.users.toggle');
     Route::put('/manage-users/{id}', [AuthController::class, 'updateUser'])->name('admin.users.update');
 
+    // Gardening Admin
+    Route::get('/admin/gardening', [\App\Http\Controllers\AdminGardeningController::class, 'index'])->name('admin.gardening.index');
+    Route::post('/admin/gardening/update-score', [\App\Http\Controllers\AdminGardeningController::class, 'updateScore'])->name('admin.gardening.update-score');
+
     // System Settings
     Route::get('/admin/settings', [AdminSettingController::class, 'index'])->name('admin.settings');
     Route::post('/admin/settings', [AdminSettingController::class, 'update'])->name('admin.settings.update');

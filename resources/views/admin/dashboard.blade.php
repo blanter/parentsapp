@@ -75,7 +75,7 @@
 
     <div class="db-menu-container"
         style="margin-top: 10px; margin-bottom: 40px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
-        <a href="{{ route('gardening.index') }}" class="db-menu-item gardening">
+        <a href="{{ route('admin.gardening.index') }}" class="db-menu-item gardening">
             <i data-lucide="sprout"></i>
             <span>Home Gardening</span>
         </a>
