@@ -66,31 +66,17 @@
             </div>
 
             <!-- Filter Buttons -->
-            <div class="filter-buttons">
+            <div class="lb-filter-buttons">
                 <a href="{{ route('parents.index', ['activity' => 'all']) }}"
-                    class="filter-btn {{ !$activityFilter || $activityFilter === 'all' ? 'active' : '' }}">
+                    class="lb-filter-btn {{ !$activityFilter || $activityFilter === 'all' ? 'active' : '' }}">
                     All Activities
                 </a>
-                <a href="{{ route('parents.index', ['activity' => 'Journaling Parents']) }}"
-                    class="filter-btn {{ $activityFilter === 'Journaling Parents' ? 'active' : '' }}">
-                    Journaling Parents
-                </a>
-                <a href="{{ route('parents.index', ['activity' => 'Support/Kerjasama']) }}"
-                    class="filter-btn {{ $activityFilter === 'Support/Kerjasama' ? 'active' : '' }}">
-                    Support/Kerjasama
-                </a>
-                <a href="{{ route('parents.index', ['activity' => 'Home Gardening']) }}"
-                    class="filter-btn {{ $activityFilter === 'Home Gardening' ? 'active' : '' }}">
-                    Home Gardening
-                </a>
-                <a href="{{ route('parents.index', ['activity' => 'Administrasi']) }}"
-                    class="filter-btn {{ $activityFilter === 'Administrasi' ? 'active' : '' }}">
-                    Administrasi
-                </a>
-                <a href="{{ route('parents.index', ['activity' => 'Lifebook Journey']) }}"
-                    class="filter-btn {{ $activityFilter === 'Lifebook Journey' ? 'active' : '' }}">
-                    Lifebook Journey
-                </a>
+                @foreach(['Journaling Parents', 'Support/Kerjasama', 'Home Gardening', 'Administrasi', 'Lifebook Journey'] as $act)
+                    <a href="{{ route('parents.index', ['activity' => $act]) }}"
+                        class="lb-filter-btn {{ $activityFilter === $act ? 'active' : '' }}">
+                        {{ $act }}
+                    </a>
+                @endforeach
             </div>
 
             <!-- Leaderboard Section -->

@@ -2936,8 +2936,8 @@ a.btn.btn-warning {
 }
 
 .adm-dash-card.coming .adm-dash-icon {
-    background: rgba(243, 244, 246, 1);
-    color: #9CA3AF;
+    background: rgba(6, 182, 212, 0.1);
+    color: #0891b2;
 }
 
 @media screen and (max-width: 600px) {
