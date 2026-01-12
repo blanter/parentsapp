@@ -87,28 +87,29 @@
     </div>
 
     <!-- Modal Detail Progress -->
-    <div id="plantDetailModal" class="modal" style="display: none;">
-        <div class="modal-content adm-modal-content" style="position: relative; overflow: hidden;">
-            <div style="background: var(--db-purple); padding: 24px 30px; border-radius: 0; border: none;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
-                    <div style="flex: 1;">
-                        <h2 style="font-weight: 800; font-size: 20px; margin: 0; color: #fff; line-height: 1.3;">Gardening Activity Reports</h2>
-                        <p id="modalPlantInfo" style="font-size: 13px; opacity: 0.85; margin: 8px 0 0 0; font-weight: 600; color: #fff;"></p>
+    <div id="plantDetailModal" class="ct-modal-overlay">
+        <div class="ct-modal-card" style="max-width: 800px;">
+            <div class="ct-modal-header">
+                <div class="ct-modal-title-group">
+                    <div class="ct-modal-header-icon">
+                        <i data-lucide="sprout"></i>
                     </div>
-                    <button class="close-btn" onclick="closePlantDetailModal()"
-                        style="background: rgba(255,255,255,0.2); border: none; color: #fff; width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; cursor: pointer; flex-shrink: 0;">
-                        <i data-lucide="x" style="width: 20px;"></i>
-                    </button>
+                    <div>
+                        <h3 class="ct-modal-title">Gardening Activity Reports</h3>
+                        <p class="ct-modal-subtitle" id="modalPlantInfo">Plant Data</p>
+                    </div>
                 </div>
+                <button class="ct-modal-close" onclick="closePlantDetailModal()">
+                    <i data-lucide="x"></i>
+                </button>
             </div>
-            <div style="padding: 30px; max-height: 70vh; overflow-y: auto; background: #FAFBFC;">
-                <div id="progressList" style="display: flex; flex-direction: column; gap: 20px;">
-                    <!-- Progress items will be injected here -->
-                </div>
+            <div class="ct-modal-body" id="progressList" style="max-height: 70vh; overflow-y: auto;">
+                <!-- Progress items will be injected here -->
             </div>
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         const plantsData = @json($plants);
 
@@ -116,77 +117,78 @@
             const plant = plantsData.find(p => p.id == plantId);
             if (!plant) return;
 
-            document.getElementById('modalPlantInfo').innerText = `${plant.plant_name} • Parent: ${plant.user.name}`;
+            $('#modalPlantInfo').text(`${plant.plant_name} • Parent: ${plant.user.name}`);
 
-            const progressList = document.getElementById('progressList');
-            progressList.innerHTML = '';
+            const progressList = $('#progressList');
+            progressList.html('');
 
             if (plant.progress.length === 0) {
-                progressList.innerHTML = `
-                    <div style="text-align: center; padding: 60px 20px; opacity: 0.3;">
-                        <i data-lucide="frown" style="width: 48px; height: 48px; margin-bottom: 15px;"></i>
-                        <p style="font-weight: 800; font-size: 16px;">This parent hasn't submitted progress reports yet.</p>
+                progressList.html(`
+                    <div class="ct-premium-empty-wrapper">
+                        <div class="ct-premium-empty-content">
+                            <i data-lucide="frown" class="ct-premium-empty-icon"></i>
+                            <p class="ct-premium-empty-text">This parent hasn't submitted progress reports yet.</p>
+                        </div>
                     </div>
-                `;
+                `);
             } else {
                 plant.progress.forEach(p => {
-                    const item = document.createElement('div');
-                    item.className = 'adm-gn-progress-item shadow-sm';
-
                     let imgHtml = '';
                     if (p.image) {
                         imgHtml = `<img src="/gardening/progress/${p.image}" class="adm-gn-progress-img">`;
                     }
 
-                    item.innerHTML = `
-                        ${imgHtml}
-                        <div class="adm-gn-progress-content">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
-                                <div style="flex: 1; min-width: 200px;">
-                                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                                        <i data-lucide="calendar" style="width: 14px; color: var(--db-purple);"></i>
-                                        <span style="font-weight: 800; color: var(--db-text-dark); font-size: 14px;">
-                                            ${new Date(p.report_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
-                                        </span>
+                    const itemHtml = `
+                        <div class="adm-gn-progress-item shadow-sm">
+                            ${imgHtml}
+                            <div class="adm-gn-progress-content">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
+                                    <div style="flex: 1; min-width: 200px;">
+                                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                            <i data-lucide="calendar" style="width: 14px; color: var(--db-purple);"></i>
+                                            <span style="font-weight: 800; color: var(--db-text-dark); font-size: 14px;">
+                                                ${new Date(p.report_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                            </span>
+                                        </div>
+                                        <p style="font-size: 13px; color: #4B5563; font-weight: 500; line-height: 1.6; margin: 0;">${p.description || 'No description provided.'}</p>
                                     </div>
-                                    <p style="font-size: 13px; color: #4B5563; font-weight: 500; line-height: 1.6; margin: 0;">${p.description || 'No description provided.'}</p>
+                                    <div class="adm-gn-score-box">
+                                        <div class="adm-gn-score-label">Current Score</div>
+                                        <div class="adm-gn-score-value">${p.score || 0}</div>
+                                    </div>
                                 </div>
-                                <div class="adm-gn-score-box">
-                                    <div class="adm-gn-score-label">Current Score</div>
-                                    <div class="adm-gn-score-value">${p.score || 0}</div>
-                                </div>
-                            </div>
 
-                            <form action="{{ route('admin.gardening.update-score') }}" method="POST" class="adm-gn-score-form">
-                                @csrf
-                                <input type="hidden" name="progress_id" value="${p.id}">
-                                <div style="flex-grow: 1;">
-                                    <label style="display: block; font-size: 11px; font-weight: 800; color: #9CA3AF; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Update Assessment Score</label>
-                                    <input type="number" name="score" value="${p.score || 0}" class="auth-form-control" style="height: 48px; background: #fff; border: 2px solid #F3F4F6;" required>
-                                </div>
-                                <button type="submit" class="auth-btn-primary" style="height: 48px; padding: 0 25px;">
-                                    <i data-lucide="check-circle" style="width: 18px;"></i> <span>Update Score</span>
-                                </button>
-                            </form>
+                                <form action="{{ route('admin.gardening.update-score') }}" method="POST" class="adm-gn-score-form">
+                                    @csrf
+                                    <input type="hidden" name="progress_id" value="${p.id}">
+                                    <div style="flex-grow: 1;">
+                                        <label style="display: block; font-size: 11px; font-weight: 800; color: #9CA3AF; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Update Assessment Score</label>
+                                        <input type="number" name="score" value="${p.score || 0}" class="auth-form-control" style="height: 48px; background: #fff; border: 2px solid #F3F4F6;" required>
+                                    </div>
+                                    <button type="submit" class="auth-btn-primary" style="height: 48px; padding: 0 25px;">
+                                        <i data-lucide="check-circle" style="width: 18px;"></i> <span>Update Score</span>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     `;
-                    progressList.appendChild(item);
+                    progressList.append(itemHtml);
                 });
             }
 
-            document.getElementById('plantDetailModal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
+            $('#plantDetailModal').fadeIn(300).css('display', 'flex');
             lucide.createIcons();
         }
 
         function closePlantDetailModal() {
-            document.getElementById('plantDetailModal').style.display = 'none';
+            $('#plantDetailModal').fadeOut(300);
             document.body.style.overflow = 'auto';
         }
 
-        window.onclick = function (event) {
-            const modal = document.getElementById('plantDetailModal');
-            if (event.target == modal) closePlantDetailModal();
-        }
+        $('#plantDetailModal').on('click', function(e) {
+            if ($(e.target).hasClass('ct-modal-overlay')) {
+                closePlantDetailModal();
+            }
+        });
     </script>
 @endsection
