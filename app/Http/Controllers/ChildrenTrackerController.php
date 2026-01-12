@@ -389,7 +389,58 @@ class ChildrenTrackerController extends Controller
                 ['user_id' => $parentId, 'student_id' => $request->student_id, 'bulan' => $bulan, 'tahun' => $tahun],
                 $updateData
             );
-            return response()->json(['success' => true, 'message' => 'Journal berhasil disimpan!']);
+
+            // Scoring for Parents
+            $pointsEarned = 0;
+            if (!$isTeacher && !$isAdmin) {
+                $student = Student::find($request->student_id);
+                $studentName = $student ? $student->name : 'Murid';
+
+                // Check which aspect was filled
+                $aspectScoreType = null;
+                $aspectTitle = "";
+
+                if (isset($updateData['parent_filled_at'])) {
+                    $aspectScoreType = 'Parent Aspect';
+                    $aspectTitle = "Aspek Orang Tua ($studentName)";
+                } else if (isset($updateData['child_filled_at'])) {
+                    $aspectScoreType = 'Child Aspect';
+                    $aspectTitle = "Aspek Anak ($studentName)";
+                } else if (isset($updateData['internal_external_filled_at'])) {
+                    $aspectScoreType = 'Internal/External Aspect';
+                    $aspectTitle = "Aspek Internal/Eksternal ($studentName)";
+                }
+
+                if ($aspectScoreType) {
+                    $scoreDesc = "Journal: $aspectTitle ($bulan $tahun)";
+                    // Check if already scored for this specific aspect, journal and month
+                    $existingScore = \App\Models\Score::where('user_id', Auth::id())
+                        ->where('activity', 'Journaling Parents')
+                        ->where('deskripsi', $scoreDesc)
+                        ->first();
+
+                    if (!$existingScore) {
+                        \App\Models\Score::create([
+                            'user_id' => Auth::id(),
+                            'activity' => 'Journaling Parents',
+                            'score' => 100,
+                            'deskripsi' => $scoreDesc
+                        ]);
+                        $pointsEarned = 100;
+                    }
+                }
+            }
+
+            $message = 'Journal berhasil disimpan!';
+            if ($pointsEarned > 0) {
+                $message .= " Anda mendapatkan $pointsEarned poin!";
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'earned_points' => $pointsEarned
+            ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Gagal menyimpan: ' . $e->getMessage()], 500);
         }

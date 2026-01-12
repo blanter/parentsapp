@@ -19,7 +19,7 @@
                     @if($isTeacher)
                         Data respon Anda telah aman disimpan ke sistem. Tetap semangat membimbing murid!
                     @else
-                        Data jurnal Anda telah aman disimpan ke sistem. Terima kasih Ayah / Bunda!
+                        <span id="popupPointsMsg">Data jurnal Anda telah aman disimpan ke sistem. Terima kasih Ayah / Bunda!</span>
                     @endif
                 </p>
                 <button class="pa-popup-btn" onclick="closePopup()">Siap, Terima Kasih</button>
@@ -266,6 +266,13 @@
                 success: function (response) {
                     if (response.success) {
                         $(btn).text('Saved!').css('background', '#10B981');
+                        
+                        if (response.earned_points > 0) {
+                            $('#popupPointsMsg').html('Selamat Ayah / Bunda! Anda mendapatkan <b>' + response.earned_points + ' Poin</b> dari pengisian journaling parents.');
+                        } else {
+                            $('#popupPointsMsg').text('Data jurnal Anda telah aman disimpan ke sistem. Terima kasih Ayah / Bunda!');
+                        }
+                        
                         showSuccessPopup();
                         setTimeout(() => {
                             $(btn).text(originalText).prop('disabled', false).css('background', '');
