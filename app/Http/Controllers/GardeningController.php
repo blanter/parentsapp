@@ -28,6 +28,7 @@ class GardeningController extends Controller
                 'status' => 'filled',
                 'id' => $p->id,
                 'description' => $p->description,
+                'score' => $p->score,
                 'image' => $p->image ? asset('gardening/progress/' . $p->image) : null
             ];
         })->keyBy('date')->toArray();
@@ -69,12 +70,24 @@ class GardeningController extends Controller
         $plant = GardeningPlant::where('user_id', Auth::id())->findOrFail($id);
 
         $request->validate([
-            'report_date' => 'required|date',
+            'report_date' => 'required|date|before_or_equal:today',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:3072',
+        ], [
+            'report_date.before_or_equal' => 'Anda tidak bisa menambahkan progress untuk tanggal di masa depan.',
         ]);
 
         $reportDate = Carbon::parse($request->report_date);
+        $today = Carbon::today();
+
+        // Calculate Score based on delay
+        // Same day: 100, -20 per day delay
+        $diffInDays = $reportDate->diffInDays($today, false);
+        $diffInDays = max(0, $diffInDays); // Ignore future dates (though validated)
+
+        $baseScore = 100;
+        $penaltyPerDay = 20;
+        $calculatedScore = max(40, $baseScore - ($diffInDays * $penaltyPerDay));
 
         $data = [
             'gardening_plant_id' => $plant->id,
@@ -83,7 +96,7 @@ class GardeningController extends Controller
             'report_date' => $request->report_date,
             'report_month' => $reportDate->month,
             'report_year' => $reportDate->year,
-            'score' => 0, // Default score
+            'score' => $calculatedScore,
         ];
 
         if ($request->hasFile('image')) {
@@ -113,13 +126,31 @@ class GardeningController extends Controller
             $data['image'] = $imageName;
         }
 
+        // Check if progress already exists for this date to avoid duplicate scores
+        $existingProgress = GardeningProgress::where('gardening_plant_id', $plant->id)
+            ->where('report_date', $request->report_date)
+            ->first();
+
         // Update if exists on same date, otherwise create
         GardeningProgress::updateOrCreate(
             ['gardening_plant_id' => $plant->id, 'report_date' => $request->report_date],
             $data
         );
 
-        return back()->with('success', 'Progress berhasil disimpan!');
+        // Sync with Scores table if it's a new entry for this date or update existing score record
+        // Find existing score record for this specific gardening progress
+        $scoreEntry = \App\Models\Score::updateOrCreate(
+            [
+                'user_id' => Auth::id(),
+                'activity' => 'Home Gardening',
+                'deskripsi' => 'Progress: ' . $plant->plant_name . ' (' . $request->report_date . ')',
+            ],
+            [
+                'score' => $calculatedScore,
+            ]
+        );
+
+        return back()->with('success', 'Progress berhasil disimpan!')->with('earned_points', $calculatedScore);
     }
 
     public function destroy($id)

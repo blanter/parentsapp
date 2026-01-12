@@ -8,6 +8,23 @@
     <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
 
     <div class="gn-container">
+        <!-- Success Alert Popup -->
+        @if(session('earned_points') !== null)
+            <div id="successPopup" class="pa-popup-overlay" style="display: flex;">
+                <div class="pa-popup-card">
+                    <div class="pa-popup-icon" style="background: rgba(54, 179, 126, 0.1); color: var(--db-secondary);">
+                        <i data-lucide="award"></i>
+                    </div>
+                    <h3 class="pa-popup-title">Berhasil Disimpan!</h3>
+                    <p class="pa-popup-message">
+                        Selamat Ayah / Bunda! Anda mendapatkan <b>{{ session('earned_points') }} Poin</b> untuk laporan progress
+                        hari ini.
+                    </p>
+                    <button class="pa-popup-btn" onclick="closePopup()">Siap, Terima Kasih</button>
+                </div>
+            </div>
+        @endif
+
         <!-- Header -->
         <div class="db-header" style="margin-bottom: 20px;">
             <div class="db-brand-section">
@@ -81,10 +98,14 @@
             </div>
         </div>
 
-        @if(session('success'))
+        @if($errors->any())
             <div
-                style="background: #E8F5E9; color: #2E7D32; padding: 15px; border-radius: 20px; margin-bottom: 20px; font-weight: 700; font-size: 13px; border: 2px solid #C8E6C9;">
-                {{ session('success') }}
+                style="background: #FFEBEE; color: #D32F2F; padding: 15px; border-radius: 20px; margin-bottom: 20px; font-weight: 700; font-size: 13px; border: 2px solid #FFCDD2;">
+                <ul style="margin: 0; padding-left: 20px;">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
         @endif
 
@@ -203,10 +224,20 @@
                 cell.className = 'gn-cal-cell';
                 cell.innerText = d;
 
+                const cellDate = new Date(currentYear, currentMonth, d);
+                const isFuture = cellDate > today;
+
                 if (dateStr === todayStr) cell.classList.add('today');
                 if (events[dateStr]) cell.classList.add('has-data');
+                if (isFuture) cell.style.opacity = '0.3';
 
-                cell.onclick = () => handleDateClick(dateStr);
+                cell.onclick = () => {
+                    if (isFuture) {
+                        alert('Anda tidak bisa menambahkan progress untuk tanggal di masa depan.');
+                        return;
+                    }
+                    handleDateClick(dateStr);
+                };
                 grid.appendChild(cell);
             }
         }
@@ -306,6 +337,10 @@
         function closeProgressModal() {
             document.getElementById('progressModal').style.display = 'none';
             document.body.style.overflow = 'auto';
+        }
+
+        function closePopup() {
+            $('#successPopup').fadeOut(300);
         }
 
         function formatDate(dateStr) {
