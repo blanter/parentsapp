@@ -77,9 +77,22 @@ class HabitTrackerController extends Controller
             ->where('log_date', $request->date)
             ->first();
 
+        $pointsEarned = 0;
+        $habit = Habit::find($request->habit_id);
+        $habitTitle = $habit ? $habit->title : 'Habit';
+        $scoreDesc = "Habit Daily: $habitTitle ($request->date)";
+
         if ($log) {
             $log->is_completed = !$log->is_completed;
             $log->save();
+
+            if (!$log->is_completed) {
+                // Remove points
+                \App\Models\Score::where('user_id', Auth::id())
+                    ->where('activity', 'Lifebook Journey')
+                    ->where('deskripsi', $scoreDesc)
+                    ->delete();
+            }
         } else {
             $log = HabitDailyLog::create([
                 'habit_id' => $request->habit_id,
@@ -88,7 +101,29 @@ class HabitTrackerController extends Controller
             ]);
         }
 
-        return response()->json(['success' => true, 'is_completed' => $log->is_completed]);
+        if ($log->is_completed) {
+            // Add Points (10)
+            $existingScore = \App\Models\Score::where('user_id', Auth::id())
+                ->where('activity', 'Lifebook Journey')
+                ->where('deskripsi', $scoreDesc)
+                ->first();
+
+            if (!$existingScore) {
+                \App\Models\Score::create([
+                    'user_id' => Auth::id(),
+                    'activity' => 'Lifebook Journey',
+                    'score' => 10,
+                    'deskripsi' => $scoreDesc
+                ]);
+                $pointsEarned = 10;
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'is_completed' => $log->is_completed,
+            'earned_points' => $pointsEarned
+        ]);
     }
 
     public function deleteHabit($id)
@@ -129,7 +164,40 @@ class HabitTrackerController extends Controller
         $task->is_completed = !$task->is_completed;
         $task->save();
 
-        return response()->json(['success' => true, 'is_completed' => $task->is_completed]);
+        $pointsEarned = 0;
+        $points = ($task->week_index == 6) ? 100 : 50;
+        $typeLabel = ($task->week_index == 6) ? "Monthly" : "Weekly (Week $task->week_index)";
+        $scoreDesc = "Habit $typeLabel: $task->title (" . date('F', mktime(0, 0, 0, $task->month, 1)) . " $task->year)";
+
+        if ($task->is_completed) {
+            // Add Points
+            $existingScore = \App\Models\Score::where('user_id', Auth::id())
+                ->where('activity', 'Lifebook Journey')
+                ->where('deskripsi', $scoreDesc)
+                ->first();
+
+            if (!$existingScore) {
+                \App\Models\Score::create([
+                    'user_id' => Auth::id(),
+                    'activity' => 'Lifebook Journey',
+                    'score' => $points,
+                    'deskripsi' => $scoreDesc
+                ]);
+                $pointsEarned = $points;
+            }
+        } else {
+            // Remove points
+            \App\Models\Score::where('user_id', Auth::id())
+                ->where('activity', 'Lifebook Journey')
+                ->where('deskripsi', $scoreDesc)
+                ->delete();
+        }
+
+        return response()->json([
+            'success' => true,
+            'is_completed' => $task->is_completed,
+            'earned_points' => $pointsEarned
+        ]);
     }
 
     public function deleteWeeklyTask($id)

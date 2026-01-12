@@ -46,6 +46,21 @@
 
 @section('content')
     <div class="lj-container">
+        <!-- Success Alert Popup -->
+        <div id="successPopup" class="pa-popup-overlay" style="display: none;">
+            <div class="pa-popup-card">
+                <div class="pa-popup-icon" style="background: rgba(54, 179, 126, 0.1); color: var(--db-secondary);">
+                    <i data-lucide="award"></i>
+                </div>
+                <h3 class="pa-popup-title">Berhasil Disimpan!</h3>
+                <p class="pa-popup-message">
+                    Selamat Ayah / Bunda! Anda mendapatkan <b id="earnedPointsText">0 Poin</b> untuk aktivitas Lifebook
+                    Journey.
+                </p>
+                <button class="pa-popup-btn" onclick="closePopup()">Siap, Terima Kasih</button>
+            </div>
+        </div>
+
         <!-- Header Section -->
         <div class="db-header" style="margin-bottom: 20px;">
             <div class="db-brand-section">
@@ -75,7 +90,7 @@
         <div class="vm-tabs">
             <button class="vm-tab-btn active" onclick="switchTab('journey')">
                 <i data-lucide="milestone"></i>
-                Journey Data    
+                Journey Data
             </button>
             <button class="vm-tab-btn" onclick="switchTab('habits')">
                 <i data-lucide="calendar-check"></i>
@@ -185,66 +200,66 @@
                 <div class="ht-container">
                     <div class="ht-header">
                         <div class="ht-title-group">
-                        <h2>Habit Tracker</h2>
-                        <p id="ht-current-month-text">Monthly Progress</p>
+                            <h2>Habit Tracker</h2>
+                            <p id="ht-current-month-text">Monthly Progress</p>
+                        </div>
+                        <div class="ht-controls">
+                            <select class="ht-select" id="ht-month-select">
+                                @for($m = 1; $m <= 12; $m++)
+                                    <option value="{{ $m }}" {{ $m == date('n') ? 'selected' : '' }}>
+                                        {{ date('F', mktime(0, 0, 0, $m, 1)) }}
+                                    </option>
+                                @endfor
+                            </select>
+                            <select class="ht-select" id="ht-year-select">
+                                @for($y = date('Y') - 1; $y <= date('Y') + 1; $y++)
+                                    <option value="{{ $y }}" {{ $y == date('Y') ? 'selected' : '' }}>{{ $y }}</option>
+                                @endfor
+                            </select>
+                        </div>
                     </div>
-                    <div class="ht-controls">
-                        <select class="ht-select" id="ht-month-select">
-                            @for($m = 1; $m <= 12; $m++)
-                                <option value="{{ $m }}" {{ $m == date('n') ? 'selected' : '' }}>
-                                    {{ date('F', mktime(0, 0, 0, $m, 1)) }}
-                                </option>
-                            @endfor
-                        </select>
-                        <select class="ht-select" id="ht-year-select">
-                            @for($y = date('Y') - 1; $y <= date('Y') + 1; $y++)
-                                <option value="{{ $y }}" {{ $y == date('Y') ? 'selected' : '' }}>{{ $y }}</option>
-                            @endfor
-                        </select>
+
+                    <!-- Total Monthly Progress Card -->
+                    <div class="ht-total-progress-card">
+                        <div class="ht-donut-container" id="ht-monthly-donut">
+                            <div class="ht-donut-val" id="ht-monthly-percentage">0%</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 14px; font-weight: 800; color: var(--db-text-dark);">Total Monthly
+                                Progress</div>
+                            <div style="font-size: 11px; font-weight: 600; color: #9CA3AF;" id="ht-monthly-stats">0 of 0
+                                habits completed</div>
+                        </div>
+                    </div>
+
+                    <div class="ht-section-header"
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <div style="font-size: 14px; font-weight: 800; color: var(--db-text-dark);">Daily Habits</div>
+                        <button class="ht-add-btn" onclick="openAddHabitModal()">
+                            <i data-lucide="plus" style="width: 14px;"></i> Tambah Habit
+                        </button>
+                    </div>
+
+                    <div class="ht-table-wrapper">
+                        <table class="ht-table" id="ht-daily-table">
+                            <thead>
+                                <tr id="ht-table-days-row">
+                                    <!-- Days will be injected here -->
+                                </tr>
+                            </thead>
+                            <tbody id="ht-daily-body">
+                                <!-- Habits will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Weekly Habits -->
+                    <div style="font-size: 14px; font-weight: 800; color: var(--db-text-dark); margin-top: 40px;">Weekly
+                        Habits</div>
+                    <div class="ht-weekly-section" id="ht-weekly-container">
+                        <!-- Weeks 1-5 cards will be injected here -->
                     </div>
                 </div>
-
-                <!-- Total Monthly Progress Card -->
-                <div class="ht-total-progress-card">
-                    <div class="ht-donut-container" id="ht-monthly-donut">
-                        <div class="ht-donut-val" id="ht-monthly-percentage">0%</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 14px; font-weight: 800; color: var(--db-text-dark);">Total Monthly
-                            Progress</div>
-                        <div style="font-size: 11px; font-weight: 600; color: #9CA3AF;" id="ht-monthly-stats">0 of 0
-                            habits completed</div>
-                    </div>
-                </div>
-
-                <div class="ht-section-header"
-                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <div style="font-size: 14px; font-weight: 800; color: var(--db-text-dark);">Daily Habits</div>
-                    <button class="ht-add-btn" onclick="openAddHabitModal()">
-                        <i data-lucide="plus" style="width: 14px;"></i> Tambah Habit
-                    </button>
-                </div>
-
-                <div class="ht-table-wrapper">
-                    <table class="ht-table" id="ht-daily-table">
-                        <thead>
-                            <tr id="ht-table-days-row">
-                                <!-- Days will be injected here -->
-                            </tr>
-                        </thead>
-                        <tbody id="ht-daily-body">
-                            <!-- Habits will be injected here -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Weekly Habits -->
-                <div style="font-size: 14px; font-weight: 800; color: var(--db-text-dark); margin-top: 40px;">Weekly
-                    Habits</div>
-                <div class="ht-weekly-section" id="ht-weekly-container">
-                    <!-- Weeks 1-5 cards will be injected here -->
-                </div>
-            </div>
             </div>
         </div>
 
@@ -387,6 +402,12 @@
                             // Update UI
                             $('#text-' + currentField).text(content || 'Belum ada data.');
                             updateStatusDot(activeCategoryId);
+
+                            if (response.earned_points > 0) {
+                                $('#earnedPointsText').text(response.earned_points + ' Poin');
+                                $('#successPopup').fadeIn(300).css('display', 'flex');
+                            }
+
                             closeModal();
                         }
                     },
@@ -489,12 +510,12 @@
             let bodyHtml = '';
             habits.forEach(habit => {
                 let habitRow = `<tr><td class="ht-habit-name-col">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <button class="ht-btn-delete" onclick="deleteHabit(${habit.id})"><i data-lucide="trash-2" style="width:14px;"></i></button>
-                        <button class="ht-btn-delete" onclick="openEditHabitModal(${habit.id}, '${habit.title.replace(/'/g, "\\'")}')" style="color:var(--db-purple);"><i data-lucide="edit-3" style="width:14px;"></i></button>
-                        ${habit.title}
-                    </div>
-                </td>`;
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <button class="ht-btn-delete" onclick="deleteHabit(${habit.id})"><i data-lucide="trash-2" style="width:14px;"></i></button>
+                            <button class="ht-btn-delete" onclick="openEditHabitModal(${habit.id}, '${habit.title.replace(/'/g, "\\'")}')" style="color:var(--db-purple);"><i data-lucide="edit-3" style="width:14px;"></i></button>
+                            ${habit.title}
+                        </div>
+                    </td>`;
 
                 const habitLogs = logs[habit.id] || [];
                 for (let d = 1; d <= daysInMonth; d++) {
@@ -503,10 +524,10 @@
                     const weekNum = Math.ceil((d + new Date(currentHTYear, currentHTMonth - 1, 1).getDay()) / 7);
 
                     habitRow += `<td class="ht-day-cell ht-week-${weekNum}">
-                        <input type="checkbox" class="ht-checkbox" 
-                            ${isDone ? 'checked' : ''} 
-                            onchange="toggleHabit(${habit.id}, '${dateStr}')">
-                    </td>`;
+                            <input type="checkbox" class="ht-checkbox" 
+                                ${isDone ? 'checked' : ''} 
+                                onchange="toggleHabit(${habit.id}, '${dateStr}')">
+                        </td>`;
                 }
                 habitRow += '</tr>';
                 bodyHtml += habitRow;
@@ -520,24 +541,24 @@
                 let tasksList = '';
                 tasks.forEach(task => {
                     tasksList += `<li class="ht-weekly-item">
-                        <input type="checkbox" class="ht-checkbox" ${task.is_completed ? 'checked' : ''} onchange="toggleWeeklyTask(${task.id})">
-                        <span class="ht-weekly-text ${task.is_completed ? 'completed' : ''}">${task.title}</span>
-                        <button class="ht-btn-delete" onclick="openEditWeeklyTaskModal(${task.id}, '${task.title.replace(/'/g, "\\'")}', ${i})" style="color:var(--db-purple);"><i data-lucide="edit-3" style="width:14px;"></i></button>
-                        <button class="ht-btn-delete" onclick="deleteWeeklyTask(${task.id})"><i data-lucide="trash-2" style="width:14px;"></i></button>
-                    </li>`;
+                            <input type="checkbox" class="ht-checkbox" ${task.is_completed ? 'checked' : ''} onchange="toggleWeeklyTask(${task.id})">
+                            <span class="ht-weekly-text ${task.is_completed ? 'completed' : ''}">${task.title}</span>
+                            <button class="ht-btn-delete" onclick="openEditWeeklyTaskModal(${task.id}, '${task.title.replace(/'/g, "\\'")}', ${i})" style="color:var(--db-purple);"><i data-lucide="edit-3" style="width:14px;"></i></button>
+                            <button class="ht-btn-delete" onclick="deleteWeeklyTask(${task.id})"><i data-lucide="trash-2" style="width:14px;"></i></button>
+                        </li>`;
                 });
 
                 const label = i === 6 ? 'MONTHLY' : `WEEK ${i}`;
 
                 weeklyHtml += `
-                    <div class="ht-weekly-card">
-                        <div class="ht-weekly-header">
-                            <div class="ht-weekly-title">${label}</div>
-                            <button class="ht-add-btn" onclick="openAddWeeklyTaskModal(${i})"><i data-lucide="plus" style="width:12px;"></i></button>
+                        <div class="ht-weekly-card">
+                            <div class="ht-weekly-header">
+                                <div class="ht-weekly-title">${label}</div>
+                                <button class="ht-add-btn" onclick="openAddWeeklyTaskModal(${i})"><i data-lucide="plus" style="width:12px;"></i></button>
+                            </div>
+                            <ul class="ht-weekly-list">${tasksList || '<li style="font-size:11px; opacity:0.5;">No tasks</li>'}</ul>
                         </div>
-                        <ul class="ht-weekly-list">${tasksList || '<li style="font-size:11px; opacity:0.5;">No tasks</li>'}</ul>
-                    </div>
-                `;
+                    `;
             }
             $('#ht-weekly-container').html(weeklyHtml);
 
@@ -568,7 +589,13 @@
                 url: "{{ route('habit-tracker.toggle') }}",
                 method: 'POST',
                 data: { _token: "{{ csrf_token() }}", habit_id: habitId, date: date },
-                success: function () { loadHTData(); }
+                success: function (response) {
+                    if (response.earned_points > 0) {
+                        $('#earnedPointsText').text(response.earned_points + ' Poin');
+                        $('#successPopup').fadeIn(300).css('display', 'flex');
+                    }
+                    loadHTData();
+                }
             });
         };
 
@@ -657,7 +684,13 @@
                 url: `/habit-tracker/weekly-task/${id}/toggle`,
                 method: 'POST',
                 data: { _token: "{{ csrf_token() }}" },
-                success: function () { loadHTData(); }
+                success: function (response) {
+                    if (response.earned_points > 0) {
+                        $('#earnedPointsText').text(response.earned_points + ' Poin');
+                        $('#successPopup').fadeIn(300).css('display', 'flex');
+                    }
+                    loadHTData();
+                }
             });
         };
 
@@ -697,6 +730,10 @@
                 });
             }
             lucide.createIcons();
+        }
+
+        function closePopup() {
+            $('#successPopup').fadeOut(300);
         }
     </script>
 @endsection

@@ -45,9 +45,33 @@ class LifebookJourneyController extends Controller
             [$request->input('field') => $request->input('content')]
         );
 
+        // Scoring Logic: 100 points when all 4 fields are filled
+        $pointsEarned = 0;
+        if (!empty($journey->premise) && !empty($journey->vision) && !empty($journey->purpose) && !empty($journey->strategy)) {
+            $catName = collect($this->categories)->where('id', $request->input('category'))->first()['name'] ?? $request->input('category');
+            $scoreDesc = "Journey: $catName (Full Data)";
+
+            // Check if already scored for this category
+            $existingScore = \App\Models\Score::where('user_id', $user->id)
+                ->where('activity', 'Lifebook Journey')
+                ->where('deskripsi', $scoreDesc)
+                ->first();
+
+            if (!$existingScore) {
+                \App\Models\Score::create([
+                    'user_id' => $user->id,
+                    'activity' => 'Lifebook Journey',
+                    'score' => 100,
+                    'deskripsi' => $scoreDesc
+                ]);
+                $pointsEarned = 100;
+            }
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil disimpan',
+            'earned_points' => $pointsEarned,
             'data' => $journey
         ]);
     }
