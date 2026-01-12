@@ -71,6 +71,10 @@
                 <span>Parents Lifebook Journey</span>
             </a>
         </div>
+
+        <div class="profile-footer-version">
+            Version {{ $appVersion }} • Parents App
+        </div>
     </div>
 
     <!-- Bottom Navigation -->

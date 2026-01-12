@@ -118,4 +118,33 @@ class AdminChildrenTrackerController extends Controller
             'currentYear'
         ));
     }
+    public function show($id)
+    {
+        $mainDb = config('database.connections.mysql.database');
+        $userDb = config('database.connections.lifebook_users.database');
+
+        $journal = DB::table($mainDb . '.parent_journals as j')
+            ->where('j.id', $id)
+            ->join($mainDb . '.users as p', 'j.user_id', '=', 'p.id')
+            ->join($userDb . '.users as s', 'j.student_id', '=', 's.id')
+            ->leftJoin($mainDb . '.teacher_student as ts', 'j.student_id', '=', 'ts.student_id')
+            ->leftJoin($userDb . '.users as t', 'ts.teacher_id', '=', 't.id')
+            ->select(
+                'j.*',
+                'p.name as parent_name',
+                's.name as student_name',
+                's.image as student_avatar',
+                't.name as teacher_name'
+            )
+            ->first();
+
+        if (!$journal) {
+            return response()->json(['success' => false, 'message' => 'Journal not found'], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $journal
+        ]);
+    }
 }

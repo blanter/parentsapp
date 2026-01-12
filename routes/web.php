@@ -33,7 +33,8 @@ Route::middleware(['auth', 'approved'])->group(function () {
         if (Auth::user()->role === 'admin') {
             return redirect()->intended('/admin/dashboard');
         }
-        return view('dashboard');
+        $appVersion = \App\Models\WebSetting::where('key', 'app_version')->first()->value ?? '1.0.0';
+        return view('dashboard', compact('appVersion'));
     })->name('dashboard');
 
     Route::get('/coming-soon', function () {
@@ -91,6 +92,7 @@ Route::middleware(['auth', 'approved', 'admin'])->group(function () {
 
     // Children Tracker Admin
     Route::get('/admin/children-tracker', [\App\Http\Controllers\AdminChildrenTrackerController::class, 'index'])->name('admin.children-tracker.index');
+    Route::get('/admin/children-tracker/{id}', [\App\Http\Controllers\AdminChildrenTrackerController::class, 'show'])->name('admin.children-tracker.show');
 
     // System Settings
     Route::get('/admin/settings', [AdminSettingController::class, 'index'])->name('admin.settings');

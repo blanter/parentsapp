@@ -1862,11 +1862,217 @@ a.btn.btn-warning {
 
 @keyframes slideUp {
     from {
-        transform: translateY(100%);
+        opacity: 0;
+        transform: translateY(10px);
     }
 
     to {
+        opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* Children Tracker Admin Detail Modal */
+.ct-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.ct-modal-card {
+    background: #fff;
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: ctModalZoom 0.3s ease-out;
+}
+
+@keyframes ctModalZoom {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.ct-modal-header {
+    padding: 24px 30px;
+    background: #ffffff;
+    border-bottom: 1px solid #F3F4F6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ct-modal-title-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.ct-modal-header-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(108, 136, 224, 0.1);
+    color: var(--db-purple);
+}
+
+.ct-modal-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    margin: 0;
+}
+
+.ct-modal-subtitle {
+    font-size: 11px;
+    color: #9CA3AF;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.ct-modal-close {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: none;
+    background: #F3F4F6;
+    color: var(--db-text-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ct-modal-close:hover {
+    background: #E5E7EB;
+    transform: rotate(90deg);
+}
+
+.ct-modal-body {
+    padding: 30px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.ct-modal-section {
+    margin-bottom: 30px;
+}
+
+.ct-modal-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #F3F4F6;
+}
+
+.ct-modal-section-title i {
+    width: 18px;
+    color: var(--db-purple);
+}
+
+.ct-modal-section-title h4 {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ct-modal-qa-item {
+    background: #F8FAFF;
+    padding: 20px;
+    border-radius: 18px;
+    margin-bottom: 15px;
+    border-left: 4px solid var(--db-purple);
+}
+
+.ct-modal-question {
+    font-size: 13px;
+    font-weight: 700;
+    color: #4B5563;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.ct-modal-answer {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--db-text-dark);
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.ct-modal-answer:empty::after {
+    content: "No data filled yet.";
+    font-style: italic;
+    opacity: 0.5;
+}
+
+.ct-modal-response-box {
+    background: rgba(108, 136, 224, 0.04);
+    border: 1px dashed rgba(108, 136, 224, 0.3);
+    padding: 20px;
+    border-radius: 18px;
+    margin-top: 10px;
+}
+
+.ct-modal-response-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--db-purple);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.ct-modal-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    gap: 15px;
+}
+
+.ct-modal-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(108, 136, 224, 0.1);
+    border-left-color: var(--db-purple);
+    border-radius: 50%;
+    animation: ctSpin 1s linear infinite;
+}
+
+@keyframes ctSpin {
+    to {
+        transform: rotate(360deg);
     }
 }
 
@@ -4680,5 +4886,209 @@ a.btn.btn-warning {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* Children Tracker Admin Detail Modal */
+.ct-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.ct-modal-card {
+    background: #fff;
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: ctModalZoom 0.3s ease-out;
+}
+
+@keyframes ctModalZoom {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.ct-modal-header {
+    padding: 24px 30px;
+    background: #ffffff;
+    border-bottom: 1px solid #F3F4F6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ct-modal-title-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.ct-modal-header-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(108, 136, 224, 0.1);
+    color: var(--db-purple);
+}
+
+.ct-modal-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    margin: 0;
+}
+
+.ct-modal-subtitle {
+    font-size: 11px;
+    color: #9CA3AF;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.ct-modal-close {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: none;
+    background: #F3F4F6;
+    color: var(--db-text-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ct-modal-close:hover {
+    background: #E5E7EB;
+    transform: rotate(90deg);
+}
+
+.ct-modal-body {
+    padding: 30px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.ct-modal-section {
+    margin-bottom: 30px;
+}
+
+.ct-modal-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #F3F4F6;
+}
+
+.ct-modal-section-title i {
+    width: 18px;
+    color: var(--db-purple);
+}
+
+.ct-modal-section-title h4 {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ct-modal-qa-item {
+    background: #F8FAFF;
+    padding: 20px;
+    border-radius: 18px;
+    margin-bottom: 15px;
+    border-left: 4px solid var(--db-purple);
+}
+
+.ct-modal-question {
+    font-size: 13px;
+    font-weight: 700;
+    color: #4B5563;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.ct-modal-answer {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--db-text-dark);
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.ct-modal-answer:empty::after {
+    content: "No data filled yet.";
+    font-style: italic;
+    opacity: 0.5;
+}
+
+.ct-modal-response-box {
+    background: rgba(108, 136, 224, 0.04);
+    border: 1px dashed rgba(108, 136, 224, 0.3);
+    padding: 20px;
+    border-radius: 18px;
+    margin-top: 10px;
+}
+
+.ct-modal-response-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--db-purple);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.ct-modal-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    gap: 15px;
+}
+
+.ct-modal-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(108, 136, 224, 0.1);
+    border-left-color: var(--db-purple);
+    border-radius: 50%;
+    animation: ctSpin 1s linear infinite;
+}
+
+@keyframes ctSpin {
+    to {
+        transform: rotate(360deg);
     }
 }
