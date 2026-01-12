@@ -36,7 +36,7 @@
 
         .lj-container {
             padding: 30px 20px;
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
         }
 

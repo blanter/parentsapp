@@ -809,9 +809,9 @@ a.btn.btn-warning {
 }
 
 .db-container {
-    max-width: 480px;
+    max-width: 500px;
     margin: 0 auto;
-    padding: 20px 20px 100px;
+    padding: 20px 20px 70px;
     position: relative;
     z-index: 1;
 }
@@ -1464,7 +1464,7 @@ a.btn.btn-warning {
 }
 
 .lb-container {
-    max-width: 480px;
+    max-width: 500px;
     margin: 0 auto;
     padding: 20px 20px 100px;
     position: relative;
@@ -1720,7 +1720,7 @@ a.btn.btn-warning {
 
 /* Gardening Page Styles */
 .gn-container {
-    max-width: 480px;
+    max-width: 500px;
     margin: 0 auto;
     padding: 30px 20px 100px;
     position: relative;
@@ -1852,7 +1852,7 @@ a.btn.btn-warning {
 .gn-modal-content {
     background: #fff;
     width: 100%;
-    max-width: 480px;
+    max-width: 500px;
     margin: 0 auto;
     border-radius: 35px 35px 0 0;
     padding: 30px;
@@ -2325,7 +2325,7 @@ a.btn.btn-warning {
 
 /* Volunteer Mission Styles */
 .vm-container {
-    max-width: 480px;
+    max-width: 500px;
     margin: 0 auto;
     padding: 30px 20px 100px;
     position: relative;
@@ -3479,7 +3479,7 @@ a.btn.btn-warning {
 .re-modal-content {
     background: #F8F9FF;
     width: 100%;
-    max-width: 480px;
+    max-width: 500px;
     border-radius: 35px;
     padding: 35px 25px;
     max-height: 70vh;
