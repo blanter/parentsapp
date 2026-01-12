@@ -157,6 +157,12 @@ class GardeningController extends Controller
     {
         $plant = GardeningPlant::where('user_id', Auth::id())->findOrFail($id);
 
+        // Delete all scores related to this plant's progress before the plant itself is deleted
+        \App\Models\Score::where('user_id', Auth::id())
+            ->where('activity', 'Home Gardening')
+            ->where('deskripsi', 'like', 'Progress: ' . $plant->plant_name . ' (%)')
+            ->delete();
+
         if ($plant->image) {
             $path = public_path('gardening/' . $plant->image);
             if (File::exists($path)) {
@@ -170,7 +176,13 @@ class GardeningController extends Controller
 
     public function destroyProgress($id)
     {
-        $progress = GardeningProgress::where('user_id', Auth::id())->findOrFail($id);
+        $progress = GardeningProgress::with('plant')->where('user_id', Auth::id())->findOrFail($id);
+
+        // Delete the corresponding score entry
+        \App\Models\Score::where('user_id', Auth::id())
+            ->where('activity', 'Home Gardening')
+            ->where('deskripsi', 'Progress: ' . $progress->plant->plant_name . ' (' . $progress->report_date . ')')
+            ->delete();
 
         if ($progress->image) {
             $path = public_path('gardening/progress/' . $progress->image);
