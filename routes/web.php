@@ -108,6 +108,10 @@ Route::middleware(['auth', 'approved', 'admin'])->group(function () {
     Route::get('/admin/children-tracker', [\App\Http\Controllers\AdminChildrenTrackerController::class, 'index'])->name('admin.children-tracker.index');
     Route::get('/admin/children-tracker/{id}', [\App\Http\Controllers\AdminChildrenTrackerController::class, 'show'])->name('admin.children-tracker.show');
 
+    // Lifebook Journey Admin
+    Route::get('/admin/lifebook-journey', [\App\Http\Controllers\AdminLifebookJourneyController::class, 'index'])->name('admin.lifebook-journey.index');
+    Route::get('/admin/lifebook-journey/{userId}', [\App\Http\Controllers\AdminLifebookJourneyController::class, 'show'])->name('admin.lifebook-journey.show');
+
     // System Settings
     Route::get('/admin/settings', [AdminSettingController::class, 'index'])->name('admin.settings');
     Route::post('/admin/settings', [AdminSettingController::class, 'update'])->name('admin.settings.update');
