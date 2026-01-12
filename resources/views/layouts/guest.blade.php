@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ asset('/file/lifebookicon.png') }}" rel='icon' type='image/x-icon' />
+    <link rel="manifest" href="{{ asset('/manifest.json') }}">
+    <meta name="theme-color" content="#FFD64B">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Parents App">
+    <link rel="apple-touch-icon" href="{{ asset('/file/lifebookicon.png') }}">
+    <title>@yield('title', 'Lifebook Parents')</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="{{ asset('/file/style.css') }}?v=17" rel="stylesheet" />
+
+    @yield('styles')
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body class="@yield('body-class', 'auth-body')">
+    <!-- Background Elements -->
+    <img src="{{ asset('/file/bee.png') }}" class="db-bg-pattern db-bee" alt="">
+    <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
+
+    @yield('content')
+
+    @yield('scripts')
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

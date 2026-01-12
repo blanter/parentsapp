@@ -1,22 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.guest')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{asset('/file/lifebookicon.png')}}" rel='icon' type='image/x-icon' />
-    <title>Guru Login - Lifebook Parents</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
-        rel="stylesheet">
-    <link href="{{asset('/file/style.css')}}?v=11" rel="stylesheet" />
-    <script src="https://unpkg.com/lucide@latest"></script>
-</head>
+@section('title', 'Guru Login - Lifebook Parents')
 
-<body class="auth-body">
-    <!-- Background Elements -->
-    <img src="{{ asset('/file/bee.png') }}" class="db-bg-pattern db-bee" alt="">
-    <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
-
+@section('content')
     <div class="auth-container">
         <div class="auth-card">
             <div style="text-align: center; margin-bottom: 20px;">
@@ -47,13 +33,13 @@
                 @csrf
                 <div class="auth-form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" class="auth-form-control"
-                        placeholder="teacher@email.com" required value="{{ old('email') }}">
+                    <input type="email" id="email" name="email" class="auth-form-control" placeholder="teacher@email.com"
+                        required value="{{ old('email') }}">
                 </div>
                 <div class="auth-form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" class="auth-form-control"
-                        placeholder="••••••••" required>
+                    <input type="password" id="password" name="password" class="auth-form-control" placeholder="••••••••"
+                        required>
                 </div>
 
                 <button type="submit" class="auth-btn-primary"
@@ -68,10 +54,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        lucide.createIcons();
-    </script>
-</body>
-
-</html>
+@endsection

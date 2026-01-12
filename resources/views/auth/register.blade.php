@@ -1,24 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.guest')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{asset('/file/lifebookicon.png')}}" rel='icon' type='image/x-icon' />
-    <link rel="manifest" href="{{ asset('/manifest.json') }}">
-    <meta name="theme-color" content="#FFD64B">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Parents App">
-    <link rel="apple-touch-icon" href="{{ asset('/file/lifebookicon.png') }}">
-    <title>Register - Lifebook Parents</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
-        rel="stylesheet">
-    <link href="{{asset('/file/style.css')}}?v=10" rel="stylesheet" />
+@section('title', 'Register - Lifebook Parents')
+
+@section('styles')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         /* Force Select2 to take full width */
         .select2-container {
@@ -108,13 +93,9 @@
             padding-left: 5px;
         }
     </style>
-</head>
+@endsection
 
-<body class="auth-body">
-    <!-- Background Elements -->
-    <img src="{{ asset('/file/bee.png') }}" class="db-bg-pattern db-bee" alt="">
-    <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
-
+@section('content')
     <div class="auth-container">
         <div class="auth-card">
             <h1 class="auth-title">Create Account!</h1>
@@ -177,9 +158,11 @@
             </div>
         </div>
     </div>
+@endsection
 
+@section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        lucide.createIcons();
         $(document).ready(function () {
             $('.select2').select2({
                 placeholder: "Cari nama anak...",
@@ -187,6 +170,4 @@
             });
         });
     </script>
-</body>
-
-</html>
+@endsection
