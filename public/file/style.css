@@ -5204,7 +5204,7 @@ a.btn.btn-warning {
     background: #fff;
     border-radius: 30px;
     padding: 30px;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.03);
 }
 
@@ -5362,7 +5362,7 @@ a.btn.btn-warning {
 
 /* Habit Tracker Styles */
 .ht-container {
-    margin: 50px 0;
+    margin: 20px 0;
 }
 
 .ht-header {
@@ -5400,6 +5400,78 @@ a.btn.btn-warning {
     font-weight: 600;
     color: var(--db-text-dark);
     cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .ht-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .ht-controls {
+        width: 100%;
+        display: flex;
+        gap: 8px;
+    }
+
+    .ht-select {
+        flex: 1;
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .ht-title-group h2 {
+        font-size: 18px;
+    }
+
+    .ht-total-progress-card {
+        padding: 15px;
+        gap: 15px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .ht-donut-container {
+        width: 70px;
+        height: 70px;
+    }
+
+    .ht-donut-container::before {
+        width: 50px;
+        height: 50px;
+    }
+
+    .ht-donut-val {
+        font-size: 14px;
+    }
+
+    .ht-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .ht-add-btn {
+        justify-content: center;
+    }
+
+    .ht-section-header .ht-add-btn {
+        width: 100%;
+    }
+
+    .ht-weekly-header .ht-add-btn {
+        width: auto;
+        padding: 6px 10px;
+    }
+
+    .ht-weekly-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
 }
 
 .ht-table-wrapper {

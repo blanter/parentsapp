@@ -85,7 +85,7 @@
 
         <div class="lj-header-title">
             <div class="lj-title">
-                Parents My<br><span>Lifebook Journey</span>
+                Parents <br><span>Lifebook Journey</span>
             </div>
         </div>
 
@@ -181,7 +181,9 @@
                     <i data-lucide="chevron-right"></i>
                 </button>
             </div>
+        </div>
 
+        <div class="lj-content-section" style="margin-bottom:90px">
             <!-- Habit Tracker Section -->
             <div class="ht-container">
                 <div class="ht-header">
@@ -193,7 +195,8 @@
                         <select class="ht-select" id="ht-month-select">
                             @for($m = 1; $m <= 12; $m++)
                                 <option value="{{ $m }}" {{ $m == date('n') ? 'selected' : '' }}>
-                                    {{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
+                                    {{ date('F', mktime(0, 0, 0, $m, 1)) }}
+                                </option>
                             @endfor
                         </select>
                         <select class="ht-select" id="ht-year-select">
@@ -217,7 +220,8 @@
                     </div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div class="ht-section-header"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                     <div style="font-size: 14px; font-weight: 800; color: var(--db-text-dark);">Daily Habits</div>
                     <button class="ht-add-btn" onclick="openAddHabitModal()">
                         <i data-lucide="plus" style="width: 14px;"></i> Tambah Habit
@@ -482,7 +486,7 @@
                     url: "{{ route('habit-tracker.data') }}",
                     method: 'GET',
                     data: { month: currentHTMonth, year: currentHTYear },
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             htData = response.data;
                             renderHT();
@@ -493,7 +497,7 @@
 
             const renderHT = () => {
                 const { habits, logs, weeklyTasks, daysInMonth } = htData;
-                
+
                 // Render Table Header (Days)
                 let daysHtml = '<th class="ht-habit-name-col">Daily Habits</th>';
                 for (let d = 1; d <= daysInMonth; d++) {
@@ -514,13 +518,13 @@
                             ${habit.title}
                         </div>
                     </td>`;
-                    
+
                     const habitLogs = logs[habit.id] || [];
                     for (let d = 1; d <= daysInMonth; d++) {
                         const dateStr = `${currentHTYear}-${String(currentHTMonth).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
                         const isDone = habitLogs.some(l => l.log_date === dateStr && l.is_completed);
                         const weekNum = Math.ceil((d + new Date(currentHTYear, currentHTMonth - 1, 1).getDay()) / 7);
-                        
+
                         habitRow += `<td class="ht-day-cell ht-week-${weekNum}">
                             <input type="checkbox" class="ht-checkbox" 
                                 ${isDone ? 'checked' : ''} 
@@ -576,7 +580,7 @@
                 });
 
                 const percentage = totalPossible > 0 ? Math.round((totalDone / totalPossible) * 100) : 0;
-                
+
                 $('#ht-monthly-percentage').text(percentage + '%');
                 $('#ht-monthly-donut').css('background', `conic-gradient(var(--db-purple) ${percentage}%, #E5E7EB ${percentage}%)`);
                 $('#ht-monthly-stats').text(`${totalDone} checks this month`);
@@ -587,17 +591,17 @@
                     url: "{{ route('habit-tracker.toggle') }}",
                     method: 'POST',
                     data: { _token: "{{ csrf_token() }}", habit_id: habitId, date: date },
-                    success: function() { loadHTData(); }
+                    success: function () { loadHTData(); }
                 });
             };
 
             window.deleteHabit = (id) => {
-                if(!confirm('Hapus habit ini? Seluruh log akan ikut terhapus.')) return;
+                if (!confirm('Hapus habit ini? Seluruh log akan ikut terhapus.')) return;
                 $.ajax({
                     url: `/habit-tracker/habit/${id}`,
                     method: 'DELETE',
                     data: { _token: "{{ csrf_token() }}" },
-                    success: function() { loadHTData(); }
+                    success: function () { loadHTData(); }
                 });
             };
 
@@ -613,15 +617,15 @@
                 $('#addHabitModal').css('display', 'flex').hide().fadeIn(200);
             };
 
-            $('#saveHabitBtn').click(function() {
+            $('#saveHabitBtn').click(function () {
                 const title = $('#habitTitleInput').val();
                 const id = $('#habitIdInput').val();
-                if(!title) return;
+                if (!title) return;
                 $.ajax({
                     url: "{{ route('habit-tracker.store') }}",
                     method: 'POST',
                     data: { _token: "{{ csrf_token() }}", title: title, id: id },
-                    success: function() {
+                    success: function () {
                         $('#habitTitleInput').val('');
                         $('#habitIdInput').val('');
                         closeHTModal('addHabitModal');
@@ -646,23 +650,23 @@
                 $('#addWeeklyTaskModal').css('display', 'flex').hide().fadeIn(200);
             };
 
-            $('#saveWeeklyTaskBtn').click(function() {
+            $('#saveWeeklyTaskBtn').click(function () {
                 const title = $('#weeklyTaskTitleInput').val();
                 const index = $('#weeklyTaskIndex').val();
                 const id = $('#weeklyTaskId').val();
-                if(!title) return;
+                if (!title) return;
                 $.ajax({
                     url: "{{ route('habit-tracker.weekly.store') }}",
                     method: 'POST',
-                    data: { 
-                        _token: "{{ csrf_token() }}", 
-                        title: title, 
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        title: title,
                         week_index: index,
                         month: currentHTMonth,
                         year: currentHTYear,
                         id: id
                     },
-                    success: function() {
+                    success: function () {
                         $('#weeklyTaskTitleInput').val('');
                         $('#weeklyTaskId').val('');
                         closeHTModal('addWeeklyTaskModal');
@@ -676,23 +680,23 @@
                     url: `/habit-tracker/weekly-task/${id}/toggle`,
                     method: 'POST',
                     data: { _token: "{{ csrf_token() }}" },
-                    success: function() { loadHTData(); }
+                    success: function () { loadHTData(); }
                 });
             };
 
             window.deleteWeeklyTask = (id) => {
-                if(!confirm('Hapus tugas ini?')) return;
+                if (!confirm('Hapus tugas ini?')) return;
                 $.ajax({
                     url: `/habit-tracker/weekly-task/${id}`,
                     method: 'DELETE',
                     data: { _token: "{{ csrf_token() }}" },
-                    success: function() { loadHTData(); }
+                    success: function () { loadHTData(); }
                 });
             };
 
             window.closeHTModal = (id) => { $(`#${id}`).fadeOut(200); };
 
-            $('#ht-month-select, #ht-year-select').change(function() {
+            $('#ht-month-select, #ht-year-select').change(function () {
                 currentHTMonth = $('#ht-month-select').val();
                 currentHTYear = $('#ht-year-select').val();
                 loadHTData();
