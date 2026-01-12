@@ -69,11 +69,11 @@
 
         <div class="profile-stat-container">
             <div class="profile-stat-box points">
-                <div class="profile-stat-value">0</div>
+                <div class="profile-stat-value">{{ $totalScore }}</div>
                 <div class="profile-stat-label">Total Poin</div>
             </div>
             <div class="profile-stat-box rank">
-                <div class="profile-stat-value">#--</div>
+                <div class="profile-stat-value">#{{ $rank }}</div>
                 <div class="profile-stat-label">Peringkat</div>
             </div>
         </div>

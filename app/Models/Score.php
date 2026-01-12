@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Score extends Model
 {
-    protected $fillable = ['parent_id','activity','score','deskripsi'];
+    protected $fillable = ['user_id', 'parent_id', 'activity', 'score', 'deskripsi'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function parent()
     {

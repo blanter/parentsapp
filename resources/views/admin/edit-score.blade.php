@@ -17,7 +17,8 @@
                         {{-- Parent Name (Readonly) --}}
                         <div class="form-group full-width">
                             <label class="form-label">Parents Name</label>
-                            <input type="text" class="form-control" value="{{ $score->parent->name }}" readonly>
+                            <input type="text" class="form-control"
+                                value="{{ $score->user->name ?? ($score->parent->name ?? 'Deleted User') }}" readonly>
                         </div>
 
                         {{-- Activity --}}

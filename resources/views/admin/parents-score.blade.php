@@ -6,7 +6,6 @@
 
 @section('styles')
     <style>
-        /* Add any page-specific styles from the original file if they are not in style.css */
         .container {
             max-width: 100%;
         }
@@ -29,7 +28,7 @@
                             <label class="form-label">Parents Name</label>
                             <select id="parentsDropdown" name="parent_ids[]" multiple="multiple" style="width:100%">
                                 @foreach($parents as $parent)
-                                    <option value="{{ $parent->id }}">{{ $parent->name }}</option>
+                                    <option value="{{ $parent->id }}">{{ $parent->name }} ({{ $parent->email }})</option>
                                 @endforeach
                             </select>
                         </div>
@@ -69,7 +68,7 @@
             <!-- Filter Buttons -->
             <div class="filter-buttons">
                 <a href="{{ route('parents.index', ['activity' => 'all']) }}"
-                    class="filter-btn {{ $activityFilter === 'all' ? 'active' : '' }}">
+                    class="filter-btn {{ !$activityFilter || $activityFilter === 'all' ? 'active' : '' }}">
                     All Activities
                 </a>
                 <a href="{{ route('parents.index', ['activity' => 'Journaling Parents']) }}"
@@ -120,10 +119,13 @@
                     <div class="top-performers no-bgya">
                         <div class="podium" id="podium">
                             @foreach($leaderboard->take(3) as $i => $lb)
-                                <div class="podium-item {{ $i == 0 ? 'first' : ($i == 1 ? 'second' : 'third') }}"
-                                    data-activity="{{ $lb->parent?->scores->first()->activity ?? 'All' }}">
-                                    <div class="avatar"></div>
-                                    <div class="podium-name">{{ $lb->parent?->name ?? 'Unknown' }}</div>
+                                <div class="podium-item {{ $i == 0 ? 'first' : ($i == 1 ? 'second' : 'third') }}">
+                                    <div class="avatar">
+                                        @if($lb->user?->avatar)
+                                            <img src="{{ asset('avatars/' . $lb->user->avatar) }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                        @endif
+                                    </div>
+                                    <div class="podium-name">{{ $lb->user?->name ?? 'Unknown' }}</div>
                                     <div class="score-badge">{{ $lb->total_score }}</div>
                                     <div class="podium-base">
                                         <div class="podium-rank">{{ $i + 1 }}</div>
@@ -143,12 +145,16 @@
                                 </tr>
                             </thead>
                             <tbody id="rankingBody">
-                                @foreach($leaderboard->skip(3)->take(5) as $i => $lb)
-                                    <tr data-activity="{{ $lb->parent?->scores->first()->activity ?? 'All' }}">
-                                        <td class="rank-cell">{{ $i + 1 }}</td>
+                                @foreach($leaderboard->skip(3)->take(10) as $i => $lb)
+                                    <tr>
+                                        <td class="rank-cell">{{ $i + 4 }}</td>
                                         <td class="name-cell">
-                                            <div class="avatar"></div>
-                                            {{ $lb->parent?->name ?? 'Unknown' }}
+                                            <div class="avatar">
+                                                @if($lb->user?->avatar)
+                                                    <img src="{{ asset('avatars/' . $lb->user->avatar) }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                                @endif
+                                            </div>
+                                            {{ $lb->user?->name ?? 'Unknown' }}
                                         </td>
                                         <td>{{ $lb->total_score }}</td>
                                     </tr>
@@ -163,16 +169,14 @@
             <div class="history-section">
                 <h3>History Insert</h3>
                 <!-- Filter Section -->
-                <div class="filter-section mb-4">
+                <div class="filter-section mb-5" style="background: #fff; padding: 25px; border-radius: 20px; border: 1px solid #F3F4F6; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
                     <form method="GET" action="{{ route('parents.index') }}" class="filter-form">
-
-                        <div class="form-row">
-
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end;">
                             <!-- Filter Activity -->
-                            <div class="form-group mr-2">
-                                <label class="form-label">Filter Activity</label>
-                                <select name="activity" class="form-control">
-                                    <option value="">All Activity</option>
+                            <div style="flex: 1; min-width: 240px;">
+                                <label class="form-label" style="font-size: 11px; font-weight: 800; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: block;">Filter Activity Category</label>
+                                <select name="activity" class="form-control" style="background: #fff; border: 2px solid #F3F4F6; height: 52px; border-radius: 12px; font-weight: 600; font-size: 14px; width: 100%;">
+                                    <option value="">All Activity Categories</option>
                                     <option value="Journaling Parents" {{ request('activity') == 'Journaling Parents' ? 'selected' : '' }}>Journaling Parents</option>
                                     <option value="Support/Kerjasama" {{ request('activity') == 'Support/Kerjasama' ? 'selected' : '' }}>Support/Kerjasama</option>
                                     <option value="Home Gardening" {{ request('activity') == 'Home Gardening' ? 'selected' : '' }}>Home Gardening</option>
@@ -182,30 +186,31 @@
                             </div>
 
                             <!-- Filter Parents Name -->
-                            <div class="form-group mr-2">
-                                <label class="form-label">Filter Parent</label>
-                                <select name="parent_id" class="form-control">
-                                    <option value="">All Parents</option>
+                            <div style="flex: 1; min-width: 240px;">
+                                <label class="form-label" style="font-size: 11px; font-weight: 800; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: block;">Filter Specific Parent</label>
+                                <select name="user_id" class="form-control" style="background: #fff; border: 2px solid #F3F4F6; height: 52px; border-radius: 12px; font-weight: 600; font-size: 14px; width: 100%;">
+                                    <option value="">All Registered Parents</option>
                                     @foreach($parents as $parent)
-                                        <option value="{{ $parent->id }}" {{ request('parent_id') == $parent->id ? 'selected' : '' }}>
+                                        <option value="{{ $parent->id }}" {{ request('user_id') == $parent->id ? 'selected' : '' }}>
                                             {{ $parent->name }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
 
-                            <!-- Button -->
-                            <div class="form-group">
-                                <button type="submit" class="auth-btn-primary" style="padding: 10px 20px;">
-                                    <i data-lucide="filter" style="width: 14px; height: 14px;"></i>
-                                    Filter
+                            <!-- Action Buttons -->
+                            <div style="display: flex; gap: 12px;">
+                                <button type="submit" class="auth-btn-primary" style="height: 52px; padding: 0 30px; border-radius: 12px; width: auto; display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0;">
+                                    <i data-lucide="filter" style="width: 18px; height: 18px;"></i>
+                                    <span style="font-weight: 800;">Apply</span>
                                 </button>
 
-                                @if(request('activity') || request('parent_id'))
-                                    <a href="{{ route('parents.index') }}" class="btn btn-edit">Reset</a>
+                                @if(request('activity') || request('user_id'))
+                                    <a href="{{ route('parents.index') }}" class="btn" style="height: 52px; display: flex; align-items: center; justify-content: center; background: #fff; border: 2px solid #F3F4F6; color: #6B7280; border-radius: 12px; font-weight: 800; padding: 0 20px; transition: all 0.2s; text-decoration: none;">
+                                        Reset
+                                    </a>
                                 @endif
                             </div>
-
                         </div>
                     </form>
                 </div>
@@ -225,7 +230,14 @@
                             @foreach($scores as $score)
                                 <tr data-activity="{{ $score->activity }}">
                                     <td data-label="Tanggal">{{ $score->created_at->format('d M Y H:i') }}</td>
-                                    <td data-label="Parents Name"><b>{{ $score->parent?->name ?? '-' }}</b></td>
+                                    <td data-label="Parents Name">
+                                        @if($score->user)
+                                            <b>{{ $score->user->name }}</b>
+                                            <div style="font-size: 11px; color: #9CA3AF;">{{ $score->user->email }}</div>
+                                        @else
+                                            <b>Deleted User</b>
+                                        @endif
+                                    </td>
                                     <td data-label="Activity">{{ $score->activity }}
                                         @if($score->deskripsi != NULL)
                                             - {{$score->deskripsi}}
@@ -255,31 +267,23 @@
                 {{-- Manual Pagination --}}
                 @if ($scores->hasPages())
                     <div class="custom-pagination">
-                        {{-- Tombol Previous --}}
                         @if ($scores->onFirstPage())
                             <span class="page-btn disabled">Prev</span>
                         @else
                             <a href="{{ $scores->previousPageUrl() }}" class="page-btn">Prev</a>
                         @endif
 
-                        {{-- Nomor Halaman (maks 5 + ... + last page) --}}
                         @php
                             $current = $scores->currentPage();
                             $last = $scores->lastPage();
                             $start = max(1, $current - 2);
                             $end = min($last, $current + 2);
-
-                            // pastikan total hanya 5 halaman
                             if ($end - $start < 4) {
-                                if ($start == 1) {
-                                    $end = min($last, $start + 4);
-                                } else {
-                                    $start = max(1, $end - 4);
-                                }
+                                if ($start == 1) { $end = min($last, $start + 4); } 
+                                else { $start = max(1, $end - 4); }
                             }
                         @endphp
 
-                        {{-- Tampilkan halaman pertama dan ellipsis jika perlu --}}
                         @if ($start > 1)
                             <a href="{{ $scores->url(1) }}" class="page-btn">1</a>
                             @if ($start > 2)
@@ -287,7 +291,6 @@
                             @endif
                         @endif
 
-                        {{-- Tampilkan rentang halaman --}}
                         @foreach (range($start, $end) as $page)
                             @if ($page == $current)
                                 <span class="page-btn active">{{ $page }}</span>
@@ -296,7 +299,6 @@
                             @endif
                         @endforeach
 
-                        {{-- Tampilkan ellipsis dan halaman terakhir jika perlu --}}
                         @if ($end < $last)
                             @if ($end < $last - 1)
                                 <span class="page-btn dots">...</span>
@@ -304,7 +306,6 @@
                             <a href="{{ $scores->url($last) }}" class="page-btn">{{ $last }}</a>
                         @endif
 
-                        {{-- Tombol Next --}}
                         @if ($scores->hasMorePages())
                             <a href="{{ $scores->nextPageUrl() }}" class="page-btn">Next</a>
                         @else
@@ -321,8 +322,6 @@
     <script>
         $(document).ready(function () {
             $('#parentsDropdown').select2({
-                tags: true,
-                tokenSeparators: [','],
                 placeholder: "Search and select parents...",
                 allowClear: true
             });

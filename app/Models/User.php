@@ -63,4 +63,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(LifebookJourney::class);
     }
+
+    public function scores()
+    {
+        return $this->hasMany(Score::class, 'user_id');
+    }
 }

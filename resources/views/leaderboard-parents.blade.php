@@ -48,7 +48,7 @@
                             <div class="lb-podium-avatar">
                                 <i data-lucide="user" style="opacity: 0.3;"></i>
                             </div>
-                            <div class="lb-podium-name">{{ $lb->parent?->name ?? 'Unknown' }}</div>
+                            <div class="lb-podium-name">{{ $lb->user?->name ?? 'Unknown' }}</div>
                             <div class="lb-podium-base">
                                 {{ $index + 1 }}
                             </div>
@@ -65,7 +65,7 @@
                             <td>
                                 <div class="lb-rank-badge">{{ $i + 4 }}</div>
                             </td>
-                            <td>{{ $lb->parent?->name ?? 'Unknown' }}</td>
+                            <td>{{ $lb->user?->name ?? 'Unknown' }}</td>
                             <td>{{ $lb->total_score }}</td>
                         </tr>
                     @endforeach

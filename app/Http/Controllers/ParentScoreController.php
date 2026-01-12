@@ -3,30 +3,32 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ParentModel;
+use App\Models\User;
 use App\Models\Score;
+use Illuminate\Support\Facades\DB;
 
 class ParentScoreController extends Controller
 {
     // HALAMAN SCORE
     public function index(Request $request)
     {
-        $parents = ParentModel::orderBy('name')->get();
+        // Get only users with 'user' role for the dropdown
+        $parents = User::where('role', 'user')->orderBy('name')->get();
 
         $activityFilter = $request->query('activity', null);
-        $parentFilter = $request->query('parent_id', null);
+        $userIdFilter = $request->query('user_id', null);
 
         // Query history
-        $scoresQuery = Score::with('parent')->latest();
+        $scoresQuery = Score::with('user')->latest();
 
         // === FILTER ACTIVITY ===
-        if ($activityFilter) {
+        if ($activityFilter && $activityFilter !== 'all') {
             $scoresQuery->where('activity', $activityFilter);
         }
 
-        // === FILTER PARENT ===
-        if ($parentFilter) {
-            $scoresQuery->where('parent_id', $parentFilter);
+        // === FILTER PARENT (USER) ===
+        if ($userIdFilter) {
+            $scoresQuery->where('user_id', $userIdFilter);
         }
 
         $scores = $scoresQuery
@@ -34,46 +36,44 @@ class ParentScoreController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        // Leaderboard Total per parent
-        $leaderboardQuery = Score::selectRaw('parent_id, SUM(score) as total_score')
-            ->groupBy('parent_id')
-            ->with('parent')
+        // Leaderboard Total per user
+        $leaderboardQuery = Score::select('user_id', DB::raw('SUM(score) as total_score'))
+            ->whereNotNull('user_id')
+            ->groupBy('user_id')
+            ->with('user')
             ->orderByDesc('total_score');
 
-        if ($activityFilter) {
+        if ($activityFilter && $activityFilter !== 'all') {
             $leaderboardQuery->where('activity', $activityFilter);
         }
 
-        if ($parentFilter) {
-            $leaderboardQuery->where('parent_id', $parentFilter);
+        if ($userIdFilter) {
+            $leaderboardQuery->where('user_id', $userIdFilter);
         }
 
         $leaderboard = $leaderboardQuery->get();
 
-        // THE BEST per activity (tetap global)
+        // THE BEST per activity
         $activities = ['Journaling Parents', 'Support/Kerjasama', 'Home Gardening', 'Administrasi', 'Lifebook Journey'];
         $bestScores = [];
 
         foreach ($activities as $activity) {
             $bestRow = Score::where('activity', $activity)
-                ->selectRaw('parent_id, SUM(score) as total_score')
-                ->groupBy('parent_id')
+                ->whereNotNull('user_id')
+                ->select('user_id', DB::raw('SUM(score) as total_score'))
+                ->groupBy('user_id')
                 ->orderByDesc('total_score')
                 ->first();
 
-            if ($bestRow) {
-                $parent = ParentModel::find($bestRow->parent_id);
-
-                if ($parent) {
-                    $bestScores[$activity] = (object) [
-                        'parent' => $parent,
-                        'score' => (int) $bestRow->total_score,
-                    ];
-                }
+            if ($bestRow && $bestRow->user) {
+                $bestScores[$activity] = (object) [
+                    'parent' => $bestRow->user,
+                    'score' => (int) $bestRow->total_score,
+                ];
             }
         }
 
-        return view('admin.parents-score', compact('parents', 'scores', 'leaderboard', 'bestScores', 'activityFilter', 'parentFilter'));
+        return view('admin.parents-score', compact('parents', 'scores', 'leaderboard', 'bestScores', 'activityFilter', 'userIdFilter'));
     }
 
     // FUNGSI SIMPAN
@@ -83,27 +83,17 @@ class ParentScoreController extends Controller
             'activity' => 'required|string|max:100',
             'score' => 'required|integer|min:1|max:100',
             'parent_ids' => 'required|array|min:1',
-            'parent_ids.*' => 'string|max:255',
+            'parent_ids.*' => 'exists:users,id',
             'deskripsi' => 'nullable|string|max:500',
         ]);
 
-        foreach ($request->parent_ids as $value) {
-            if (is_numeric($value)) {
-                // pilih parent yang sudah ada
-                $parent = ParentModel::find($value);
-            } else {
-                // buat parent baru kalau input teks
-                $parent = ParentModel::firstOrCreate(['name' => $value]);
-            }
-
-            if ($parent) {
-                Score::create([
-                    'parent_id' => $parent->id,
-                    'activity' => $request->activity,
-                    'score' => $request->score,
-                    'deskripsi' => $request->deskripsi ?? NULL,
-                ]);
-            }
+        foreach ($request->parent_ids as $userId) {
+            Score::create([
+                'user_id' => $userId,
+                'activity' => $request->activity,
+                'score' => $request->score,
+                'deskripsi' => $request->deskripsi ?? NULL,
+            ]);
         }
 
         return redirect()->route('parents.index')->with('success', 'Data berhasil disimpan');
@@ -118,22 +108,16 @@ class ParentScoreController extends Controller
         return redirect()->route('parents.index')->with('success', 'Data berhasil dihapus');
     }
 
-    // HALAMAN LEADERBOARD
+    // HALAMAN LEADERBOARD (Untuk Front-end)
     public function leaderboard(Request $request)
     {
         $activityFilter = $request->query('activity', 'all');
 
-        // History with filter
-        $scoresQuery = Score::with('parent')->latest();
-
-        if ($activityFilter !== 'all') {
-            $scoresQuery->where('activity', $activityFilter);
-        }
-
-        // Leaderboard total per parent
-        $leaderboardQuery = Score::selectRaw('parent_id, SUM(score) as total_score')
-            ->groupBy('parent_id')
-            ->with('parent')
+        // Leaderboard total per user
+        $leaderboardQuery = Score::select('user_id', DB::raw('SUM(score) as total_score'))
+            ->whereNotNull('user_id')
+            ->groupBy('user_id')
+            ->with('user')
             ->orderByDesc('total_score');
 
         if ($activityFilter !== 'all') {
@@ -142,24 +126,23 @@ class ParentScoreController extends Controller
 
         $leaderboard = $leaderboardQuery->get();
 
-        // THE BEST per activity (tetap global, tidak ikut filter)
+        // THE BEST per activity
         $activities = ['Journaling Parents', 'Support/Kerjasama', 'Home Gardening', 'Administrasi', 'Lifebook Journey'];
         $bestScores = [];
 
         foreach ($activities as $activity) {
             $bestRow = Score::where('activity', $activity)
-                ->selectRaw('parent_id, SUM(score) as total_score')
-                ->groupBy('parent_id')
+                ->whereNotNull('user_id')
+                ->select('user_id', DB::raw('SUM(score) as total_score'))
+                ->groupBy('user_id')
                 ->orderByDesc('total_score')
                 ->first();
-            if ($bestRow) {
-                $parent = ParentModel::find($bestRow->parent_id);
-                if ($parent) {
-                    $bestScores[$activity] = (object) [
-                        'parent' => $parent,
-                        'score' => (int) $bestRow->total_score,
-                    ];
-                }
+
+            if ($bestRow && $bestRow->user) {
+                $bestScores[$activity] = (object) [
+                    'parent' => $bestRow->user,
+                    'score' => (int) $bestRow->total_score,
+                ];
             }
         }
 
@@ -169,8 +152,7 @@ class ParentScoreController extends Controller
     // HALAMAN EDIT
     public function editscore($id)
     {
-        $score = Score::with('parent')->findOrFail($id);
-
+        $score = Score::with('user')->findOrFail($id);
         return view('admin.edit-score', compact('score'));
     }
 

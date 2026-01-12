@@ -12,8 +12,28 @@ class ProfileController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+        $totalScore = \App\Models\Score::where('user_id', $user->id)->sum('score');
+
+        // Calculate rank
+        $rank = "-";
+        if ($totalScore > 0) {
+            $allScores = \App\Models\Score::select('user_id', \Illuminate\Support\Facades\DB::raw('SUM(score) as total'))
+                ->groupBy('user_id')
+                ->orderByDesc('total')
+                ->get();
+
+            $pos = $allScores->search(function ($item) use ($user) {
+                return $item->user_id == $user->id;
+            });
+
+            if ($pos !== false) {
+                $rank = $pos + 1;
+            }
+        }
+
         $appVersion = \App\Models\WebSetting::where('key', 'app_version')->first()->value ?? '1.0.0';
-        return view('profile', compact('appVersion'));
+        return view('profile', compact('appVersion', 'totalScore', 'rank'));
     }
 
     public function settings()
