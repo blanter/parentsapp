@@ -325,11 +325,11 @@
         }
 
         // Reflection Modal Logic
-        let reflectionDismissed = false;
+        const reflectionKey = "dismissed_reflection_{{ Auth::id() }}_{{ $selectedChildId }}_{{ str_replace(' ', '_', $selectedTime) }}";
 
         function checkAndShowReflection() {
             @if(!$isTeacher)
-                if (reflectionDismissed) return;
+                if (localStorage.getItem(reflectionKey)) return;
 
                 const internal = $('#aspek_internal').val();
                 const external = $('#aspek_external').val();
@@ -354,7 +354,7 @@
         });
 
         function skipReflection() {
-            reflectionDismissed = true;
+            localStorage.setItem(reflectionKey, 'true');
             $('#reflectionModal').fadeOut(400);
         }
 
@@ -389,7 +389,7 @@
                     if (response.success) {
                         $('#reflectionModal').fadeOut(400);
                         alert('Refleksi berhasil disimpan! Terima kasih Ayah/Bunda.');
-                        reflectionDismissed = true; // Don't show again this session
+                        localStorage.setItem(reflectionKey, 'true'); 
                     }
                 },
                 error: function() {
