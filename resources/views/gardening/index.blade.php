@@ -1,18 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{asset('/file/lifebookicon.png')}}" rel='icon' type='image/x-icon' />
-    <title>Home Gardening - Lifebook Parents</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
-        rel="stylesheet">
-    <link href="{{asset('/file/style.css')}}?v=15" rel="stylesheet" />
-    <script src="https://unpkg.com/lucide@latest"></script>
-</head>
+@section('title', 'Home Gardening - Lifebook Parents')
 
-<body class="db-body">
+@section('content')
     <!-- Background Elements -->
     <img src="{{ asset('/file/bee.png') }}" class="db-bg-pattern db-bee" alt="">
     <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
@@ -58,10 +48,13 @@
                             Ditanam: {{ \Carbon\Carbon::parse($plant->planting_date)->format('d M Y') }}
                         </div>
                     </div>
-                    <form action="{{ route('gardening.destroy', $plant->id) }}" method="POST" style="position: absolute; top: 15px; right: 15px; z-index: 10;">
+                    <form action="{{ route('gardening.destroy', $plant->id) }}" method="POST"
+                        style="position: absolute; top: 15px; right: 15px; z-index: 10;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" style="background: none; border: none; color: #ef4444; cursor: pointer; opacity: 0.3;" onclick="event.stopPropagation(); return confirm('Hapus tanaman ini?')">
+                        <button type="submit"
+                            style="background: none; border: none; color: #ef4444; cursor: pointer; opacity: 0.3;"
+                            onclick="event.stopPropagation(); return confirm('Hapus tanaman ini?')">
                             <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
                         </button>
                     </form>
@@ -103,8 +96,7 @@
                     <label class="gn-label">Pilih Metode</label>
                     <div class="gn-method-grid">
                         <label class="gn-method-opt active">
-                            <input type="radio" name="method" value="Hidroponic" checked
-                                onchange="updateMethodUI(this)">
+                            <input type="radio" name="method" value="Hidroponic" checked onchange="updateMethodUI(this)">
                             Hidroponic
                         </label>
                         <label class="gn-method-opt">
@@ -133,8 +125,8 @@
 
                     <!-- Image Upload -->
                     <div style="margin-bottom: 15px;">
-                        <input type="file" name="image" class="gn-input" id="plant-image"
-                            onchange="handleImageSelect(this)" style="padding: 10px;">
+                        <input type="file" name="image" class="gn-input" id="plant-image" onchange="handleImageSelect(this)"
+                            style="padding: 10px;">
                         <p style="font-size: 11px; margin-top: 5px; opacity: 0.5; font-weight: 600;">Upload foto jika
                             ada</p>
                     </div>
@@ -157,32 +149,10 @@
             </form>
         </div>
     </div>
+@endsection
 
-    <!-- Bottom Navigation -->
-    <nav class="db-bottom-nav">
-        <a href="{{ route('dashboard') }}" class="db-nav-item">
-            <div class="db-nav-icon">
-                <i data-lucide="home"></i>
-            </div>
-            <span>Home</span>
-        </a>
-        <a href="{{ route('parents.leaderboard') }}" class="db-nav-item">
-            <div class="db-nav-icon">
-                <i data-lucide="trophy"></i>
-            </div>
-            <span>Scores</span>
-        </a>
-        <a href="{{ route('profile') }}" class="db-nav-item">
-            <div class="db-nav-icon">
-                <i data-lucide="user"></i>
-            </div>
-            <span>Profile</span>
-        </a>
-    </nav>
-
+@section('scripts')
     <script>
-        lucide.createIcons();
-
         function openModal() {
             document.getElementById('addPlantModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -217,6 +187,4 @@
             }
         }
     </script>
-</body>
-
-</html>
+@endsection

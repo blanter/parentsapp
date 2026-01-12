@@ -1,18 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{asset('/file/lifebookicon.png')}}" rel='icon' type='image/x-icon' />
-    <title>Account Settings - Lifebook Parents</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
-        rel="stylesheet">
-    <link href="{{asset('/file/style.css')}}?v=13" rel="stylesheet" />
+@section('title', 'Account Settings - Lifebook Parents')
+
+@section('styles')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         .select2-container {
             width: 100% !important;
@@ -83,9 +74,9 @@
             background-color: var(--db-purple);
         }
     </style>
-</head>
+@endsection
 
-<body class="db-body">
+@section('content')
     <!-- Background Elements -->
     <img src="{{ asset('/file/bee.png') }}" class="db-bg-pattern db-bee" alt="">
     <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
@@ -212,32 +203,11 @@
             Version {{ $appVersion }} • Parents App
         </div>
     </div>
+@endsection
 
-    <!-- Bottom Navigation -->
-    <nav class="db-bottom-nav">
-        <a href="{{ route('dashboard') }}" class="db-nav-item">
-            <div class="db-nav-icon">
-                <i data-lucide="home"></i>
-            </div>
-            <span>Home</span>
-        </a>
-        <a href="{{ route('parents.leaderboard') }}" class="db-nav-item">
-            <div class="db-nav-icon">
-                <i data-lucide="trophy"></i>
-            </div>
-            <span>Scores</span>
-        </a>
-        <a href="{{ route('profile') }}" class="db-nav-item active">
-            <div class="db-nav-icon">
-                <i data-lucide="user"></i>
-            </div>
-            <span>Profile</span>
-        </a>
-    </nav>
-
+@section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        lucide.createIcons();
-
         $(document).ready(function() {
             $('.select2').select2({
                 placeholder: "Cari nama anak...",
@@ -271,6 +241,4 @@
             }
         }
     </script>
-</body>
-
-</html>
+@endsection

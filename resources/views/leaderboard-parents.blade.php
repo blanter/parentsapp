@@ -1,18 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{asset('/file/lifebookicon.png')}}" rel='icon' type='image/x-icon' />
-    <title>Leaderboard Parents - Lifebook Parents</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
-        rel="stylesheet">
-    <link href="{{asset('/file/style.css')}}?v=12" rel="stylesheet" />
-    <script src="https://unpkg.com/lucide@latest"></script>
-</head>
+@section('title', 'Leaderboard Parents - Lifebook Parents')
 
-<body class="db-body lb-body">
+@section('body-class', 'db-body lb-body')
+
+@section('content')
     <!-- Background Elements -->
     <img src="{{ asset('/file/bee.png') }}" class="db-bg-pattern db-bee" alt="">
     <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
@@ -103,32 +95,4 @@
             Version {{ $appVersion }} • Parents App
         </div>
     </div>
-
-    <!-- Bottom Navigation -->
-    <nav class="db-bottom-nav">
-        <a href="{{ route('dashboard') }}" class="db-nav-item">
-            <div class="db-nav-icon">
-                <i data-lucide="home"></i>
-            </div>
-            <span>Home</span>
-        </a>
-        <a href="{{ route('parents.leaderboard') }}" class="db-nav-item active">
-            <div class="db-nav-icon">
-                <i data-lucide="trophy"></i>
-            </div>
-            <span>Scores</span>
-        </a>
-        <a href="{{ route('profile') }}" class="db-nav-item">
-            <div class="db-nav-icon">
-                <i data-lucide="user"></i>
-            </div>
-            <span>Profile</span>
-        </a>
-    </nav>
-
-    <script>
-        lucide.createIcons();
-    </script>
-</body>
-
-</html>
+@endsection

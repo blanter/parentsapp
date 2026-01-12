@@ -1,20 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{asset('/file/lifebookicon.png')}}" rel='icon' type='image/x-icon' />
-    <title>Volunteer Mission - Lifebook Parents</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
-        rel="stylesheet">
-    <link href="{{asset('/file/style.css')}}?v=18" rel="stylesheet" />
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-</head>
+@section('title', 'Volunteer Mission - Lifebook Parents')
 
-<body class="db-body">
+@section('content')
     <!-- Background Elements -->
     <img src="{{ asset('/file/bee.png') }}" class="db-bg-pattern db-bee" alt="">
     <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
@@ -170,32 +158,10 @@
             Version {{ $appVersion }} • Parents App
         </div>
     </div>
+@endsection
 
-    <!-- Bottom Navigation -->
-    <nav class="db-bottom-nav">
-        <a href="{{ route('dashboard') }}" class="db-nav-item">
-            <div class="db-nav-icon">
-                <i data-lucide="home"></i>
-            </div>
-            <span>Home</span>
-        </a>
-        <a href="{{ route('parents.leaderboard') }}" class="db-nav-item">
-            <div class="db-nav-icon">
-                <i data-lucide="trophy"></i>
-            </div>
-            <span>Scores</span>
-        </a>
-        <a href="{{ route('profile') }}" class="db-nav-item">
-            <div class="db-nav-icon">
-                <i data-lucide="user"></i>
-            </div>
-            <span>Profile</span>
-        </a>
-    </nav>
-
+@section('scripts')
     <script>
-        lucide.createIcons();
-
         function switchTab(tab) {
             $('.vm-tab-btn').removeClass('active');
             $('.tab-content').hide();
@@ -223,7 +189,7 @@
                 data: {
                     mission_id: missionId,
                     date: date,
-                    _token: $('meta[name="csrf-token"]').attr('content')
+                    _token: "{{ csrf_token() }}"
                 },
                 success: function (response) {
                     if (response.status === 'success') {
@@ -257,6 +223,4 @@
             });
         }
     </script>
-</body>
-
-</html>
+@endsection

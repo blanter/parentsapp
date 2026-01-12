@@ -1,18 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{asset('/file/lifebookicon.png')}}" rel='icon' type='image/x-icon' />
-    <title>Aspek Anak - Lifebook Parents</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
-        rel="stylesheet">
-    <link href="{{asset('/file/style.css')}}?v=22" rel="stylesheet" />
-    <script src="https://unpkg.com/lucide@latest"></script>
-</head>
+@section('title', 'Aspek Anak - Lifebook Parents')
 
-<body class="db-body">
+@section('content')
     <!-- Background Elements -->
     <img src="{{ asset('/file/bee.png') }}" class="db-bg-pattern db-bee" alt="">
     <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
@@ -50,7 +40,6 @@
         <!-- Quarter Selector -->
         <div class="pa-month-selector" style="margin-top: 5px;">
             @php
-                // Expecting "Kuartal X 2026"
                 $parts = explode(' ', $selectedTime);
                 $qNum = (int)($parts[1] ?? 1);
                 $year = (int)($parts[2] ?? date('Y'));
@@ -232,38 +221,10 @@
             </div>
         </div>
     </div>
+@endsection
 
-    <!-- Bottom Navigation -->
-    <nav class="db-bottom-nav">
-        @if($isTeacher)
-            <a href="{{ route('teacher.dashboard') }}" class="db-nav-item active">
-                <div class="db-nav-icon"><i data-lucide="home"></i></div>
-                <span>Home</span>
-            </a>
-            <a href="{{ route('teacher.profile') }}" class="db-nav-item">
-                <div class="db-nav-icon"><i data-lucide="user"></i></div>
-                <span>Profile</span>
-            </a>
-        @else
-            <a href="{{ route('dashboard') }}" class="db-nav-item active">
-                <div class="db-nav-icon"><i data-lucide="home"></i></div>
-                <span>Home</span>
-            </a>
-            <a href="{{ route('parents.leaderboard') }}" class="db-nav-item">
-                <div class="db-nav-icon"><i data-lucide="trophy"></i></div>
-                <span>Scores</span>
-            </a>
-            <a href="{{ route('profile') }}" class="db-nav-item">
-                <div class="db-nav-icon"><i data-lucide="user"></i></div>
-                <span>Profile</span>
-            </a>
-        @endif
-    </nav>
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+@section('scripts')
     <script>
-        lucide.createIcons();
-
         $('#childSelector').on('change', function () {
             const childId = $(this).val();
             window.location.href = "{{ route('children-tracker.child-aspect') }}?time={{ $selectedTime }}&child_id=" + childId;
@@ -326,6 +287,4 @@
             $('#successPopup').fadeOut(300);
         }
     </script>
-</body>
-
-</html>
+@endsection
