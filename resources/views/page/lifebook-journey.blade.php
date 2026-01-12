@@ -89,105 +89,120 @@
             </div>
         </div>
 
-        <!-- Carousel Section -->
-        <div class="lj-carousel-container">
-            <button class="lj-nav-btn prev" id="carouselPrev">
-                <i data-lucide="chevron-left"></i>
+        <!-- Tabs -->
+        <div class="vm-tabs">
+            <button class="vm-tab-btn active" onclick="switchTab('journey')">
+                <i data-lucide="milestone"></i>
+                Journey Data    
             </button>
-            <button class="lj-nav-btn next" id="carouselNext">
-                <i data-lucide="chevron-right"></i>
+            <button class="vm-tab-btn" onclick="switchTab('habits')">
+                <i data-lucide="calendar-check"></i>
+                Habit Tracker
             </button>
-
-            <div class="owl-carousel owl-theme" id="categoryCarousel">
-                @foreach($categories as $cat)
-                    @php
-                        $j = $journeys[$cat['id']] ?? null;
-                        $filledCount = 0;
-                        if ($j) {
-                            if (!empty($j->premise))
-                                $filledCount++;
-                            if (!empty($j->vision))
-                                $filledCount++;
-                            if (!empty($j->purpose))
-                                $filledCount++;
-                            if (!empty($j->strategy))
-                                $filledCount++;
-                        }
-
-                        $statusClass = 'empty';
-                        if ($filledCount === 4)
-                            $statusClass = 'complete';
-                        elseif ($filledCount > 0)
-                            $statusClass = 'incomplete';
-                    @endphp
-                    <div class="lj-category-item" data-id="{{ $cat['id'] }}" data-name="{{ $cat['name'] }}">
-                        <div class="lj-category-icon-wrapper">
-                            <div class="lj-status-dot {{ $statusClass }}" id="dot-{{ $cat['id'] }}"></div>
-                            <div class="lj-category-icon">
-                                <i data-lucide="{{ $cat['icon'] }}"></i>
-                            </div>
-                        </div>
-                        <div class="lj-category-name">{{ $cat['name'] }}</div>
-                    </div>
-                @endforeach
-            </div>
         </div>
 
-        <!-- Content Section -->
-        <div class="lj-content-section" id="journeyContent">
-            @php
-                $activeCat = $categories[0]['id'];
-                $activeJourney = $journeys[$activeCat] ?? null;
-            @endphp
-
-            <div class="lj-card">
-                <div class="lj-card-info">
-                    <div class="lj-card-title">Premise</div>
-                    <div class="lj-card-text" id="text-premise">{{ $activeJourney->premise ?? 'Belum ada data.' }}</div>
-                </div>
-                <button class="lj-btn-edit" onclick="openEditModal('premise')">Edit</button>
-            </div>
-
-            <div class="lj-card">
-                <div class="lj-card-info">
-                    <div class="lj-card-title">Vision</div>
-                    <div class="lj-card-text" id="text-vision">{{ $activeJourney->vision ?? 'Belum ada data.' }}</div>
-                </div>
-                <button class="lj-btn-edit" onclick="openEditModal('vision')">Edit</button>
-            </div>
-
-            <div class="lj-card">
-                <div class="lj-card-info">
-                    <div class="lj-card-title">Purpose</div>
-                    <div class="lj-card-text" id="text-purpose">{{ $activeJourney->purpose ?? 'Belum ada data.' }}</div>
-                </div>
-                <button class="lj-btn-edit" onclick="openEditModal('purpose')">Edit</button>
-            </div>
-
-            <div class="lj-card">
-                <div class="lj-card-info">
-                    <div class="lj-card-title">Strategy</div>
-                    <div class="lj-card-text" id="text-strategy">{{ $activeJourney->strategy ?? 'Belum ada data.' }}
-                    </div>
-                </div>
-                <button class="lj-btn-edit" onclick="openEditModal('strategy')">Edit</button>
-            </div>
-
-            <div class="lj-footer-nav">
-                <button class="lj-footer-btn" id="footerPrev">
+        <div id="journeyView" class="tab-content active">
+            <!-- Carousel Section -->
+            <div class="lj-carousel-container">
+                <button class="lj-nav-btn prev" id="carouselPrev">
                     <i data-lucide="chevron-left"></i>
                 </button>
-                <button class="lj-footer-btn" id="footerNext">
+                <button class="lj-nav-btn next" id="carouselNext">
                     <i data-lucide="chevron-right"></i>
                 </button>
+
+                <div class="owl-carousel owl-theme" id="categoryCarousel">
+                    @foreach($categories as $cat)
+                        @php
+                            $j = $journeys[$cat['id']] ?? null;
+                            $filledCount = 0;
+                            if ($j) {
+                                if (!empty($j->premise))
+                                    $filledCount++;
+                                if (!empty($j->vision))
+                                    $filledCount++;
+                                if (!empty($j->purpose))
+                                    $filledCount++;
+                                if (!empty($j->strategy))
+                                    $filledCount++;
+                            }
+
+                            $statusClass = 'empty';
+                            if ($filledCount === 4)
+                                $statusClass = 'complete';
+                            elseif ($filledCount > 0)
+                                $statusClass = 'incomplete';
+                        @endphp
+                        <div class="lj-category-item" data-id="{{ $cat['id'] }}" data-name="{{ $cat['name'] }}">
+                            <div class="lj-category-icon-wrapper">
+                                <div class="lj-status-dot {{ $statusClass }}" id="dot-{{ $cat['id'] }}"></div>
+                                <div class="lj-category-icon">
+                                    <i data-lucide="{{ $cat['icon'] }}"></i>
+                                </div>
+                            </div>
+                            <div class="lj-category-name">{{ $cat['name'] }}</div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Content Section -->
+            <div class="lj-content-section" id="journeyContent" style="margin-bottom:90px">
+                @php
+                    $activeCat = $categories[0]['id'];
+                    $activeJourney = $journeys[$activeCat] ?? null;
+                @endphp
+
+                <div class="lj-card">
+                    <div class="lj-card-info">
+                        <div class="lj-card-title">Premise</div>
+                        <div class="lj-card-text" id="text-premise">{{ $activeJourney->premise ?? 'Belum ada data.' }}</div>
+                    </div>
+                    <button class="lj-btn-edit" onclick="openEditModal('premise')">Edit</button>
+                </div>
+
+                <div class="lj-card">
+                    <div class="lj-card-info">
+                        <div class="lj-card-title">Vision</div>
+                        <div class="lj-card-text" id="text-vision">{{ $activeJourney->vision ?? 'Belum ada data.' }}</div>
+                    </div>
+                    <button class="lj-btn-edit" onclick="openEditModal('vision')">Edit</button>
+                </div>
+
+                <div class="lj-card">
+                    <div class="lj-card-info">
+                        <div class="lj-card-title">Purpose</div>
+                        <div class="lj-card-text" id="text-purpose">{{ $activeJourney->purpose ?? 'Belum ada data.' }}</div>
+                    </div>
+                    <button class="lj-btn-edit" onclick="openEditModal('purpose')">Edit</button>
+                </div>
+
+                <div class="lj-card">
+                    <div class="lj-card-info">
+                        <div class="lj-card-title">Strategy</div>
+                        <div class="lj-card-text" id="text-strategy">{{ $activeJourney->strategy ?? 'Belum ada data.' }}
+                        </div>
+                    </div>
+                    <button class="lj-btn-edit" onclick="openEditModal('strategy')">Edit</button>
+                </div>
+
+                <div class="lj-footer-nav">
+                    <button class="lj-footer-btn" id="footerPrev">
+                        <i data-lucide="chevron-left"></i>
+                    </button>
+                    <button class="lj-footer-btn" id="footerNext">
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div class="lj-content-section" style="margin-bottom:90px">
-            <!-- Habit Tracker Section -->
-            <div class="ht-container">
-                <div class="ht-header">
-                    <div class="ht-title-group">
+        <div id="habitsView" class="tab-content">
+            <div class="lj-content-section" style="margin-bottom:90px">
+                <!-- Habit Tracker Section -->
+                <div class="ht-container">
+                    <div class="ht-header">
+                        <div class="ht-title-group">
                         <h2>Habit Tracker</h2>
                         <p id="ht-current-month-text">Monthly Progress</p>
                     </div>
@@ -247,6 +262,7 @@
                 <div class="ht-weekly-section" id="ht-weekly-container">
                     <!-- Weeks 1-5 cards will be injected here -->
                 </div>
+            </div>
             </div>
         </div>
 
@@ -703,6 +719,24 @@
             });
 
             loadHTData();
+
+            function switchTab(tab) {
+                $('.vm-tab-btn').removeClass('active');
+                $('.tab-content').hide();
+
+                if (tab === 'journey') {
+                    $('.vm-tab-btn:first-child').addClass('active');
+                    $('#journeyView').show();
+                } else {
+                    $('.vm-tab-btn:last-child').addClass('active');
+                    $('#habitsView').show();
+                    // Scroll heatmaps to the end
+                    $('.vm-heatmap-scroll').each(function () {
+                        $(this).scrollLeft($(this)[0].scrollWidth);
+                    });
+                }
+                lucide.createIcons();
+            }
         </script>
 </body>
 
