@@ -98,5 +98,9 @@
             <i data-lucide="map"></i>
             <span>Parents Lifebook Journey</span>
         </a>
+        <a href="{{ route('parents.leaderboard') }}" class="db-promo-button" style="margin:20px 0 0">
+            <i data-lucide="trophy"></i>
+            <span>Poin & Leaderboard</span>
+        </a>
     </div>
 @endsection
