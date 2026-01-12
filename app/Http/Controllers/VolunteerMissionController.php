@@ -76,13 +76,22 @@ class VolunteerMissionController extends Controller
         $missionId = $request->mission_id;
         $date = $request->date;
 
+        $mission = VolunteerMission::findOrFail($missionId);
         $completion = VolunteerMissionCompletion::where('user_id', $userId)
             ->where('volunteer_mission_id', $missionId)
             ->where('completed_at', $date)
             ->first();
 
+        $points = 0;
         if ($completion) {
             $completion->delete();
+
+            // Delete Score
+            \App\Models\Score::where('user_id', $userId)
+                ->where('activity', 'Support/Kerjasama')
+                ->where('deskripsi', 'Mission: ' . $mission->name . ' (' . $date . ')')
+                ->delete();
+
             $status = 'unchecked';
         } else {
             VolunteerMissionCompletion::create([
@@ -90,7 +99,17 @@ class VolunteerMissionController extends Controller
                 'volunteer_mission_id' => $missionId,
                 'completed_at' => $date,
             ]);
+
+            // Add Score
+            \App\Models\Score::create([
+                'user_id' => $userId,
+                'activity' => 'Support/Kerjasama',
+                'score' => 100,
+                'deskripsi' => 'Mission: ' . $mission->name . ' (' . $date . ')',
+            ]);
+
             $status = 'checked';
+            $points = 100;
         }
 
         $stats = $this->getOverviewStats($userId);
@@ -98,6 +117,7 @@ class VolunteerMissionController extends Controller
         return response()->json([
             'status' => 'success',
             'action' => $status,
+            'earned_points' => $points,
             'stats' => [
                 'current_streak' => $stats['current_streak'],
                 'best_streak' => $stats['best_streak'],

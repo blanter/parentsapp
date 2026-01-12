@@ -8,6 +8,21 @@
     <img src="{{ asset('/file/flower.png') }}" class="db-bg-pattern db-flower" alt="">
 
     <div class="vm-container">
+        <!-- Success Alert Popup -->
+        <div id="successPopup" class="pa-popup-overlay" style="display: none;">
+            <div class="pa-popup-card">
+                <div class="pa-popup-icon" style="background: rgba(54, 179, 126, 0.1); color: var(--db-secondary);">
+                    <i data-lucide="award"></i>
+                </div>
+                <h3 class="pa-popup-title">Berhasil Disimpan!</h3>
+                <p class="pa-popup-message">
+                    Selamat Ayah / Bunda! Anda mendapatkan <b id="earnedPointsText">0 Poin</b> untuk misi volunteer hari
+                    ini.
+                </p>
+                <button class="pa-popup-btn" onclick="closePopup()">Siap, Terima Kasih</button>
+            </div>
+        </div>
+
         <!-- Header -->
         <div class="db-header" style="margin-bottom: 20px;">
             <div class="db-brand-section">
@@ -199,6 +214,12 @@
                             const targetCell = $(`.vm-heatmap-cell[data-mission="${missionId}"][data-date="${date}"]`);
                             const level = targetCell.data('level');
                             targetCell.addClass(`level-${level}`);
+
+                            // Show Points Popup
+                            if (response.earned_points > 0) {
+                                $('#earnedPointsText').text(response.earned_points + ' Poin');
+                                $('#successPopup').fadeIn(300).css('display', 'flex');
+                            }
                         } else {
                             $(element).removeClass('checked').empty();
                             // Update heatmap
@@ -221,6 +242,10 @@
                     lucide.createIcons();
                 }
             });
+        }
+
+        function closePopup() {
+            $('#successPopup').fadeOut(300);
         }
     </script>
 @endsection
