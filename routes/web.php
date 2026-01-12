@@ -65,6 +65,16 @@ Route::middleware(['auth', 'approved'])->group(function () {
     // Lifebook Journey
     Route::get('/lifebook-journey', [\App\Http\Controllers\LifebookJourneyController::class, 'index'])->name('lifebook-journey.index');
     Route::post('/lifebook-journey/update', [\App\Http\Controllers\LifebookJourneyController::class, 'update'])->name('lifebook-journey.update');
+
+    // Habit Tracker
+    Route::get('/habit-tracker/data', [\App\Http\Controllers\HabitTrackerController::class, 'index'])->name('habit-tracker.data');
+    Route::post('/habit-tracker/habit', [\App\Http\Controllers\HabitTrackerController::class, 'storeHabit'])->name('habit-tracker.store');
+    Route::post('/habit-tracker/habit/toggle', [\App\Http\Controllers\HabitTrackerController::class, 'toggleHabit'])->name('habit-tracker.toggle');
+    Route::delete('/habit-tracker/habit/{id}', [\App\Http\Controllers\HabitTrackerController::class, 'deleteHabit'])->name('habit-tracker.delete');
+
+    Route::post('/habit-tracker/weekly-task', [\App\Http\Controllers\HabitTrackerController::class, 'storeWeeklyTask'])->name('habit-tracker.weekly.store');
+    Route::post('/habit-tracker/weekly-task/{id}/toggle', [\App\Http\Controllers\HabitTrackerController::class, 'toggleWeeklyTask'])->name('habit-tracker.weekly.toggle');
+    Route::delete('/habit-tracker/weekly-task/{id}', [\App\Http\Controllers\HabitTrackerController::class, 'deleteWeeklyTask'])->name('habit-tracker.weekly.delete');
 });
 
 // Admin Only Routes
