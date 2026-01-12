@@ -19,22 +19,27 @@
 
     <div class="gn-container">
         <!-- Header -->
-        <div class="db-header" style="margin-bottom: 5px;">
+        <div class="db-header" style="margin-bottom: 20px;">
             <div class="db-brand-section">
-                <h1 style="font-size: 32px; font-weight: 800; line-height: 1.1;">Hi
-                    {{ explode(' ', Auth::user()->name)[0] }}</h1>
-                <p style="font-size: 14px; opacity: 0.6; font-weight: 600; margin-top: 5px;">Apa rencana kamu hari ini?
-                </p>
+                <a href="{{ route('gardening.index') }}"
+                    style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                    <i data-lucide="chevron-left" style="width: 30px; height: 30px;"></i>
+                    <h1 style="font-size: 24px; margin: 0;">Back</h1>
+                </a>
             </div>
-            <a href="{{ route('profile') }}" class="db-avatar-section"
-                style="width: 60px; height: 60px; background: #E5E7EB; border: none;">
+            <a href="{{ route('profile') }}" class="db-avatar-section" style="width: 45px; height: 45px;">
                 @if(Auth::user()->avatar)
                     <img src="{{ asset('avatars/' . Auth::user()->avatar) }}" alt="Avatar"
                         style="width: 100%; height: 100%; object-fit: cover;">
                 @else
-                    <i data-lucide="user" style="width: 30px; height: 30px; opacity: 0.2;"></i>
+                    <i data-lucide="user"></i>
                 @endif
             </a>
+        </div>
+
+        <div class="gn-header">
+            <h1>Hi {{ explode(' ', Auth::user()->name)[0] }}</h1>
+            <p class="gn-subtitle">Apa rencana kamu hari ini?</p>
         </div>
 
         <div style="margin: 30px 0 15px;">
