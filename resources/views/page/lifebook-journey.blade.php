@@ -197,7 +197,7 @@
             </div>
         </div>
 
-        <div id="habitsView" class="tab-content">
+        <div id="habitsView" class="tab-content" style="display: none;">
             <div class="lj-content-section" style="margin-bottom:90px">
                 <!-- Habit Tracker Section -->
                 <div class="ht-container">
