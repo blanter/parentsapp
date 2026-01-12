@@ -61,6 +61,10 @@ Route::middleware(['auth', 'approved'])->group(function () {
     // Volunteer Mission
     Route::get('/volunteer-mission', [\App\Http\Controllers\VolunteerMissionController::class, 'index'])->name('volunteer.index');
     Route::post('/volunteer-mission/toggle', [\App\Http\Controllers\VolunteerMissionController::class, 'toggle'])->name('volunteer.toggle');
+
+    // Lifebook Journey
+    Route::get('/lifebook-journey', [\App\Http\Controllers\LifebookJourneyController::class, 'index'])->name('lifebook-journey.index');
+    Route::post('/lifebook-journey/update', [\App\Http\Controllers\LifebookJourneyController::class, 'update'])->name('lifebook-journey.update');
 });
 
 // Admin Only Routes

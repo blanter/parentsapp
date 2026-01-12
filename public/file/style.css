@@ -5092,3 +5092,241 @@ a.btn.btn-warning {
         transform: rotate(360deg);
     }
 }
+
+/* Lifebook Journey Styles */
+.lj-carousel-container {
+    position: relative;
+    padding: 0 40px;
+    margin-bottom: 30px;
+}
+
+.lj-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    color: var(--db-text-dark);
+}
+
+.lj-nav-btn.prev {
+    left: 0;
+}
+
+.lj-nav-btn.next {
+    right: 0;
+}
+
+.lj-category-item {
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    opacity: 0.5;
+    transform: scale(0.9);
+}
+
+.lj-category-item.active {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.lj-category-icon {
+    width: 60px;
+    height: 60px;
+    background: #F3F4F6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    color: #9CA3AF;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.lj-category-item.active .lj-category-icon {
+    background: var(--db-purple);
+    color: #fff;
+    box-shadow: 0 10px 20px rgba(108, 136, 224, 0.3);
+    border-color: #fff;
+}
+
+.lj-category-name {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    white-space: normal;
+    line-height: 1.2;
+    max-width: 80px;
+    margin: 0 auto;
+}
+
+.lj-content-section {
+    background: #fff;
+    border-radius: 30px;
+    padding: 30px;
+    margin-bottom: 100px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.03);
+}
+
+.lj-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px 0;
+    border-bottom: 1px solid #F3F4F6;
+}
+
+.lj-card:last-child {
+    border-bottom: none;
+}
+
+.lj-card-info {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.lj-card-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    margin-bottom: 8px;
+}
+
+.lj-card-text {
+    font-size: 13px;
+    color: #6B7280;
+    line-height: 1.6;
+    min-height: 40px;
+}
+
+.lj-btn-edit {
+    width: 60px;
+    height: 48px;
+    background: #E5E7EB;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    color: var(--db-text-dark);
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    margin-top: 5px;
+    font-size: 11px;
+    font-weight: 800;
+    font-family: 'Poppins', sans-serif;
+}
+
+.lj-btn-edit:hover {
+    background: var(--db-purple);
+    color: #fff;
+}
+
+.lj-footer-nav {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.lj-footer-btn {
+    flex: 1;
+    padding: 16px;
+    border-radius: 18px;
+    background: #F3F4F6;
+    color: var(--db-text-dark);
+    font-weight: 800;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s;
+}
+
+.lj-footer-btn:hover {
+    background: #E5E7EB;
+}
+
+/* Modal for Edit */
+.lj-edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+}
+
+.lj-edit-card {
+    background: #fff;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 25px;
+    padding: 25px;
+    animation: slideUp 0.3s ease-out;
+}
+
+.lj-edit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.lj-edit-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+}
+
+.lj-textarea {
+    width: 100%;
+    min-height: 150px;
+    border: 2px solid #F3F4F6;
+    border-radius: 18px;
+    padding: 15px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: none;
+    margin-bottom: 20px;
+    transition: border-color 0.2s;
+}
+
+.lj-textarea:focus {
+    outline: none;
+    border-color: var(--db-purple);
+}
+
+.lj-save-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--db-purple);
+    color: #fff;
+    border-radius: 18px;
+    border: none;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 8px 15px rgba(108, 136, 224, 0.2);
+    font-family: 'Poppins', sans-serif;
+}
