@@ -149,4 +149,6 @@ Route::middleware(['auth:web,teacher', 'approved'])->group(function () {
     Route::put('/learning-tracker/{id}', [LearningTrackerController::class, 'update'])->name('learning-tracker.update');
     Route::delete('/learning-tracker/{id}', [LearningTrackerController::class, 'destroy'])->name('learning-tracker.destroy');
     Route::post('/learning-tracker/{id}/reply', [LearningTrackerController::class, 'reply'])->name('learning-tracker.reply');
+    Route::put('/learning-tracker/log/{id}', [LearningTrackerController::class, 'updateLog'])->name('learning-tracker.log.update');
+    Route::delete('/learning-tracker/log/{id}', [LearningTrackerController::class, 'destroyLog'])->name('learning-tracker.log.destroy');
 });

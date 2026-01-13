@@ -77,15 +77,9 @@ class LearningTrackerController extends Controller
             'type' => 'required|in:weekly,monthly,semester',
             'student_ids' => 'required|array',
             'description' => 'required|string',
-            'image' => 'nullable|image|max:5120', // 5MB max
         ]);
 
         $teacher = Auth::guard('teacher')->user();
-
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $this->uploadAndCompress($request->file('image'));
-        }
 
         // Create project without transaction to avoid timeout
         $project = LearningProject::create([
@@ -93,7 +87,7 @@ class LearningTrackerController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'type' => $request->type,
-            'image' => $imagePath,
+            'image' => null, // No image for project anymore
         ]);
 
         // Attach students using raw insert for better performance
@@ -151,7 +145,6 @@ class LearningTrackerController extends Controller
             'title' => 'required|string|max:255',
             'type' => 'required|in:weekly,monthly,semester',
             'description' => 'required|string',
-            'image' => 'nullable|image|max:5120',
         ]);
 
         $project = LearningProject::findOrFail($id);
@@ -161,20 +154,10 @@ class LearningTrackerController extends Controller
             return back()->with('error', 'Unauthorized action.');
         }
 
-        $imagePath = $project->image;
-        if ($request->hasFile('image')) {
-            // Delete old image
-            if ($imagePath) {
-                Storage::disk('public')->delete($imagePath);
-            }
-            $imagePath = $this->uploadAndCompress($request->file('image'));
-        }
-
         $project->update([
             'title' => $request->title,
             'description' => $request->description,
             'type' => $request->type,
-            'image' => $imagePath,
         ]);
 
         return back()->with('success', 'Project updated successfully!');
@@ -189,14 +172,90 @@ class LearningTrackerController extends Controller
             return back()->with('error', 'Unauthorized action.');
         }
 
-        // Delete image if exists
+        // Delete project image if exists (though we stopped adding it)
         if ($project->image) {
             Storage::disk('public')->delete($project->image);
+        }
+
+        // Delete all comment images
+        foreach ($project->logs as $log) {
+            if ($log->image) {
+                Storage::disk('public')->delete($log->image);
+            }
         }
 
         $project->delete();
 
         return back()->with('success', 'Project deleted successfully!');
+    }
+
+    public function updateLog(Request $request, $id)
+    {
+        $request->validate([
+            'content' => 'required|string',
+            'progress_percentage' => 'nullable|integer|min:0|max:100',
+            'image' => 'nullable|image|max:5120',
+        ]);
+
+        $log = LearningLog::findOrFail($id);
+        $isTeacher = Auth::guard('teacher')->check();
+
+        // Check ownership
+        if ($isTeacher) {
+            if ($log->teacher_id !== Auth::guard('teacher')->id()) {
+                return back()->with('error', 'Unauthorized action.');
+            }
+        } else {
+            if ($log->user_id !== Auth::id()) {
+                return back()->with('error', 'Unauthorized action.');
+            }
+        }
+
+        $imagePath = $log->image;
+        if ($request->hasFile('image')) {
+            if ($imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
+            $imagePath = $this->uploadAndCompress($request->file('image'));
+        }
+
+        $log->update([
+            'content' => $request->input('content'),
+            'progress_percentage' => $isTeacher ? $request->input('progress_percentage') : $log->progress_percentage,
+            'image' => $imagePath,
+        ]);
+
+        // Update project progress if teacher updated log with percentage
+        if ($isTeacher && $request->has('progress_percentage')) {
+            $log->project->update(['progress_percentage' => $request->progress_percentage]);
+        }
+
+        return back()->with('success', 'Comment updated successfully!');
+    }
+
+    public function destroyLog($id)
+    {
+        $log = LearningLog::findOrFail($id);
+        $isTeacher = Auth::guard('teacher')->check();
+
+        // Check ownership
+        if ($isTeacher) {
+            if ($log->teacher_id !== Auth::guard('teacher')->id()) {
+                return back()->with('error', 'Unauthorized action.');
+            }
+        } else {
+            if ($log->user_id !== Auth::id()) {
+                return back()->with('error', 'Unauthorized action.');
+            }
+        }
+
+        if ($log->image) {
+            Storage::disk('public')->delete($log->image);
+        }
+
+        $log->delete();
+
+        return back()->with('success', 'Comment deleted successfully!');
     }
 
     private function uploadAndCompress($file)

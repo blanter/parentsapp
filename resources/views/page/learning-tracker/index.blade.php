@@ -27,6 +27,44 @@
         </div>
     </div>
 
+    <!-- Edit Comment Modal -->
+    <div class="lt-modal" id="editCommentModal">
+        <div class="lt-modal-content">
+            <div class="lt-modal-header">
+                <h3 class="lt-modal-title">Edit Komentar</h3>
+                <button class="lt-close-modal" onclick="closeEditCommentModal()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="editCommentForm" method="POST" enctype="multipart/form-data" class="lt-form">
+                @csrf
+                @method('PUT')
+                <div class="auth-form-group">
+                    <label>Isi Komentar</label>
+                    <textarea name="content" id="edit_comment_content" class="auth-form-control" style="height: 100px; resize: none; padding-top: 15px;" required></textarea>
+                </div>
+
+                <div class="auth-form-row" style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    @if($isTeacher)
+                        <div class="auth-form-group" style="flex: 1;">
+                            <label>Update Progress (%)</label>
+                            <input type="number" name="progress_percentage" id="edit_comment_progress" class="auth-form-control" min="0" max="100">
+                        </div>
+                    @endif
+                    <div class="auth-form-group" style="flex: 1;">
+                        <label>Ganti Foto (Optional)</label>
+                        <input type="file" name="image" class="auth-form-control" style="padding-top: 12px;">
+                    </div>
+                </div>
+
+                <button type="submit" class="auth-btn-primary">
+                    <i data-lucide="save"></i>
+                    <span>Simpan Perubahan</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
     @if($isTeacher)
         <!-- Edit Project Modal -->
         <div class="lt-modal" id="editProjectModal">
@@ -37,7 +75,7 @@
                         <i data-lucide="x"></i>
                     </button>
                 </div>
-                <form id="editProjectForm" method="POST" enctype="multipart/form-data" class="lt-form">
+                <form id="editProjectForm" method="POST" class="lt-form">
                     @csrf
                     @method('PUT')
                     <div class="auth-form-group">
@@ -45,19 +83,13 @@
                         <input type="text" name="title" id="edit_title" class="auth-form-control" required>
                     </div>
 
-                    <div class="auth-form-row" style="display: flex; gap: 15px; margin-bottom: 20px;">
-                        <div class="auth-form-group" style="flex: 1;">
-                            <label>Jenis Project</label>
-                            <select name="type" id="edit_type" class="auth-form-control" style="background: #fff; border: 2px solid #F3F4F6; height: 52px; border-radius: 12px; font-family: 'Poppins', sans-serif;">
-                                <option value="weekly">Mingguan</option>
-                                <option value="monthly">Bulanan</option>
-                                <option value="semester">Semesteran</option>
-                            </select>
-                        </div>
-                        <div class="auth-form-group" style="flex: 1;">
-                            <label>Foto Baru (Optional)</label>
-                            <input type="file" name="image" class="auth-form-control" style="padding-top: 12px;">
-                        </div>
+                    <div class="auth-form-group">
+                        <label>Jenis Project</label>
+                        <select name="type" id="edit_type" class="auth-form-control" style="background: #fff; border: 2px solid #F3F4F6; height: 52px; border-radius: 12px; font-family: 'Poppins', sans-serif;">
+                            <option value="weekly">Mingguan</option>
+                            <option value="monthly">Bulanan</option>
+                            <option value="semester">Semesteran</option>
+                        </select>
                     </div>
 
                     <div class="auth-form-group">
@@ -82,7 +114,7 @@
                         <i data-lucide="x"></i>
                     </button>
                 </div>
-                <form action="{{ route('learning-tracker.store') }}" method="POST" enctype="multipart/form-data" class="lt-form">
+                <form action="{{ route('learning-tracker.store') }}" method="POST" class="lt-form">
                     @csrf
                     <div class="auth-form-group">
                         <label>Nama Project</label>
@@ -98,19 +130,13 @@
                         </select>
                     </div>
 
-                    <div class="auth-form-row" style="display: flex; gap: 15px; margin-bottom: 20px;">
-                        <div class="auth-form-group" style="flex: 1;">
-                            <label>Jenis Project</label>
-                            <select name="type" class="auth-form-control" style="background: #fff; border: 2px solid #F3F4F6; height: 52px; border-radius: 12px; font-family: 'Poppins', sans-serif;">
-                                <option value="weekly">Mingguan</option>
-                                <option value="monthly">Bulanan</option>
-                                <option value="semester">Semesteran</option>
-                            </select>
-                        </div>
-                        <div class="auth-form-group" style="flex: 1;">
-                            <label>Foto Awal (Optional)</label>
-                            <input type="file" name="image" class="auth-form-control" style="padding-top: 12px;">
-                        </div>
+                    <div class="auth-form-group">
+                        <label>Jenis Project</label>
+                        <select name="type" class="auth-form-control" style="background: #fff; border: 2px solid #F3F4F6; height: 52px; border-radius: 12px; font-family: 'Poppins', sans-serif;">
+                            <option value="weekly">Mingguan</option>
+                            <option value="monthly">Bulanan</option>
+                            <option value="semester">Semesteran</option>
+                        </select>
                     </div>
 
                     <div class="auth-form-group">
@@ -219,9 +245,32 @@
                                 <div class="lt-comment {{ $log->teacher_id ? 'teacher-comment' : 'parent-comment' }}">
                                     <div class="lt-comment-header">
                                         <span class="lt-comment-author">
-                                            {{ $log->teacher_id ? $log->teacher->name . ' (Guru)' : $log->user->name . ' (Orang Tua)' }}
+                                            {{ $log->teacher_id ? $log->teacher->name : $log->user->name }}
                                         </span>
-                                        <span class="lt-comment-time">{{ $log->created_at->format('d M, H:i') }}</span>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <span class="lt-comment-time">{{ $log->created_at->format('d M, H:i') }}</span>
+                                            
+                                            @php
+                                                $canEdit = false;
+                                                if ($isTeacher && $log->teacher_id === Auth::guard('teacher')->id()) $canEdit = true;
+                                                if (!$isTeacher && $log->user_id === Auth::id()) $canEdit = true;
+                                            @endphp
+
+                                            @if($canEdit)
+                                                <div class="lt-comment-actions">
+                                                    <button onclick="openEditCommentModal({{ $log->id }}, '{{ addslashes($log->content) }}', {{ $log->progress_percentage ?? 'null' }})" style="background: none; border: none; padding: 0; color: var(--db-purple); cursor: pointer;">
+                                                        <i data-lucide="edit-3" style="width: 14px;"></i>
+                                                    </button>
+                                                    <form action="{{ route('learning-tracker.log.destroy', $log->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Hapus komentar ini?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" style="background: none; border: none; padding: 0; color: #EF4444; cursor: pointer;">
+                                                            <i data-lucide="trash" style="width: 14px;"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
                                     <div class="lt-comment-content">
                                         @if($log->progress_percentage !== null)
@@ -270,7 +319,7 @@
             </div>
         @endif
 
-        <div style="margin-bottom: 100px;"></div>
+        <div style="margin-bottom: 20px;"></div>
     </div>
 @endsection
 
@@ -311,6 +360,13 @@
                 }
             });
 
+            // Edit Comment Modal Backdrop
+            $('#editCommentModal').on('click', function(e) {
+                if ($(e.target).hasClass('lt-modal')) {
+                    $(this).removeClass('active');
+                }
+            });
+
             // Loading Logic on Form Submit
             $('.lt-form').on('submit', function() {
                 $('#loadingOverlay').addClass('active');
@@ -331,6 +387,20 @@
 
         function closeEditModal() {
             $('#editProjectModal').removeClass('active');
+        }
+
+        function openEditCommentModal(id, content, progress) {
+            $('#editCommentForm').attr('action', '/learning-tracker/log/' + id);
+            $('#edit_comment_content').val(content);
+            if ($('#edit_comment_progress').length) {
+                $('#edit_comment_progress').val(progress);
+            }
+            $('#editCommentModal').addClass('active');
+            lucide.createIcons();
+        }
+
+        function closeEditCommentModal() {
+            $('#editCommentModal').removeClass('active');
         }
 
         function viewImage(imageUrl) {
