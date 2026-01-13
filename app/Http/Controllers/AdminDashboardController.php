@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\GardeningPlant;
 use App\Models\VolunteerMissionCompletion;
 use App\Models\ParentJournal;
+use App\Models\LearningProject;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -63,6 +64,10 @@ class AdminDashboardController extends Controller
             ->whereBetween('updated_at', [Carbon::now()->subDays(7), Carbon::now()])
             ->count();
 
+        // Learning Tracker Statistics
+        $totalProjects = LearningProject::count();
+        $recentProjects = LearningProject::where('created_at', '>=', Carbon::now()->subDays(7))->count();
+
         return view('admin.dashboard', compact(
             'totalUsers',
             'pendingUsers',
@@ -72,7 +77,9 @@ class AdminDashboardController extends Controller
             'todayCompletions',
             'thisWeekCompletions',
             'totalJournals',
-            'recentJournals'
+            'recentJournals',
+            'totalProjects',
+            'recentProjects'
         ));
     }
 }

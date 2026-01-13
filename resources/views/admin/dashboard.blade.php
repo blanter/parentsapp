@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        <!-- Coming Soon Card -->
+        <!-- Children Tracker Card -->
         <a href="{{ route('admin.children-tracker.index') }}" style="text-decoration: none; color: inherit;">
             <div class="adm-dash-card coming">
                 <div class="adm-dash-icon">
@@ -90,7 +90,7 @@
             <i data-lucide="activity"></i>
             <span>Lifebook Children Tracker</span>
         </a>
-        <a href="{{ route('coming-soon') }}" class="db-menu-item learning-tracker">
+        <a href="{{ route('admin.learning-tracker.index') }}" class="db-menu-item learning-tracker">
             <i data-lucide="book-open"></i>
             <span>My Kids Learning Tracker</span>
         </a>
