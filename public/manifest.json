@@ -11,19 +11,19 @@
     "orientation": "portrait",
     "icons": [
         {
-            "src": "/file/appicon.png",
+            "src": "/file/appiconx.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "/file/appicon.png",
+            "src": "/file/appiconx.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "/file/appicon.png",
+            "src": "/file/appiconx.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
@@ -35,7 +35,7 @@
             "url": "/dashboard",
             "icons": [
                 {
-                    "src": "/file/appicon.png",
+                    "src": "/file/appiconx.png",
                     "sizes": "192x192"
                 }
             ]

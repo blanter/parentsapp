@@ -7,7 +7,7 @@
     <div class="db-container">
         <div class="header-simple">
             <div class="logo-wrapper">
-                <img src="{{ asset('/file/appicon.png') }}" style="width: 50px; height: 50px;" alt="">
+                <img src="{{ asset('/file/appiconx.png') }}" style="width: 50px; height: 50px;" alt="">
             </div>
             <h1>Pasang Aplikasi</h1>
             <p>Gunakan aplikasi untuk pengalaman terbaik</p>
