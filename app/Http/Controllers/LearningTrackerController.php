@@ -24,25 +24,32 @@ class LearningTrackerController extends Controller
                 ->get();
 
             // Manually load students for each project
+            $allProjectStudentIds = [];
             foreach ($projects as $project) {
                 $studentIds = DB::table('learning_project_student')
                     ->where('learning_project_id', $project->id)
-                    ->pluck('student_id');
+                    ->pluck('student_id')
+                    ->toArray();
 
                 $project->setRelation('students', Student::whereIn('id', $studentIds)->get());
                 $project->load('logs.teacher', 'logs.user');
+
+                $allProjectStudentIds = array_merge($allProjectStudentIds, $studentIds);
             }
+
+            $studentsWithProjects = Student::whereIn('id', array_unique($allProjectStudentIds))->get();
 
             // For the select dropdown
             $students = Student::active()->get();
 
-            return view('page.learning-tracker.index', compact('projects', 'students', 'isTeacher'));
+            return view('page.learning-tracker.index', compact('projects', 'students', 'isTeacher', 'studentsWithProjects'));
         } else {
             // Parent view - get student IDs first
             $studentIds = $user->students->pluck('id')->toArray();
 
             if (empty($studentIds)) {
                 $projects = collect();
+                $studentsWithProjects = collect();
             } else {
                 // Get project IDs that have these students
                 $projectIds = DB::table('learning_project_student')
@@ -56,17 +63,25 @@ class LearningTrackerController extends Controller
                     ->get();
 
                 // Manually load relationships
+                $allProjectStudentIds = [];
                 foreach ($projects as $project) {
                     $projectStudentIds = DB::table('learning_project_student')
                         ->where('learning_project_id', $project->id)
-                        ->pluck('student_id');
+                        ->pluck('student_id')
+                        ->toArray();
 
                     $project->setRelation('students', Student::whereIn('id', $projectStudentIds)->get());
                     $project->load('logs.teacher', 'logs.user', 'teacher');
+
+                    $allProjectStudentIds = array_merge($allProjectStudentIds, $projectStudentIds);
                 }
+
+                $studentsWithProjects = Student::whereIn('id', array_unique($allProjectStudentIds))
+                    ->whereIn('id', $studentIds) // Only parents' own kids
+                    ->get();
             }
 
-            return view('page.learning-tracker.index', compact('projects', 'isTeacher'));
+            return view('page.learning-tracker.index', compact('projects', 'isTeacher', 'studentsWithProjects'));
         }
     }
 

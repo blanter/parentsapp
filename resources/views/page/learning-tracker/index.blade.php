@@ -171,6 +171,37 @@
             </button>
         @endif
 
+        @if($studentsWithProjects->isNotEmpty())
+            <!-- Student Selector -->
+            <div class="lt-student-selector">
+                <h3 class="lt-section-title">Anak-anak</h3>
+                <div class="lt-student-grid">
+                    @foreach($studentsWithProjects as $student)
+                        <div class="lt-student-card" onclick="filterByStudent({{ $student->id }}, this)">
+                            <div class="lt-student-avatar">
+                                <i data-lucide="user"></i>
+                            </div>
+                            <span class="lt-student-name">{{ explode(' ', $student->name)[0] }}</span>
+                        </div>
+                    @endforeach
+                    <div class="lt-student-card active" onclick="filterByStudent('all', this)">
+                        <div class="lt-student-avatar" style="background: var(--db-purple); color: #fff;">
+                            <i data-lucide="users"></i>
+                        </div>
+                        <span class="lt-student-name">Semua</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Selector (Chips) -->
+            <div class="lt-project-selector" id="projectSelector" style="margin-bottom: 30px; display: none;">
+                <h3 class="lt-section-title">Project Tersedia</h3>
+                <div class="lt-project-chips">
+                    <!-- Dynamic chips added via JS -->
+                </div>
+            </div>
+        @endif
+
         @if($projects->isEmpty())
             <div class="profile-card" style="text-align: center; padding: 50px 20px;">
                 <div style="font-size: 40px; margin-bottom: 20px; opacity: 0.3;">
@@ -187,9 +218,9 @@
             </div>
         @else
             <!-- Social Media Feed Style -->
-            <div class="lt-feed">
+            <div class="lt-feed" id="projectFeed">
                 @foreach($projects as $project)
-                    <div class="lt-post-card">
+                    <div class="lt-post-card" data-project-id="{{ $project->id }}" data-project-title="{{ $project->title }}" data-students="{{ json_encode($project->students->pluck('id')) }}">
                         <div class="lt-post-header">
                             <div class="lt-post-info">
                                 <h2 class="lt-project-title">{{ $project->title }}</h2>
@@ -407,6 +438,79 @@
             $('#viewerImage').attr('src', imageUrl);
             $('#imageViewerModal').addClass('active');
             lucide.createIcons();
+        }
+
+        function filterByStudent(studentId, element) {
+            $('.lt-student-card').removeClass('active');
+            $(element).addClass('active');
+
+            // Reset project selector
+            $('.lt-project-chips').empty();
+            let visibleProjects = new Set();
+            let projectMap = new Map(); // id -> title
+
+            if (studentId === 'all') {
+                $('#projectSelector').fadeOut();
+                $('.lt-post-card').fadeIn();
+            } else {
+                $('.lt-post-card').each(function() {
+                    const studentIds = $(this).data('students');
+                    const pId = $(this).data('project-id');
+                    const pTitle = $(this).data('project-title');
+                    
+                    if (studentIds.includes(studentId)) {
+                        $(this).fadeIn();
+                        projectMap.set(pId, pTitle);
+                    } else {
+                        $(this).fadeOut();
+                    }
+                });
+
+                // Populate Project Chips
+                if (projectMap.size > 0) {
+                    $('.lt-project-chips').append(`
+                        <div class="lt-project-chip active" onclick="filterByProject('all', this)">
+                            Semua Project
+                        </div>
+                    `);
+                    
+                    projectMap.forEach((title, id) => {
+                        $('.lt-project-chips').append(`
+                            <div class="lt-project-chip" onclick="filterByProject(${id}, this)">
+                                ${title}
+                            </div>
+                        `);
+                    });
+                    $('#projectSelector').fadeIn();
+                } else {
+                    $('#projectSelector').fadeOut();
+                }
+            }
+            
+            setTimeout(() => lucide.createIcons(), 500);
+        }
+
+        function filterByProject(projectId, element) {
+            $('.lt-project-chip').removeClass('active');
+            $(element).addClass('active');
+
+            const activeStudentId = $('.lt-student-card.active').attr('onclick').match(/\d+|all/)[0];
+
+            $('.lt-post-card').each(function() {
+                const studentIds = $(this).data('students');
+                const pId = $(this).data('project-id');
+                
+                const matchesStudent = activeStudentId === 'all' || studentIds.includes(parseInt(activeStudentId));
+                const matchesProject = projectId === 'all' || pId === projectId;
+
+                if (matchesStudent && matchesProject) {
+                    $(this).fadeIn();
+                } else {
+                    $(this).fadeOut();
+                }
+            });
+
+            setTimeout(() => lucide.createIcons(), 500);
         }
     </script>
 @endsection

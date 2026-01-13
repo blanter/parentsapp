@@ -6242,3 +6242,113 @@ a.btn.btn-warning {
     width: 16px;
     height: 16px;
 }
+
+/* Student Selector Styles */
+.lt-student-selector {
+    margin-bottom: 30px;
+}
+
+.lt-section-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    margin-bottom: 15px;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.lt-student-grid {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 5px 5px 15px 5px;
+    scrollbar-width: none;
+    /* Hide scrollbar Firefox */
+}
+
+.lt-student-grid::-webkit-scrollbar {
+    display: none;
+    /* Hide scrollbar Chrome/Safari */
+}
+
+.lt-student-card {
+    flex: 0 0 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lt-student-avatar {
+    width: 60px;
+    height: 60px;
+    background: #fff;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9CA3AF;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 2px solid transparent;
+    transition: all 0.3s;
+}
+
+.lt-student-card:hover .lt-student-avatar {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(108, 136, 224, 0.15);
+}
+
+.lt-student-card.active .lt-student-avatar {
+    border-color: var(--db-purple);
+    color: var(--db-purple);
+    background: rgba(108, 136, 224, 0.05);
+}
+
+.lt-student-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--db-text-dark);
+    opacity: 0.8;
+    text-align: center;
+}
+
+.lt-student-card.active .lt-student-name {
+    color: var(--db-purple);
+    opacity: 1;
+}
+
+/* Project Chips Styles */
+.lt-project-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.lt-project-chip {
+    padding: 10px 18px;
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #6B7280;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.lt-project-chip:hover {
+    border-color: var(--db-purple);
+    color: var(--db-purple);
+    transform: translateY(-2px);
+}
+
+.lt-project-chip.active {
+    background: var(--db-purple);
+    color: #fff;
+    border-color: var(--db-purple);
+    box-shadow: 0 8px 15px rgba(108, 136, 224, 0.2);
+}
