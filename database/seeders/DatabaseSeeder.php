@@ -13,7 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(AccessPinSeeder::class);
         $this->call(ParentsAndScoresSeeder::class);
+        $this->call(AdminUserSeeder::class);
+        $this->call(VolunteerMissionSeeder::class);
+        $this->call(WebSettingSeeder::class);
     }
 }
