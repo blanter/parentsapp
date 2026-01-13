@@ -8,6 +8,10 @@ class HabitDailyLog extends Model
 {
     protected $fillable = ['habit_id', 'log_date', 'is_completed'];
 
+    protected $casts = [
+        'is_completed' => 'boolean',
+    ];
+
     public function habit()
     {
         return $this->belongsTo(Habit::class);

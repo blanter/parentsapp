@@ -510,24 +510,24 @@
             let bodyHtml = '';
             habits.forEach(habit => {
                 let habitRow = `<tr><td class="ht-habit-name-col">
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <button class="ht-btn-delete" onclick="deleteHabit(${habit.id})"><i data-lucide="trash-2" style="width:14px;"></i></button>
-                            <button class="ht-btn-delete" onclick="openEditHabitModal(${habit.id}, '${habit.title.replace(/'/g, "\\'")}')" style="color:var(--db-purple);"><i data-lucide="edit-3" style="width:14px;"></i></button>
-                            ${habit.title}
-                        </div>
-                    </td>`;
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <button class="ht-btn-delete" onclick="deleteHabit(${habit.id})"><i data-lucide="trash-2" style="width:14px;"></i></button>
+                                <button class="ht-btn-delete" onclick="openEditHabitModal(${habit.id}, '${habit.title.replace(/'/g, "\\'")}')" style="color:var(--db-purple);"><i data-lucide="edit-3" style="width:14px;"></i></button>
+                                ${habit.title}
+                            </div>
+                        </td>`;
 
                 const habitLogs = logs[habit.id] || [];
                 for (let d = 1; d <= daysInMonth; d++) {
                     const dateStr = `${currentHTYear}-${String(currentHTMonth).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                    const isDone = habitLogs.some(l => l.log_date === dateStr && l.is_completed);
+                    const isDone = habitLogs.some(l => l.log_date === dateStr && (l.is_completed === true || l.is_completed == 1 || l.is_completed == '1'));
                     const weekNum = Math.ceil((d + new Date(currentHTYear, currentHTMonth - 1, 1).getDay()) / 7);
 
                     habitRow += `<td class="ht-day-cell ht-week-${weekNum}">
-                            <input type="checkbox" class="ht-checkbox" 
-                                ${isDone ? 'checked' : ''} 
-                                onchange="toggleHabit(${habit.id}, '${dateStr}')">
-                        </td>`;
+                                <input type="checkbox" class="ht-checkbox" 
+                                    ${isDone ? 'checked' : ''} 
+                                    onchange="toggleHabit(${habit.id}, '${dateStr}')">
+                            </td>`;
                 }
                 habitRow += '</tr>';
                 bodyHtml += habitRow;
@@ -540,25 +540,26 @@
                 const tasks = weeklyTasks[i] || [];
                 let tasksList = '';
                 tasks.forEach(task => {
+                    const isCompleted = (task.is_completed === true || task.is_completed == 1 || task.is_completed == '1');
                     tasksList += `<li class="ht-weekly-item">
-                            <input type="checkbox" class="ht-checkbox" ${task.is_completed ? 'checked' : ''} onchange="toggleWeeklyTask(${task.id})">
-                            <span class="ht-weekly-text ${task.is_completed ? 'completed' : ''}">${task.title}</span>
-                            <button class="ht-btn-delete" onclick="openEditWeeklyTaskModal(${task.id}, '${task.title.replace(/'/g, "\\'")}', ${i})" style="color:var(--db-purple);"><i data-lucide="edit-3" style="width:14px;"></i></button>
-                            <button class="ht-btn-delete" onclick="deleteWeeklyTask(${task.id})"><i data-lucide="trash-2" style="width:14px;"></i></button>
-                        </li>`;
+                                <input type="checkbox" class="ht-checkbox" ${isCompleted ? 'checked' : ''} onchange="toggleWeeklyTask(${task.id})">
+                                <span class="ht-weekly-text ${isCompleted ? 'completed' : ''}">${task.title}</span>
+                                <button class="ht-btn-delete" onclick="openEditWeeklyTaskModal(${task.id}, '${task.title.replace(/'/g, "\\'")}', ${i})" style="color:var(--db-purple);"><i data-lucide="edit-3" style="width:14px;"></i></button>
+                                <button class="ht-btn-delete" onclick="deleteWeeklyTask(${task.id})"><i data-lucide="trash-2" style="width:14px;"></i></button>
+                            </li>`;
                 });
 
                 const label = i === 6 ? 'MONTHLY' : `WEEK ${i}`;
 
                 weeklyHtml += `
-                        <div class="ht-weekly-card">
-                            <div class="ht-weekly-header">
-                                <div class="ht-weekly-title">${label}</div>
-                                <button class="ht-add-btn" onclick="openAddWeeklyTaskModal(${i})"><i data-lucide="plus" style="width:12px;"></i></button>
+                            <div class="ht-weekly-card">
+                                <div class="ht-weekly-header">
+                                    <div class="ht-weekly-title">${label}</div>
+                                    <button class="ht-add-btn" onclick="openAddWeeklyTaskModal(${i})"><i data-lucide="plus" style="width:12px;"></i></button>
+                                </div>
+                                <ul class="ht-weekly-list">${tasksList || '<li style="font-size:11px; opacity:0.5;">No tasks</li>'}</ul>
                             </div>
-                            <ul class="ht-weekly-list">${tasksList || '<li style="font-size:11px; opacity:0.5;">No tasks</li>'}</ul>
-                        </div>
-                    `;
+                        `;
             }
             $('#ht-weekly-container').html(weeklyHtml);
 
@@ -573,7 +574,7 @@
 
             Object.values(logs).forEach(habitLogs => {
                 habitLogs.forEach(log => {
-                    if (log.is_completed) totalDone++;
+                    if (log.is_completed === true || log.is_completed == 1 || log.is_completed == '1') totalDone++;
                 });
             });
 
