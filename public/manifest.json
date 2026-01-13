@@ -3,7 +3,7 @@
     "short_name": "Parents",
     "description": "Lifebook Parents - Monitor children development and journals",
     "id": "/",
-    "start_url": "/?utm_source=pwa",
+    "start_url": "/dashboard?utm_source=pwa",
     "scope": "/",
     "display": "standalone",
     "background_color": "#ffffff",
@@ -12,13 +12,19 @@
     "icons": [
         {
             "src": "/file/lifebookicon.png",
-            "sizes": "72x72",
+            "sizes": "192x192",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "/file/bee.png",
-            "sizes": "360x360",
+            "src": "/file/lifebookicon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/file/flower.png",
+            "sizes": "370x370",
             "type": "image/png",
             "purpose": "maskable"
         }
@@ -30,17 +36,7 @@
             "icons": [
                 {
                     "src": "/file/lifebookicon.png",
-                    "sizes": "72x72"
-                }
-            ]
-        },
-        {
-            "name": "Scores",
-            "url": "/leaderboard-parents",
-            "icons": [
-                {
-                    "src": "/file/lifebookicon.png",
-                    "sizes": "72x72"
+                    "sizes": "192x192"
                 }
             ]
         }

@@ -99,38 +99,41 @@
         const quickInstallContainer = document.getElementById('quickInstallContainer');
         const quickInstallButton = document.getElementById('quickInstallButton');
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent the mini-infobar from appearing on mobile
-            e.preventDefault();
-            // Stash the event so it can be triggered later.
-            deferredPrompt = e;
-            // Update UI notify the user they can install the PWA
+        // Always show the container initially for non-iOS and non-installed
+        if (!isIOS && !window.matchMedia('(display-mode: standalone)').matches) {
             quickInstallContainer.style.display = 'block';
+            quickInstallButton.innerHTML = '<i data-lucide="smartphone"></i><span>PASANG APLIKASI</span>';
+            lucide.createIcons();
+        }
 
-            // If we have an auto-install prompt, we can hide the iOS manual notice
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            quickInstallContainer.style.display = 'block';
+            quickInstallButton.innerHTML = '<i data-lucide="download"></i><span>UNDUH SEKARANG</span>';
+            lucide.createIcons();
             if (iosNotice) iosNotice.style.display = 'none';
         });
 
         quickInstallButton.addEventListener('click', (e) => {
-            // Hide the app provided install promotion
-            quickInstallContainer.style.display = 'none';
-            // Show the install prompt
-            deferredPrompt.prompt();
-            // Wait for the user to respond to the prompt
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the PWA prompt');
-                } else {
-                    console.log('User dismissed the PWA prompt');
-                }
-                deferredPrompt = null;
-            });
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        quickInstallContainer.style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                // If no prompt, scroll to steps or show alert
+                document.querySelector('.dl-content-card').scrollIntoView({ behavior: 'smooth' });
+                alert('Gunakan menu browser anda (titik tiga di pojok kanan atas) lalu pilih "Instal aplikasi" atau "Pasang ke HP" untuk pengalaman terbaik.');
+            }
         });
 
         window.addEventListener('appinstalled', (evt) => {
             // Log install to analytics
             console.log('INSTALL: Success');
-            quickInstallContainer.style.display = 'none';
         });
     </script>
 @endsection
