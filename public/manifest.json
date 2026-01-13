@@ -11,20 +11,20 @@
     "orientation": "portrait",
     "icons": [
         {
-            "src": "/file/lifebookicon.png",
+            "src": "/file/appicon.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "/file/lifebookicon.png",
+            "src": "/file/appicon.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "/file/flower.png",
-            "sizes": "370x370",
+            "src": "/file/appicon.png",
+            "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
         }
@@ -35,7 +35,7 @@
             "url": "/dashboard",
             "icons": [
                 {
-                    "src": "/file/lifebookicon.png",
+                    "src": "/file/appicon.png",
                     "sizes": "192x192"
                 }
             ]
