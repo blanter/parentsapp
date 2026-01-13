@@ -31,10 +31,9 @@
                 <i data-lucide="book-open"></i>
                 <span>Lifebook Children Tracker</span>
             </a>
-            <a href="{{ route('teacher.profile') }}" class="db-menu-item journey"
-                style="background: var(--db-purple); box-shadow: 0 8px 0px #4A63B3;">
-                <i data-lucide="user-cog"></i>
-                <span>Halaman Profil</span>
+            <a href="{{ route('learning-tracker.index') }}" class="db-menu-item mission">
+                <i data-lucide="layout-list"></i>
+                <span>My Kids Learning Tracker</span>
             </a>
         </div>
 

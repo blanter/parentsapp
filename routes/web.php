@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GardeningController;
 use App\Http\Controllers\AdminSettingController;
 use App\Http\Controllers\ChildrenTrackerController;
+use App\Http\Controllers\LearningTrackerController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -141,4 +142,11 @@ Route::middleware(['auth:web,teacher', 'approved'])->group(function () {
     Route::get('/children-tracker/internal-external-aspect', [ChildrenTrackerController::class, 'internalExternalAspect'])->name('children-tracker.internal-external-aspect');
     Route::post('/children-tracker/save-journal', [ChildrenTrackerController::class, 'saveJournal'])->name('children-tracker.save-journal');
     Route::post('/children-tracker/save-reflection', [ChildrenTrackerController::class, 'saveReflection'])->name('children-tracker.save-reflection');
+
+    // Learning Tracker
+    Route::get('/learning-tracker', [LearningTrackerController::class, 'index'])->name('learning-tracker.index');
+    Route::post('/learning-tracker', [LearningTrackerController::class, 'store'])->name('learning-tracker.store');
+    Route::put('/learning-tracker/{id}', [LearningTrackerController::class, 'update'])->name('learning-tracker.update');
+    Route::delete('/learning-tracker/{id}', [LearningTrackerController::class, 'destroy'])->name('learning-tracker.destroy');
+    Route::post('/learning-tracker/{id}/reply', [LearningTrackerController::class, 'reply'])->name('learning-tracker.reply');
 });

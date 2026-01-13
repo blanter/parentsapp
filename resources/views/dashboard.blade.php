@@ -46,7 +46,7 @@
                 <i data-lucide="activity"></i>
                 <span>Lifebook Children Tracker</span>
             </a>
-            <a href="{{ route('coming-soon') }}" class="db-menu-item learning-tracker">
+            <a href="{{ route('learning-tracker.index') }}" class="db-menu-item learning-tracker">
                 <i data-lucide="book-open"></i>
                 <span>My Kids Learning Tracker</span>
             </a>
