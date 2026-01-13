@@ -14,7 +14,7 @@
     <title>@yield('title', 'Lifebook Parents')</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
         rel="stylesheet">
-    <link href="{{ asset('/file/style.css') }}?v=17" rel="stylesheet" />
+    <link href="{{ asset('/file/style.css') }}?ver=2" rel="stylesheet" />
 
     @yield('styles')
 
