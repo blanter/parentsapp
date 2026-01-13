@@ -28,13 +28,15 @@
     <!-- Bottom Navigation -->
     <nav class="db-bottom-nav">
         @if(Auth::guard('teacher')->check())
-            <a href="{{ route('teacher.dashboard') }}" class="db-nav-item {{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}">
+            <a href="{{ route('teacher.dashboard') }}"
+                class="db-nav-item {{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}">
                 <div class="db-nav-icon">
                     <i data-lucide="home"></i>
                 </div>
                 <span>Home</span>
             </a>
-            <a href="{{ route('teacher.profile') }}" class="db-nav-item {{ request()->routeIs('teacher.profile') ? 'active' : '' }}">
+            <a href="{{ route('teacher.profile') }}"
+                class="db-nav-item {{ request()->routeIs('teacher.profile') ? 'active' : '' }}">
                 <div class="db-nav-icon">
                     <i data-lucide="user"></i>
                 </div>
@@ -47,13 +49,15 @@
                 </div>
                 <span>Home</span>
             </a>
-            <a href="{{ route('parents.leaderboard') }}" class="db-nav-item {{ request()->routeIs('parents.leaderboard') ? 'active' : '' }}">
+            <a href="{{ route('parents.leaderboard') }}"
+                class="db-nav-item {{ request()->routeIs('parents.leaderboard') ? 'active' : '' }}">
                 <div class="db-nav-icon">
                     <i data-lucide="trophy"></i>
                 </div>
                 <span>Scores</span>
             </a>
-            <a href="{{ route('profile') }}" class="db-nav-item {{ (request()->routeIs('profile') || request()->routeIs('profile.settings')) ? 'active' : '' }}">
+            <a href="{{ route('profile') }}"
+                class="db-nav-item {{ (request()->routeIs('profile') || request()->routeIs('profile.settings')) ? 'active' : '' }}">
                 <div class="db-nav-icon">
                     <i data-lucide="user"></i>
                 </div>
@@ -67,6 +71,15 @@
     <script>
         // Initialize Lucide icons
         lucide.createIcons();
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker registered', reg))
+                    .catch(err => console.log('Service Worker registration failed', err));
+            });
+        }
     </script>
 </body>
 

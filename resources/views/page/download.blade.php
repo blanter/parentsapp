@@ -11,7 +11,7 @@
             </div>
             <h1>Pasang Aplikasi</h1>
             <p>Gunakan aplikasi untuk pengalaman terbaik</p>
-            
+
             <!-- Quick Download Section -->
             <div id="quickInstallContainer" class="pwa-promo-container" style="display: none;">
                 <button id="quickInstallButton" class="pwa-download-btn">
@@ -53,17 +53,24 @@
             </div>
         </div>
 
-        <div id="iosNotice" style="margin-top: 30px; display: none; background: rgba(108, 136, 224, 0.05); padding: 25px; border-radius: 24px; border: 2px dashed var(--db-purple); text-align: center;">
-            <div style="background: var(--db-purple); width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; margin: 0 auto 15px;">
+        <div id="iosNotice"
+            style="margin-top: 30px; display: none; background: rgba(108, 136, 224, 0.05); padding: 25px; border-radius: 24px; border: 2px dashed var(--db-purple); text-align: center;">
+            <div
+                style="background: var(--db-purple); width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; margin: 0 auto 15px;">
                 <i data-lucide="smartphone"></i>
             </div>
-            <h4 style="font-size: 16px; font-weight: 800; color: var(--db-text-dark); margin-bottom: 8px;">Pengguna iOS / iPhone</h4>
-            <p style="font-size: 13px; font-weight: 500; color: var(--db-text-dark); opacity: 0.8; line-height: 1.6; margin: 0;">Silakan gunakan menu <b>Share</b> di peramban anda lalu pilih menu <b>"Add to Home Screen"</b> untuk memasang aplikasi.</p>
+            <h4 style="font-size: 16px; font-weight: 800; color: var(--db-text-dark); margin-bottom: 8px;">Pengguna iOS /
+                iPhone</h4>
+            <p
+                style="font-size: 13px; font-weight: 500; color: var(--db-text-dark); opacity: 0.8; line-height: 1.6; margin: 0;">
+                Silakan gunakan menu <b>Share</b> di peramban anda lalu pilih menu <b>"Add to Home Screen"</b> untuk
+                memasang aplikasi.</p>
         </div>
 
         <div style="margin-top: 30px; text-align: center;">
             <a href="{{ url()->previous() == url()->current() ? route('login') : url()->previous() }}"
-                class="auth-btn-primary" style="text-decoration: none; background: #fff; color: var(--db-text-dark); border: 2px solid #F3F4F6; box-shadow: 0 6px 0px #eee;">
+                class="auth-btn-primary"
+                style="text-decoration: none; background: #fff; color: var(--db-text-dark); border: 2px solid #F3F4F6; box-shadow: 0 6px 0px #eee;">
                 <i data-lucide="arrow-left"></i>
                 <span>Kembali Sebelumnya</span>
             </a>
@@ -76,9 +83,15 @@
         // Detect iOS
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const iosNotice = document.getElementById('iosNotice');
-        
+
         if (isIOS) {
             iosNotice.style.display = 'block';
+        }
+
+        // Check if already installed
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+            quickInstallContainer.innerHTML = '<div style="background: #ecfdf5; color: #059669; padding: 15px; border-radius: 12px; font-size: 13px; font-weight: 800;">Aplikasi sudah terpasang di perangkat anda.</div>';
+            quickInstallContainer.style.display = 'block';
         }
 
         // PWA Install Logic
@@ -93,7 +106,7 @@
             deferredPrompt = e;
             // Update UI notify the user they can install the PWA
             quickInstallContainer.style.display = 'block';
-            
+
             // If we have an auto-install prompt, we can hide the iOS manual notice
             if (iosNotice) iosNotice.style.display = 'none';
         });
