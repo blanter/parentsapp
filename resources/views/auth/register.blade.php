@@ -10,9 +10,15 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13.3px;
             color: var(--db-text-dark);
             padding-left: 5px;
+        }
+
+        @media screen and (max-width: 480px) {
+            .auth-form-group label {
+                font-size: 12.6px;
+            }
         }
     </style>
 @endsection
@@ -60,13 +66,24 @@
 
                 <div class="auth-form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" class="auth-form-control" placeholder="••••••••"
-                        required>
+                    <div class="auth-input-wrapper">
+                        <input type="password" id="password" name="password" class="auth-form-control"
+                            placeholder="••••••••" required>
+                        <button type="button" class="auth-password-toggle" onclick="togglePassword('password', this)">
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="auth-form-group">
                     <label for="password_confirmation">Confirm Password</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation" class="auth-form-control"
-                        placeholder="••••••••" required>
+                    <div class="auth-input-wrapper">
+                        <input type="password" id="password_confirmation" name="password_confirmation"
+                            class="auth-form-control" placeholder="••••••••" required>
+                        <button type="button" class="auth-password-toggle"
+                            onclick="togglePassword('password_confirmation', this)">
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <button type="submit" class="auth-btn-primary">
@@ -91,5 +108,18 @@
                 allowClear: true
             });
         });
+
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+            const icon = button.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                input.type = 'password';
+                icon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
     </script>
 @endsection

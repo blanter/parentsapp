@@ -5,10 +5,15 @@
 @section('content')
     <div class="auth-container">
         <div class="auth-card">
-            <div style="text-align: center; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px;">
                 <span
                     style="background: var(--db-purple); color: #fff; padding: 5px 15px; border-radius: 99px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Akses
                     Guru</span>
+                <a href="{{ route('login') }}"
+                    style="background: #F3F4F6; color: var(--db-purple); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"
+                    title="Masuk sebagai Orang Tua / Admin">
+                    <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
+                </a>
             </div>
             <h1 class="auth-title">Hello, Teacher!</h1>
             <p class="auth-subtitle">Masuk untuk mengelola jurnal dan perkembangan murid</p>
@@ -38,8 +43,13 @@
                 </div>
                 <div class="auth-form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" class="auth-form-control" placeholder="••••••••"
-                        required>
+                    <div class="auth-input-wrapper">
+                        <input type="password" id="password" name="password" class="auth-form-control"
+                            placeholder="••••••••" required>
+                        <button type="button" class="auth-password-toggle" onclick="togglePassword('password', this)">
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <button type="submit" class="auth-btn-primary"
@@ -48,10 +58,26 @@
                     <span>Masuk ke Dashboard Guru</span>
                 </button>
             </form>
-
             <div class="auth-footer">
                 Bukan guru? <a href="{{ route('login') }}">Masuk sebagai Orang Tua</a>
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+            const icon = button.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                input.type = 'password';
+                icon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+    </script>
 @endsection
