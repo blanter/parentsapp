@@ -55,7 +55,21 @@ class HabitTrackerController extends Controller
 
         if ($request->id) {
             $habit = Habit::where('user_id', Auth::id())->findOrFail($request->id);
+            $oldTitle = $habit->title;
             $habit->update(['title' => $request->title]);
+
+            // Update existing score descriptions if title changed
+            if ($oldTitle !== $request->title) {
+                $scores = \App\Models\Score::where('user_id', Auth::id())
+                    ->where('activity', 'Lifebook Journey')
+                    ->where('deskripsi', 'like', "Habit Daily: $oldTitle (%")
+                    ->get();
+
+                foreach ($scores as $score) {
+                    $newDesc = str_replace("Habit Daily: $oldTitle (", "Habit Daily: $request->title (", $score->deskripsi);
+                    $score->update(['deskripsi' => $newDesc]);
+                }
+            }
         } else {
             $habit = Habit::create([
                 'user_id' => Auth::id(),
@@ -129,6 +143,13 @@ class HabitTrackerController extends Controller
     public function deleteHabit($id)
     {
         $habit = Habit::where('user_id', Auth::id())->findOrFail($id);
+
+        // Remove points for all logs of this habit
+        \App\Models\Score::where('user_id', Auth::id())
+            ->where('activity', 'Lifebook Journey')
+            ->where('deskripsi', 'like', "Habit Daily: $habit->title (%")
+            ->delete();
+
         $habit->delete();
         return response()->json(['success' => true]);
     }
@@ -144,14 +165,28 @@ class HabitTrackerController extends Controller
 
         if ($request->id) {
             $task = HabitWeeklyTask::where('user_id', Auth::id())->findOrFail($request->id);
+            $oldTitle = $task->title;
             $task->update(['title' => $request->title]);
+
+            // Update existing score description if title changed
+            if ($oldTitle !== $request->title) {
+                $typeLabel = ($task->week_index == 6) ? "Monthly" : "Weekly (Week $task->week_index)";
+                $oldScoreDesc = "Habit $typeLabel: $oldTitle (" . date('F', mktime(0, 0, 0, $task->month, 1)) . " $task->year)";
+                $newScoreDesc = "Habit $typeLabel: $task->title (" . date('F', mktime(0, 0, 0, $task->month, 1)) . " $task->year)";
+
+                \App\Models\Score::where('user_id', Auth::id())
+                    ->where('activity', 'Lifebook Journey')
+                    ->where('deskripsi', $oldScoreDesc)
+                    ->update(['deskripsi' => $newScoreDesc]);
+            }
         } else {
             $task = HabitWeeklyTask::create([
                 'user_id' => Auth::id(),
                 'title' => $request->title,
                 'month' => $request->month,
                 'year' => $request->year,
-                'week_index' => $request->week_index
+                'week_index' => $request->week_index,
+                'is_completed' => false
             ]);
         }
 
@@ -203,6 +238,16 @@ class HabitTrackerController extends Controller
     public function deleteWeeklyTask($id)
     {
         $task = HabitWeeklyTask::where('user_id', Auth::id())->findOrFail($id);
+
+        // Remove points if any
+        $typeLabel = ($task->week_index == 6) ? "Monthly" : "Weekly (Week $task->week_index)";
+        $scoreDesc = "Habit $typeLabel: $task->title (" . date('F', mktime(0, 0, 0, $task->month, 1)) . " $task->year)";
+
+        \App\Models\Score::where('user_id', Auth::id())
+            ->where('activity', 'Lifebook Journey')
+            ->where('deskripsi', $scoreDesc)
+            ->delete();
+
         $task->delete();
         return response()->json(['success' => true]);
     }
