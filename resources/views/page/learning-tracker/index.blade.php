@@ -19,7 +19,7 @@
 
     <!-- Image Viewer Modal -->
     <div class="lt-modal" id="imageViewerModal">
-        <div class="lt-modal-content" style="max-width: 800px; padding: 0; overflow: hidden;">
+        <div class="lt-modal-content" style="max-width: 500px; padding: 0; overflow: hidden;">
             <button class="lt-close-modal" id="closeImageViewer" style="position: absolute; top: 15px; right: 15px; z-index: 10;">
                 <i data-lucide="x"></i>
             </button>

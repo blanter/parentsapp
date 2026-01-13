@@ -15,6 +15,14 @@ body {
     color: #333
 }
 
+a,
+button,
+input,
+textarea,
+select {
+    -webkit-tap-highlight-color: transparent;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
