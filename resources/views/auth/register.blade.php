@@ -5,84 +5,6 @@
 @section('styles')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
-        /* Force Select2 to take full width */
-        .select2-container {
-            width: 100% !important;
-        }
-
-        /* Select2 Premium Styling for Auth Pages */
-        .select2-container--default .select2-selection--multiple {
-            background: #fff;
-            border: 2px solid #E5E7EB;
-            border-radius: 20px;
-            padding: 10px 15px;
-            min-height: 55px;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-        }
-
-        .select2-container--default.select2-container--focus .select2-selection--multiple {
-            border-color: var(--db-purple);
-            box-shadow: 0 0 0 4px rgba(108, 136, 224, 0.1);
-            outline: none;
-        }
-
-        .select2-container--default .select2-selection--multiple .select2-selection__choice {
-            background-color: rgba(108, 136, 224, 0.1);
-            border: none;
-            border-radius: 12px;
-            padding: 5px 12px;
-            color: var(--db-purple);
-            font-weight: 700;
-            font-size: 13px;
-            margin: 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-            color: var(--db-purple);
-            border: none;
-            font-weight: 900;
-            font-size: 16px;
-            opacity: 0.5;
-            transition: all 0.2s;
-            margin-right: 0;
-        }
-
-        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
-            opacity: 1;
-            background: none;
-        }
-
-        .select2-dropdown {
-            border: 2px solid var(--db-purple);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            z-index: 9999;
-            margin-top: 5px;
-        }
-
-        .select2-results__option {
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--db-text-dark);
-        }
-
-        .select2-container--default .select2-results__option--highlighted[aria-selected] {
-            background-color: var(--db-purple) !important;
-            color: #ffffff !important;
-        }
-
-        .select2-container--default .select2-results__option[aria-selected=true] {
-            background-color: #F3F4F6;
-            color: var(--db-purple);
-        }
-
         /* Adjust label for consistency */
         .auth-form-group label {
             display: block;
@@ -115,8 +37,8 @@
                 @csrf
                 <div class="auth-form-group">
                     <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" class="auth-form-control" placeholder="Nama Lengkap"
-                        required value="{{ old('name') }}">
+                    <input type="text" id="name" name="name" class="auth-form-control" placeholder="Nama Lengkap" required
+                        value="{{ old('name') }}">
                 </div>
                 <div class="auth-form-group">
                     <label for="email">Email Address</label>
@@ -138,13 +60,13 @@
 
                 <div class="auth-form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" class="auth-form-control"
-                        placeholder="••••••••" required>
+                    <input type="password" id="password" name="password" class="auth-form-control" placeholder="••••••••"
+                        required>
                 </div>
                 <div class="auth-form-group">
                     <label for="password_confirmation">Confirm Password</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation"
-                        class="auth-form-control" placeholder="••••••••" required>
+                    <input type="password" id="password_confirmation" name="password_confirmation" class="auth-form-control"
+                        placeholder="••••••••" required>
                 </div>
 
                 <button type="submit" class="auth-btn-primary">
