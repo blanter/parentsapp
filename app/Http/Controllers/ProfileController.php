@@ -68,9 +68,32 @@ class ProfileController extends Controller
                 }
             }
 
-            $avatarName = time() . '.' . $request->avatar->extension();
-            $request->avatar->move(public_path('avatars'), $avatarName);
-            $user->avatar = $avatarName;
+            try {
+                $file = $request->file('avatar');
+                $filename = time() . '.jpg';
+                $path = public_path('avatars/' . $filename);
+
+                // Use Intervention Image for compression (60%)
+                $manager = new \Intervention\Image\ImageManager(
+                    new \Intervention\Image\Drivers\Gd\Driver()
+                );
+
+                $image = $manager->read($file);
+
+                // Resize if too large (max 800px width for avatar)
+                if ($image->width() > 800) {
+                    $image->scale(width: 800);
+                }
+
+                $image->toJpeg(60)->save($path);
+
+                $user->avatar = $filename;
+            } catch (\Exception $e) {
+                // Fallback to simple move
+                $avatarName = time() . '.' . $request->avatar->extension();
+                $request->avatar->move(public_path('avatars'), $avatarName);
+                $user->avatar = $avatarName;
+            }
         }
 
         $user->save();
