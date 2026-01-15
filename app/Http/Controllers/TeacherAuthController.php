@@ -29,7 +29,7 @@ class TeacherAuthController extends Controller
             }
 
             $request->session()->regenerate();
-            return redirect()->intended('/guru/dashboard');
+            return redirect()->route('teacher.dashboard');
         }
 
         return back()->withErrors([

@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->redirectGuestsTo(function (\Illuminate\Http\Request $request) {
-            if ($request->is('guru') || $request->is('guru/*')) {
+            if ($request->is('guru') || $request->is('guru/*') || $request->routeIs('teacher.*')) {
                 return route('teacher.login');
             }
             return route('login');
