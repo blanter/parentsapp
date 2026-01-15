@@ -283,8 +283,8 @@
                                             
                                             @php
                                                 $canEdit = false;
-                                                if ($isTeacher && $log->teacher_id === Auth::guard('teacher')->id()) $canEdit = true;
-                                                if (!$isTeacher && $log->user_id === Auth::id()) $canEdit = true;
+                                                if ($isTeacher && $log->teacher_id == Auth::guard('teacher')->id()) $canEdit = true;
+                                                if (!$isTeacher && $log->user_id == Auth::id()) $canEdit = true;
                                             @endphp
 
                                             @if($canEdit)
