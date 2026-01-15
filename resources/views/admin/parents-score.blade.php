@@ -28,7 +28,7 @@
                             <label class="form-label">Parents Name</label>
                             <select id="parentsDropdown" name="parent_ids[]" multiple="multiple" style="width:100%">
                                 @foreach($parents as $parent)
-                                    <option value="{{ $parent->id }}">{{ $parent->name }} ({{ $parent->email }})</option>
+                                    <option value="{{ $parent->id }}">{{ $parent->name }} ({{ $parent->students->pluck('name')->implode(', ') }})</option>
                                 @endforeach
                             </select>
                         </div>
@@ -178,7 +178,7 @@
                                     <option value="">All Registered Parents</option>
                                     @foreach($parents as $parent)
                                         <option value="{{ $parent->id }}" {{ request('user_id') == $parent->id ? 'selected' : '' }}>
-                                            {{ $parent->name }}
+                                            {{ $parent->name }} ({{ $parent->students->pluck('name')->implode(', ') }})
                                         </option>
                                     @endforeach
                                 </select>

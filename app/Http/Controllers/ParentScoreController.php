@@ -13,7 +13,7 @@ class ParentScoreController extends Controller
     public function index(Request $request)
     {
         // Get only users with 'user' role for the dropdown
-        $parents = User::where('role', 'user')->orderBy('name')->get();
+        $parents = User::where('role', 'user')->with('students')->orderBy('name')->get();
 
         $activityFilter = $request->query('activity', null);
         $userIdFilter = $request->query('user_id', null);
