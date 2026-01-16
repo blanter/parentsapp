@@ -97,6 +97,27 @@
             <i data-lucide="chevron-right" style="color: var(--db-primary); width: 22px; height: 22px;"></i>
         </a>
 
+        <!-- Hubungi Admin Button -->
+        @if($adminWhatsapp)
+            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $adminWhatsapp) }}" target="_blank" class="profile-info-item"
+                style="text-decoration: none; border-color: #25D366; background: #ffffff; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div
+                        style="background: #25D366; width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #fff; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);">
+                        <i data-lucide="message-circle" style="width: 22px; height: 22px;"></i>
+                    </div>
+                    <div>
+                        <span class="profile-info-label"
+                            style="opacity: 1; font-size: 14px; font-weight: 800; display: block; color: var(--db-text-dark);">Hubungi
+                            Admin</span>
+                        <span style="font-size: 11px; opacity: 0.6; font-weight: 600; color: var(--db-text-dark);">Chat via
+                            WhatsApp</span>
+                    </div>
+                </div>
+                <i data-lucide="external-link" style="color: #25D366; width: 22px; height: 22px;"></i>
+            </a>
+        @endif
+
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit" class="btn-logout">

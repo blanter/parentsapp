@@ -33,6 +33,15 @@
                     sebagai pembimbing di jurnal orang tua.</p>
             </div>
 
+            <div class="auth-form-group" style="margin-top: 25px;">
+                <label>Admin WhatsApp</label>
+                <input type="text" name="admin_whatsapp" class="auth-form-control"
+                    value="{{ $settings['admin_whatsapp'] ?? '' }}"
+                    placeholder="Contoh: 628123456789 atau +62 812-3456-789">
+                <p style="font-size: 11px; margin-top: 5px; opacity: 0.5; font-weight: 600;">Nomor WhatsApp admin yang akan
+                    muncul di tombol "Hubungi Admin" pada halaman profil user.</p>
+            </div>
+
             <button type="submit" class="auth-btn-primary" style="margin-top: 10px; width: 100%;">
                 <i data-lucide="save"></i>
                 <span>Update Settings</span>

@@ -33,7 +33,9 @@ class ProfileController extends Controller
         }
 
         $appVersion = \App\Models\WebSetting::where('key', 'app_version')->first()->value ?? '1.0.0';
-        return view('profile', compact('appVersion', 'totalScore', 'rank'));
+        $adminWhatsapp = \App\Models\WebSetting::where('key', 'admin_whatsapp')->first()->value ?? '';
+
+        return view('profile', compact('appVersion', 'totalScore', 'rank', 'adminWhatsapp'));
     }
 
     public function settings()
