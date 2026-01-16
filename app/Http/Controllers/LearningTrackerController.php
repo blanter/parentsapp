@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class LearningTrackerController extends Controller
 {
@@ -164,8 +165,13 @@ class LearningTrackerController extends Controller
 
         $project = LearningProject::findOrFail($id);
 
+        $teacherId = Auth::guard('teacher')->id();
+
         // Check if teacher owns this project
-        if (Auth::guard('teacher')->id() !== $project->teacher_id) {
+        // Use loose comparison ( != ) to handle string/int id mismatch between databases
+        if ($teacherId != $project->teacher_id) {
+            Log::error("LearningTracker Update Unauthorized: Teacher ID {$teacherId} (Type: " . gettype($teacherId) . ") vs Project Teacher ID {$project->teacher_id} (Type: " . gettype($project->teacher_id) . ")");
+
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
             }
@@ -189,8 +195,13 @@ class LearningTrackerController extends Controller
     {
         $project = LearningProject::findOrFail($id);
 
+        $teacherId = Auth::guard('teacher')->id();
+
         // Check if teacher owns this project
-        if (Auth::guard('teacher')->id() !== $project->teacher_id) {
+        // Use loose comparison ( != )
+        if ($teacherId != $project->teacher_id) {
+            Log::error("LearningTracker Destroy Unauthorized: Teacher ID {$teacherId} (Type: " . gettype($teacherId) . ") vs Project Teacher ID {$project->teacher_id} (Type: " . gettype($project->teacher_id) . ")");
+
             if (request()->ajax() || request()->wantsJson()) {
                 return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
             }
@@ -231,14 +242,18 @@ class LearningTrackerController extends Controller
 
         // Check ownership
         if ($isTeacher) {
-            if ($log->teacher_id !== Auth::guard('teacher')->id()) {
+            $teacherId = Auth::guard('teacher')->id();
+            if ($log->teacher_id != $teacherId) {
+                Log::error("LearningTracker UpdateLog Unauthorized (Teacher): Teacher ID {$teacherId} vs Log Teacher ID {$log->teacher_id}");
                 if ($request->ajax() || $request->wantsJson()) {
                     return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
                 }
                 return back()->with('error', 'Unauthorized action.');
             }
         } else {
-            if ($log->user_id !== Auth::id()) {
+            $userId = Auth::id();
+            if ($log->user_id != $userId) {
+                Log::error("LearningTracker UpdateLog Unauthorized (Parent): User ID {$userId} vs Log User ID {$log->user_id}");
                 if ($request->ajax() || $request->wantsJson()) {
                     return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
                 }
@@ -279,11 +294,21 @@ class LearningTrackerController extends Controller
 
         // Check ownership
         if ($isTeacher) {
-            if ($log->teacher_id !== Auth::guard('teacher')->id()) {
+            $teacherId = Auth::guard('teacher')->id();
+            if ($log->teacher_id != $teacherId) {
+                Log::error("LearningTracker DestroyLog Unauthorized (Teacher): Teacher ID {$teacherId} vs Log Teacher ID {$log->teacher_id}");
+                if (request()->ajax() || request()->wantsJson()) {
+                    return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
+                }
                 return back()->with('error', 'Unauthorized action.');
             }
         } else {
-            if ($log->user_id !== Auth::id()) {
+            $userId = Auth::id();
+            if ($log->user_id != $userId) {
+                Log::error("LearningTracker DestroyLog Unauthorized (Parent): User ID {$userId} vs Log User ID {$log->user_id}");
+                if (request()->ajax() || request()->wantsJson()) {
+                    return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
+                }
                 return back()->with('error', 'Unauthorized action.');
             }
         }
@@ -293,6 +318,10 @@ class LearningTrackerController extends Controller
         }
 
         $log->delete();
+
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Comment deleted successfully!']);
+        }
 
         return back()->with('success', 'Comment deleted successfully!');
     }
