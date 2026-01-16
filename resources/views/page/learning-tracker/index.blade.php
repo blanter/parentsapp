@@ -408,7 +408,8 @@
         });
 
         function openEditModal(id, title, type, description) {
-            $('#editProjectForm').attr('action', '/learning-tracker/' + id);
+            const updateUrl = "{{ route('learning-tracker.update', ':id') }}".replace(':id', id);
+            $('#editProjectForm').attr('action', updateUrl);
             $('#edit_title').val(title);
             $('#edit_type').val(type);
             $('#edit_description').val(description);
@@ -421,7 +422,8 @@
         }
 
         function openEditCommentModal(id, content, progress) {
-            $('#editCommentForm').attr('action', '/learning-tracker/log/' + id);
+            const updateUrl = "{{ route('learning-tracker.log.update', ':id') }}".replace(':id', id);
+            $('#editCommentForm').attr('action', updateUrl);
             $('#edit_comment_content').val(content);
             if ($('#edit_comment_progress').length) {
                 $('#edit_comment_progress').val(progress);
