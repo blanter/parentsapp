@@ -5840,6 +5840,7 @@ a.btn.btn-warning {
     align-items: flex-start;
     margin-bottom: 20px;
     gap: 15px;
+    flex-wrap: wrap;
 }
 
 .lt-post-info {
@@ -6131,6 +6132,107 @@ a.btn.btn-warning {
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s;
+}
+
+.lt-send-btn {
+    background: var(--db-purple);
+    color: #fff;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* Responsive for Learning Tracker */
+@media screen and (max-width: 576px) {
+    .db-container {
+        padding: 15px 15px 70px;
+    }
+
+    .lt-post-card {
+        padding: 20px;
+        border-radius: 25px;
+    }
+
+    .lt-post-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .lt-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #F9FAFF;
+        padding: 8px 12px;
+        border-radius: 15px;
+        width: fit-content;
+        margin-left: auto;
+        border: 1px solid #F3F4F6;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    .lt-badge {
+        font-size: 10px;
+        padding: 6px 10px;
+        border-radius: 8px;
+    }
+
+    .lt-action-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+    }
+
+    .lt-project-title {
+        font-size: 19px;
+        margin-bottom: 5px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .lt-student-tag {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+
+    .lt-meta-info {
+        gap: 8px;
+        opacity: 0.8;
+    }
+
+    .lt-comments-section {
+        padding: 15px;
+        border-radius: 20px;
+    }
+
+    .lt-reply-input-wrapper {
+        padding: 12px;
+    }
+
+    .lt-reply-actions {
+        gap: 10px;
+    }
+
+    .lt-inline-input {
+        padding: 4px 8px;
+    }
+
+    .lt-student-avatar {
+        width: 50px;
+        height: 50px;
+    }
+
+    .lt-student-card {
+        flex: 0 0 70px;
+    }
 }
 
 .lt-reply-actions button:hover {
@@ -6546,6 +6648,7 @@ a.btn.btn-warning {
         transform: translateY(0);
     }
 }
+
 /* Lifebook Journey Help Button & Modal Styles */
 .lj-help-btn-container {
     text-align: center;

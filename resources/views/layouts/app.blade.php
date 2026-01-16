@@ -14,11 +14,11 @@
     <title>@yield('title', 'Lifebook Parents')</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
         rel="stylesheet">
-    <link href="{{ asset('/file/style.css') }}?ver=3" rel="stylesheet" />
+    <link href="{{ asset('/file/style.css') }}?ver=4" rel="stylesheet" />
 
     @yield('styles')
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{{asset('/file/jquery.min.js')}}"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 

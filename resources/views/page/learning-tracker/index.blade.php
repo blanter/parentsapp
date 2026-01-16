@@ -28,7 +28,8 @@
     <!-- Image Viewer Modal -->
     <div class="lt-modal" id="imageViewerModal">
         <div class="lt-modal-content" style="max-width: 500px; padding: 0; overflow: hidden;">
-            <button class="lt-close-modal" id="closeImageViewer" style="position: absolute; top: 15px; right: 15px; z-index: 10;">
+            <button class="lt-close-modal" id="closeImageViewer"
+                style="position: absolute; top: 15px; right: 15px; z-index: 10;">
                 <i data-lucide="x"></i>
             </button>
             <img id="viewerImage" src="" style="width: 100%; height: auto; display: block;">
@@ -49,14 +50,16 @@
                 @method('PUT')
                 <div class="auth-form-group">
                     <label>Isi Komentar</label>
-                    <textarea name="content" id="edit_comment_content" class="auth-form-control" style="height: 100px; resize: none; padding-top: 15px;" required></textarea>
+                    <textarea name="content" id="edit_comment_content" class="auth-form-control"
+                        style="height: 100px; resize: none; padding-top: 15px;" required></textarea>
                 </div>
 
                 <div class="auth-form-row" style="display: flex; gap: 15px; margin-bottom: 20px;">
                     @if($isTeacher)
                         <div class="auth-form-group" style="flex: 1;">
                             <label>Update Progress (%)</label>
-                            <input type="number" name="progress_percentage" id="edit_comment_progress" class="auth-form-control" min="0" max="100">
+                            <input type="number" name="progress_percentage" id="edit_comment_progress" class="auth-form-control"
+                                min="0" max="100">
                         </div>
                     @endif
                     <div class="auth-form-group" style="flex: 1;">
@@ -93,7 +96,8 @@
 
                     <div class="auth-form-group">
                         <label>Jenis Project</label>
-                        <select name="type" id="edit_type" class="auth-form-control" style="background: #fff; border: 2px solid #F3F4F6; height: 52px; border-radius: 12px; font-family: 'Poppins', sans-serif;">
+                        <select name="type" id="edit_type" class="auth-form-control"
+                            style="background: #fff; border: 2px solid #F3F4F6; height: 52px; border-radius: 12px; font-family: 'Poppins', sans-serif;">
                             <option value="weekly">Mingguan</option>
                             <option value="monthly">Bulanan</option>
                             <option value="semester">Semesteran</option>
@@ -102,7 +106,8 @@
 
                     <div class="auth-form-group">
                         <label>Deskripsi Project</label>
-                        <textarea name="description" id="edit_description" class="auth-form-control" style="height: 100px; resize: none; padding-top: 15px;" required></textarea>
+                        <textarea name="description" id="edit_description" class="auth-form-control"
+                            style="height: 100px; resize: none; padding-top: 15px;" required></textarea>
                     </div>
 
                     <button type="submit" class="auth-btn-primary">
@@ -126,7 +131,8 @@
                     @csrf
                     <div class="auth-form-group">
                         <label>Nama Project</label>
-                        <input type="text" name="title" class="auth-form-control" placeholder="Contoh: Menanam Sayur Hidroponik" required>
+                        <input type="text" name="title" class="auth-form-control" placeholder="Contoh: Menanam Sayur Hidroponik"
+                            required>
                     </div>
 
                     <div class="auth-form-group">
@@ -140,7 +146,8 @@
 
                     <div class="auth-form-group">
                         <label>Jenis Project</label>
-                        <select name="type" class="auth-form-control" style="background: #fff; border: 2px solid #F3F4F6; height: 52px; border-radius: 12px; font-family: 'Poppins', sans-serif;">
+                        <select name="type" class="auth-form-control"
+                            style="background: #fff; border: 2px solid #F3F4F6; height: 52px; border-radius: 12px; font-family: 'Poppins', sans-serif;">
                             <option value="weekly">Mingguan</option>
                             <option value="monthly">Bulanan</option>
                             <option value="semester">Semesteran</option>
@@ -149,7 +156,9 @@
 
                     <div class="auth-form-group">
                         <label>Deskripsi Project</label>
-                        <textarea name="description" class="auth-form-control" style="height: 100px; resize: none; padding-top: 15px;" placeholder="Jelaskan detail project yang akan dipantau..." required></textarea>
+                        <textarea name="description" class="auth-form-control"
+                            style="height: 100px; resize: none; padding-top: 15px;"
+                            placeholder="Jelaskan detail project yang akan dipantau..." required></textarea>
                     </div>
 
                     <button type="submit" class="auth-btn-primary">
@@ -164,7 +173,8 @@
     <div class="db-container">
         <div class="db-header">
             <div class="db-brand-section">
-                <span style="background: var(--db-purple); color: #fff; padding: 3px 10px; border-radius: 99px; font-size: 10px; font-weight: 800; text-transform: uppercase;">Tracker</span>
+                <span
+                    style="background: var(--db-purple); color: #fff; padding: 3px 10px; border-radius: 99px; font-size: 10px; font-weight: 800; text-transform: uppercase;">Tracker</span>
                 <h1 style="margin-top: 5px;">My Kids<br>Learning Tracker</h1>
             </div>
             <a href="{{ $isTeacher ? route('teacher.dashboard') : route('dashboard') }}" class="db-avatar-section">
@@ -228,7 +238,8 @@
             <!-- Social Media Feed Style -->
             <div class="lt-feed" id="projectFeed">
                 @foreach($projects as $project)
-                    <div class="lt-post-card" data-project-id="{{ $project->id }}" data-project-title="{{ $project->title }}" data-students="{{ json_encode($project->students->pluck('id')) }}">
+                    <div class="lt-post-card" data-project-id="{{ $project->id }}" data-project-title="{{ $project->title }}"
+                        data-students="{{ json_encode($project->students->pluck('id')) }}">
                         <div class="lt-post-header">
                             <div class="lt-post-info">
                                 <h2 class="lt-project-title">{{ $project->title }}</h2>
@@ -239,16 +250,19 @@
                                 </div>
                                 <div class="lt-meta-info">
                                     <span class="lt-posted-by">Posted by: {{ $project->teacher->name }}</span>
-                                    <span class="lt-post-date">{{ $project->created_at->diffForHumans() }} • {{ ucfirst($project->type) }}</span>
+                                    <span class="lt-post-date">{{ $project->created_at->diffForHumans() }} •
+                                        {{ ucfirst($project->type) }}</span>
                                 </div>
                             </div>
                             <div class="lt-actions">
                                 <div class="lt-badge">{{ $project->progress_percentage }}%</div>
                                 @if($isTeacher)
-                                    <button class="lt-action-btn lt-edit-btn" onclick="openEditModal({{ $project->id }}, '{{ addslashes($project->title) }}', '{{ $project->type }}', '{{ addslashes($project->description) }}')">
+                                    <button class="lt-action-btn lt-edit-btn"
+                                        onclick="openEditModal({{ $project->id }}, '{{ addslashes($project->title) }}', '{{ $project->type }}', '{{ addslashes($project->description) }}')">
                                         <i data-lucide="edit-2"></i>
                                     </button>
-                                    <button class="lt-action-btn lt-delete-btn" onclick="deleteProject({{ $project->id }}, '{{ addslashes($project->title) }}')">
+                                    <button class="lt-action-btn lt-delete-btn"
+                                        onclick="deleteProject({{ $project->id }}, '{{ addslashes($project->title) }}')">
                                         <i data-lucide="trash-2"></i>
                                     </button>
                                 @endif
@@ -284,22 +298,28 @@
                                         </span>
                                         <div style="display: flex; align-items: center; gap: 10px;">
                                             <span class="lt-comment-time">{{ $log->created_at->format('d M, H:i') }}</span>
-                                            
+
                                             @php
                                                 $canEdit = false;
-                                                if ($isTeacher && $log->teacher_id == Auth::guard('teacher')->id()) $canEdit = true;
-                                                if (!$isTeacher && $log->user_id == Auth::id()) $canEdit = true;
+                                                if ($isTeacher && $log->teacher_id == Auth::guard('teacher')->id())
+                                                    $canEdit = true;
+                                                if (!$isTeacher && $log->user_id == Auth::id())
+                                                    $canEdit = true;
                                             @endphp
 
                                             @if($canEdit)
                                                 <div class="lt-comment-actions">
-                                                    <button onclick="openEditCommentModal({{ $log->id }}, '{{ addslashes($log->content) }}', {{ $log->progress_percentage ?? 'null' }})" style="background: none; border: none; padding: 0; color: var(--db-purple); cursor: pointer;">
+                                                    <button
+                                                        onclick="openEditCommentModal({{ $log->id }}, '{{ addslashes($log->content) }}', {{ $log->progress_percentage ?? 'null' }})"
+                                                        style="background: none; border: none; padding: 0; color: var(--db-purple); cursor: pointer;">
                                                         <i data-lucide="edit-3" style="width: 14px;"></i>
                                                     </button>
-                                                    <form action="{{ route('learning-tracker.log.destroy', $log->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Hapus komentar ini?')">
+                                                    <form action="{{ route('learning-tracker.log.destroy', $log->id) }}" method="POST"
+                                                        style="display: inline;" onsubmit="return confirm('Hapus komentar ini?')">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" style="background: none; border: none; padding: 0; color: #EF4444; cursor: pointer;">
+                                                        <button type="submit"
+                                                            style="background: none; border: none; padding: 0; color: #EF4444; cursor: pointer;">
                                                             <i data-lucide="trash" style="width: 14px;"></i>
                                                         </button>
                                                     </form>
@@ -315,7 +335,8 @@
                                         @endif
                                         <p>{{ $log->content }}</p>
                                         @if($log->image)
-                                            <button class="lt-view-image-btn" style="margin-top: 10px;" onclick="viewImage('{{ asset('storage/' . $log->image) }}')">
+                                            <button class="lt-view-image-btn" style="margin-top: 10px;"
+                                                onclick="viewImage('{{ asset('storage/' . $log->image) }}')">
                                                 <i data-lucide="image"></i>
                                                 <span>Lihat Gambar</span>
                                             </button>
@@ -326,36 +347,43 @@
 
                             <!-- Reply Form -->
                             <div class="lt-reply-form">
-                                <form action="{{ route('learning-tracker.reply', $project->id) }}" method="POST" enctype="multipart/form-data" class="lt-form">
+                                <form action="{{ route('learning-tracker.reply', $project->id) }}" method="POST"
+                                    enctype="multipart/form-data" class="lt-form">
                                     @csrf
                                     <div class="lt-reply-input-wrapper">
                                         <textarea name="content" placeholder="Tulis balasan atau update..." required></textarea>
-                                        <div class="lt-reply-actions">
-                                            @if($isTeacher)
-                                                <div class="lt-inline-input">
-                                                    <i data-lucide="percent" style="width: 14px;"></i>
-                                                    <input type="number" name="progress_percentage" min="0" max="100" value="{{ $project->progress_percentage }}" placeholder="Progress">
+                                        <div class="lt-image-preview-container" style="display: none; margin-top: 10px; position: relative; width: fit-content;">
+                                                        <img src="" class="lt-image-preview" style="max-width: 100%; max-height: 150px; border-radius: 15px; border: 2px solid #F3F4F6; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                                                        <button type="button" class="lt-remove-preview" style="position: absolute; top: -8px; right: -8px; background: #EF4444; color: #fff; border: none; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);">
+                                                            <i data-lucide="x" style="width: 14px; height: 14px;"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="lt-reply-actions">
+                                                        @if($isTeacher)
+                                                            <div class="lt-inline-input">
+                                                                <i data-lucide="percent" style="width: 14px;"></i>
+                                                                <input type="number" name="progress_percentage" min="0" max="100" value="{{ $project->progress_percentage }}" placeholder="Progress">
+                                                            </div>
+                                                        @endif
+                                                        <label class="lt-file-input">
+                                                            <i data-lucide="image"></i>
+                                                            <input type="file" name="image" class="lt-image-input" style="display: none;" accept="image/*">
+                                                        </label>
+                                                        <button type="submit">
+                                                            <i data-lucide="send"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            @endif
-                                            <label class="lt-file-input">
-                                                <i data-lucide="image"></i>
-                                                <input type="file" name="image" style="display: none;">
-                                            </label>
-                                            <button type="submit">
-                                                <i data-lucide="send"></i>
-                                            </button>
+                                            </form>
                                         </div>
                                     </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                                </div>
                 @endforeach
-            </div>
+                    </div>
         @endif
 
-        <div style="margin-bottom: 20px;"></div>
-    </div>
+            <div style="margin-bottom: 20px;"></div>
+        </div>
 @endsection
 
 @section('scripts')
@@ -402,6 +430,33 @@
                 }
             });
 
+            // Image Preview Logic
+            $(document).on('change', '.lt-image-input', function() {
+                const input = this;
+                const wrapper = $(this).closest('.lt-reply-input-wrapper');
+                const previewContainer = wrapper.find('.lt-image-preview-container');
+                const previewImg = previewContainer.find('.lt-image-preview');
+
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImg.attr('src', e.target.result);
+                        previewContainer.fadeIn(200);
+                        lucide.createIcons();
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            });
+
+            $(document).on('click', '.lt-remove-preview', function() {
+                const previewContainer = $(this).closest('.lt-image-preview-container');
+                const wrapper = previewContainer.closest('.lt-reply-input-wrapper');
+                const input = wrapper.find('.lt-image-input');
+
+                input.val('');
+                previewContainer.fadeOut(200);
+            });
+
             // Loading Logic on Form Submit
             $('.lt-form').on('submit', function() {
                 $('#loadingOverlay').addClass('active');
@@ -416,13 +471,13 @@
                 const form = $(this);
                 const url = form.attr('action');
                 const formData = new FormData(form[0]);
-                
+
                 console.log('=== EDIT PROJECT ===');
                 console.log('URL:', url);
                 console.log('Form Data:', Object.fromEntries(formData));
-                
+
                 $('#loadingOverlay').addClass('active');
-                
+
                 $.ajax({
                     url: url,
                     method: 'POST',
@@ -444,7 +499,7 @@
                         console.error('Status Text:', xhr.statusText);
                         console.error('Response:', xhr.responseText);
                         console.error('Error:', error);
-                        
+
                         let errorMsg = 'Gagal mengupdate project.';
                         if (xhr.responseJSON && xhr.responseJSON.message) {
                             errorMsg = xhr.responseJSON.message;
@@ -457,7 +512,7 @@
                         } else if (xhr.status === 500) {
                             errorMsg = 'Server error. Cek log server.';
                         }
-                        
+
                         showToast(errorMsg, 'error');
                     },
                     complete: function() {
@@ -472,13 +527,13 @@
                 const form = $(this);
                 const url = form.attr('action');
                 const formData = new FormData(form[0]);
-                
+
                 console.log('=== EDIT COMMENT ===');
                 console.log('URL:', url);
                 console.log('Form Data:', Object.fromEntries(formData));
-                
+
                 $('#loadingOverlay').addClass('active');
-                
+
                 $.ajax({
                     url: url,
                     method: 'POST',
@@ -500,7 +555,7 @@
                         console.error('Status Text:', xhr.statusText);
                         console.error('Response:', xhr.responseText);
                         console.error('Error:', error);
-                        
+
                         let errorMsg = 'Gagal mengupdate komentar.';
                         if (xhr.responseJSON && xhr.responseJSON.message) {
                             errorMsg = xhr.responseJSON.message;
@@ -513,7 +568,7 @@
                         } else if (xhr.status === 500) {
                             errorMsg = 'Server error. Cek log server.';
                         }
-                        
+
                         showToast(errorMsg, 'error');
                     },
                     complete: function() {
@@ -528,9 +583,9 @@
             const toast = $('#ltToast');
             const icon = $('#ltToastIcon');
             const msg = $('#ltToastMessage');
-            
+
             msg.text(message);
-            
+
             if (type === 'success') {
                 toast.css('background', 'linear-gradient(135deg, #36B37E, #2E9968)');
                 icon.attr('data-lucide', 'check-circle');
@@ -538,10 +593,10 @@
                 toast.css('background', 'linear-gradient(135deg, #EF4444, #DC2626)');
                 icon.attr('data-lucide', 'x-circle');
             }
-            
+
             lucide.createIcons();
             toast.fadeIn(300);
-            
+
             setTimeout(() => {
                 toast.fadeOut(300);
             }, 3000);
@@ -550,15 +605,15 @@
         // Delete Project Function
         function deleteProject(id, title) {
             if (!confirm(`Yakin ingin menghapus project "${title}"?`)) return;
-            
+
             const deleteUrl = "{{ route('learning-tracker.destroy', ':id') }}".replace(':id', id);
-            
+
             console.log('=== DELETE PROJECT ===');
             console.log('Project ID:', id);
             console.log('URL:', deleteUrl);
-            
+
             $('#loadingOverlay').addClass('active');
-            
+
             $.ajax({
                 url: deleteUrl,
                 method: 'POST',
@@ -577,7 +632,7 @@
                     console.error('Status Text:', xhr.statusText);
                     console.error('Response:', xhr.responseText);
                     console.error('Error:', error);
-                    
+
                     let errorMsg = 'Gagal menghapus project.';
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMsg = xhr.responseJSON.message;
@@ -588,7 +643,7 @@
                     } else if (xhr.status === 500) {
                         errorMsg = 'Server error. Cek log server.';
                     }
-                    
+
                     showToast(errorMsg, 'error');
                     $('#loadingOverlay').removeClass('active');
                 }
@@ -650,7 +705,7 @@
                     const studentIds = $(this).data('students');
                     const pId = $(this).data('project-id');
                     const pTitle = $(this).data('project-title');
-                    
+
                     if (studentIds.includes(studentId)) {
                         $(this).fadeIn();
                         projectMap.set(pId, pTitle);
@@ -666,7 +721,7 @@
                             Semua Project
                         </div>
                     `);
-                    
+
                     projectMap.forEach((title, id) => {
                         $('.lt-project-chips').append(`
                             <div class="lt-project-chip" onclick="filterByProject(${id}, this)">
@@ -679,7 +734,7 @@
                     $('#projectSelector').fadeOut();
                 }
             }
-            
+
             setTimeout(() => lucide.createIcons(), 500);
         }
 
@@ -692,7 +747,7 @@
             $('.lt-post-card').each(function() {
                 const studentIds = $(this).data('students');
                 const pId = $(this).data('project-id');
-                
+
                 const matchesStudent = activeStudentId === 'all' || studentIds.includes(parseInt(activeStudentId));
                 const matchesProject = projectId === 'all' || pId === projectId;
 
