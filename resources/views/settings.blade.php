@@ -81,8 +81,13 @@
                     <label>Daftar Nama Anak</label>
                     <select name="student_ids[]" class="auth-form-control select2" multiple="multiple" required>
                         @foreach($students as $student)
-                            <option value="{{ $student->id }}" {{ Auth::user()->students->contains($student->id) ? 'selected' : '' }}>
-                                {{ $student->name }}
+                            @php
+                                $isSelected = Auth::user()->students->contains($student->id);
+                            @endphp
+                            <option value="{{ $student->id }}" 
+                                {{ $isSelected ? 'selected' : '' }} 
+                                {{ ($student->is_taken && !$isSelected) ? 'disabled' : '' }}>
+                                {{ $student->name }} {{ ($student->is_taken && !$isSelected) ? '(Sudah Ada Akun)' : '' }}
                             </option>
                         @endforeach
                     </select>

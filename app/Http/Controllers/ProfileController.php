@@ -40,8 +40,22 @@ class ProfileController extends Controller
 
     public function settings()
     {
+        $user = Auth::user();
         $students = \App\Models\Student::active()->orderBy('name')->get();
-        return view('settings', compact('students'));
+
+        $takenStudentIds = \Illuminate\Support\Facades\DB::table('parent_student')
+            ->where('user_id', '!=', $user->id)
+            ->pluck('student_id')
+            ->toArray();
+
+        $students->map(function ($student) use ($takenStudentIds) {
+            $student->is_taken = in_array($student->id, $takenStudentIds);
+            return $student;
+        });
+
+        $appVersion = \App\Models\WebSetting::where('key', 'app_version')->first()->value ?? '1.0.0';
+
+        return view('settings', compact('students', 'appVersion'));
     }
 
     public function update(Request $request)
@@ -53,7 +67,20 @@ class ProfileController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'student_ids' => 'required|array|min:1',
-            'student_ids.*' => 'exists:lifebook_users.users,id',
+            'student_ids.*' => [
+                'exists:lifebook_users.users,id',
+                function ($attribute, $value, $fail) use ($user) {
+                    $isTaken = \Illuminate\Support\Facades\DB::table('parent_student')
+                        ->where('student_id', $value)
+                        ->where('user_id', '!=', $user->id)
+                        ->exists();
+                    if ($isTaken) {
+                        $student = \App\Models\Student::find($value);
+                        $name = $student ? $student->name : $value;
+                        $fail("Murid $name sudah memiliki akun orang tua terdaftar.");
+                    }
+                },
+            ],
         ], [
             'student_ids.required' => 'Pilih setidaknya satu nama anak.',
         ]);
