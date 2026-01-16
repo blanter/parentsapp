@@ -157,7 +157,8 @@
             </p>
             <div class="pa-textarea-wrapper">
                 @php
-                    $canEditTeacherReply = $isTeacher && !$isLifebookTeacher;
+                    // Guru lifebook (yang juga guru wali) atau guru wali biasa bisa edit
+                    $canEditTeacherReply = $isTeacher;
                 @endphp
 
                 @if($canEditTeacherReply)

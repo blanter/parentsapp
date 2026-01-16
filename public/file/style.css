@@ -3016,7 +3016,7 @@ a.btn.btn-warning {
     font-size: 18px;
     font-weight: 800;
     color: var(--db-text-dark);
-    margin: 25px 0 15px;
+    margin: 20px 0 15px;
 }
 
 .ct-list {
@@ -6416,4 +6416,133 @@ a.btn.btn-warning {
     color: #fff;
     border-color: var(--db-purple);
     box-shadow: 0 8px 15px rgba(108, 136, 224, 0.2);
+}
+
+/* Children Tracker Student Filter Styles */
+.ct-student-selector {
+    margin-bottom: 25px;
+}
+
+.ct-filter-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--db-text-dark);
+    margin-bottom: 15px;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ct-student-grid {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 5px 0 15px 0;
+    scrollbar-width: none;
+}
+
+.ct-student-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.ct-student-filter-card {
+    flex: 0 0 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ct-student-filter-avatar {
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9CA3AF;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 2px solid transparent;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.ct-student-filter-card:hover .ct-student-filter-avatar {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(108, 136, 224, 0.15);
+}
+
+.ct-student-filter-card.active .ct-student-filter-avatar {
+    border-color: var(--db-purple);
+    color: var(--db-purple);
+    background: rgba(108, 136, 224, 0.05);
+}
+
+.ct-student-filter-name {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--db-text-dark);
+    opacity: 0.8;
+    text-align: center;
+    max-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ct-student-filter-card.active .ct-student-filter-name {
+    color: var(--db-purple);
+    opacity: 1;
+}
+
+/* Status Dot Indicator */
+.ct-status-dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    top: -3px;
+    right: -3px;
+    border: 2px solid #fff;
+    animation: ctPulse 2s infinite;
+}
+
+.ct-status-pending {
+    background: #EF4444;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+}
+
+.ct-status-responded {
+    background: #10B981;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+    animation: none;
+}
+
+@keyframes ctPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 0.8;
+    }
+}
+
+@keyframes ctFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

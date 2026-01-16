@@ -9,9 +9,36 @@ use Illuminate\Support\Facades\DB;
 use App\Models\ParentJournal;
 use App\Models\Student;
 use App\Models\Teacher;
+use App\Models\TeacherLifebookStudent;
 
 class ChildrenTrackerController extends Controller
 {
+    /**
+     * Get the lifebook teacher ID for a specific student
+     * Returns specific lifebook teacher if assigned, otherwise returns default
+     */
+    private function getLifebookTeacherId($studentId)
+    {
+        // Check if student has a specific lifebook teacher
+        $specificTeacher = TeacherLifebookStudent::where('student_id', $studentId)->first();
+
+        if ($specificTeacher) {
+            return $specificTeacher->teacher_id;
+        }
+
+        // Fall back to default lifebook teacher
+        return \App\Models\WebSetting::where('key', 'lifebook_teacher_id')->value('value');
+    }
+
+    /**
+     * Check if current teacher is the lifebook teacher for a student
+     */
+    private function isLifebookTeacherForStudent($teacherId, $studentId)
+    {
+        $lifebookTeacherId = $this->getLifebookTeacherId($studentId);
+        return $teacherId == $lifebookTeacherId;
+    }
+
     public function index(Request $request)
     {
         $isTeacher = Auth::guard('teacher')->check();
@@ -101,6 +128,79 @@ class ChildrenTrackerController extends Controller
                 });
         }
 
+        // Collect unique students from submissions with their response status for teacher filter
+        $studentsWithStatus = collect();
+        if ($isAdmin || $isTeacher) {
+            $studentMap = [];
+            foreach ($submissions as $sub) {
+                $studentId = $sub->student_id;
+                if (!isset($studentMap[$studentId])) {
+                    $studentMap[$studentId] = [
+                        'id' => $studentId,
+                        'name' => $sub->student_name,
+                        'pending_count' => 0,
+                        'responded_count' => 0,
+                    ];
+                }
+
+                $isQuarterly = str_contains($sub->bulan, 'Kuartal');
+
+                // Check parent aspect response status
+                if ($sub->parent_aspect_filled && ($isQuarterly || $sub->bulan == 'Orang Tua')) {
+                    if ($sub->lifebook_teacher_reply) {
+                        $studentMap[$studentId]['responded_count']++;
+                    } elseif (!$sub->teacher_reply) {
+                        $studentMap[$studentId]['pending_count']++;
+                    } else {
+                        // Has teacher_reply but not lifebook_teacher_reply
+                        $studentMap[$studentId]['pending_count']++;
+                    }
+                }
+
+                // Check child aspect response status
+                if ($sub->child_aspect_filled && $isQuarterly) {
+                    if ($sub->lifebook_child_reply) {
+                        $studentMap[$studentId]['responded_count']++;
+                    } elseif (!$sub->teacher_report) {
+                        $studentMap[$studentId]['pending_count']++;
+                    } else {
+                        $studentMap[$studentId]['pending_count']++;
+                    }
+                }
+
+                // Check internal/external aspect response status
+                if ($sub->internal_external_filled && !$isQuarterly) {
+                    if ($sub->strategi_baru) {
+                        $studentMap[$studentId]['responded_count']++;
+                    } elseif (!$sub->internal_teacher_reply && !$sub->external_teacher_reply) {
+                        $studentMap[$studentId]['pending_count']++;
+                    } else {
+                        $studentMap[$studentId]['pending_count']++;
+                    }
+                }
+            }
+
+            // Convert to collection with status
+            foreach ($studentMap as $studentId => $data) {
+                $status = 'none'; // No submissions
+                if ($data['pending_count'] > 0) {
+                    $status = 'pending';
+                } elseif ($data['responded_count'] > 0) {
+                    $status = 'responded';
+                }
+
+                $studentsWithStatus->push((object) [
+                    'id' => $data['id'],
+                    'name' => $data['name'],
+                    'status' => $status,
+                    'pending_count' => $data['pending_count'],
+                    'responded_count' => $data['responded_count'],
+                ]);
+            }
+
+            $studentsWithStatus = $studentsWithStatus->sortBy('name')->values();
+        }
+
         $aspects = [
             'parent' => [
                 'name' => 'Aspek Orang Tua',
@@ -166,7 +266,7 @@ class ChildrenTrackerController extends Controller
 
         $appVersion = \App\Models\WebSetting::where('key', 'app_version')->value('value') ?? '1.2.0';
 
-        return view('children-tracker.index', compact('aspects', 'isTeacher', 'isAdmin', 'isLifebookTeacher', 'submissions', 'appVersion', 'currentMonthYear', 'currentQuarterYear', 'currentYear'));
+        return view('children-tracker.index', compact('aspects', 'isTeacher', 'isAdmin', 'isLifebookTeacher', 'submissions', 'studentsWithStatus', 'appVersion', 'currentMonthYear', 'currentQuarterYear', 'currentYear'));
     }
 
     public function parentAspect(Request $request)
@@ -189,12 +289,14 @@ class ChildrenTrackerController extends Controller
         $isTeacher = Auth::guard('teacher')->check();
         $user = $isTeacher ? Auth::guard('teacher')->user() : Auth::user();
 
-        $lifebookTeacherId = \App\Models\WebSetting::where('key', 'lifebook_teacher_id')->value('value');
-        $activeLifebookTeacher = \App\Models\Teacher::find($lifebookTeacherId);
+        $defaultLifebookTeacherId = \App\Models\WebSetting::where('key', 'lifebook_teacher_id')->value('value');
+        $activeLifebookTeacher = \App\Models\Teacher::find($defaultLifebookTeacherId);
         $isAdmin = !$isTeacher && $user && $user->role === 'admin';
-        $isLifebookTeacher = ($isTeacher && ($user->id == $lifebookTeacherId)) || $isAdmin;
 
-        if ($isLifebookTeacher) {
+        // For initial check, use default lifebook teacher
+        $isDefaultLifebookTeacher = ($isTeacher && ($user->id == $defaultLifebookTeacherId)) || $isAdmin;
+
+        if ($isDefaultLifebookTeacher) {
             $children = Student::active()->orderBy('name')->get();
         } else {
             $children = $user->students;
@@ -219,6 +321,13 @@ class ChildrenTrackerController extends Controller
         }
 
         $selectedChildId = $request->get('child_id', $children->first()->id ?? null);
+
+        // Get the actual lifebook teacher for THIS specific student
+        $lifebookTeacherIdForStudent = $this->getLifebookTeacherId($selectedChildId);
+        $activeLifebookTeacher = \App\Models\Teacher::find($lifebookTeacherIdForStudent);
+
+        // Check if current teacher is the lifebook teacher for THIS specific student
+        $isLifebookTeacher = $isAdmin || ($isTeacher && $this->isLifebookTeacherForStudent($user->id, $selectedChildId));
 
         $journal = ParentJournal::where('student_id', $selectedChildId)
             ->where('bulan', $bulan)
@@ -294,8 +403,9 @@ class ChildrenTrackerController extends Controller
         }
 
         $isAdmin = !$isTeacher && $user && $user->role === 'admin';
-        $lifebookTeacherId = \App\Models\WebSetting::where('key', 'lifebook_teacher_id')->value('value');
-        $isLifebookTeacher = ($isTeacher && ($user->id == $lifebookTeacherId)) || $isAdmin;
+
+        // Check if current teacher is the lifebook teacher for THIS specific student
+        $isLifebookTeacher = $isAdmin || ($isTeacher && $this->isLifebookTeacherForStudent($user->id, $request->student_id));
 
         $updateData = [];
         $childParentFields = ['rutinitas', 'hubungan_keluarga', 'hubungan_teman', 'aspek_sosial'];

@@ -15,19 +15,47 @@
     <div class="db-container">
         <div class="db-header">
             <div class="db-brand-section">
-                <h1 style="font-size: 28px;">Hello<br><span
-                        style="color: var(--db-purple)">{{ $displayUser->name }}</span></h1>
+                <h1 style="font-size: 28px;">Hello<br><span style="color: var(--db-purple)">{{ $displayUser->name }}</span>
+                </h1>
                 <p style="font-size: 13.5px; font-weight: 600; opacity: 0.6; margin-top: 5px;">
                     {{ $isTeacher ? 'Pantau perkembangan anak didik Anda' : 'Have a great day with your children, parents' }}
                 </p>
             </div>
-            <a href="{{ $backRoute }}" class="db-avatar-section"
-                style="width: 50px; height: 50px; text-decoration: none;">
+            <a href="{{ $backRoute }}" class="db-avatar-section" style="width: 50px; height: 50px; text-decoration: none;">
                 <i data-lucide="chevron-left" style="font-size: 24px; opacity: 1;"></i>
             </a>
         </div>
 
         @if($isAdmin || $isTeacher)
+            @if($studentsWithStatus->isNotEmpty())
+                <!-- Student Filter Selector -->
+                <div class="ct-student-selector">
+                    <h3 class="ct-filter-title">Filter Nama Anak</h3>
+                    <div class="ct-student-grid">
+                        <div class="ct-student-filter-card active" onclick="filterByStudent('all', this)">
+                            <div class="ct-student-filter-avatar" style="background: var(--db-purple); color: #fff;">
+                                <i data-lucide="users"></i>
+                            </div>
+                            <span class="ct-student-filter-name">Semua</span>
+                        </div>
+                        @foreach($studentsWithStatus as $student)
+                            <div class="ct-student-filter-card" onclick="filterByStudent({{ $student->id }}, this)"
+                                data-student-id="{{ $student->id }}">
+                                <div class="ct-student-filter-avatar">
+                                    <i data-lucide="user"></i>
+                                    @if($student->status === 'pending')
+                                        <span class="ct-status-dot ct-status-pending" title="Ada jurnal belum direspon"></span>
+                                    @elseif($student->status === 'responded')
+                                        <span class="ct-status-dot ct-status-responded" title="Semua jurnal sudah direspon"></span>
+                                    @endif
+                                </div>
+                                <span class="ct-student-filter-name">{{ explode(' ', $student->name)[0] }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
             <h2 class="ct-section-title">Laporan Jurnal Masuk</h2>
             <div class="ct-list">
                 @forelse($submissions as $sub)
@@ -38,7 +66,7 @@
                     {{-- Card for Aspek Orang Tua --}}
                     @if($sub->parent_aspect_filled && ($isQuarterly || $sub->bulan == 'Orang Tua'))
                         <a href="{{ route('children-tracker.parent-aspect', ['time' => $sub->bulan . ' ' . $currentYear, 'child_id' => $sub->student_id]) }}"
-                            class="ct-card">
+                            class="ct-card" data-student-id="{{ $sub->student_id }}">
                             <div class="ct-card-icon color-purple">
                                 <i data-lucide="user"></i>
                             </div>
@@ -81,7 +109,7 @@
                     {{-- Card for Aspek Anak --}}
                     @if($sub->child_aspect_filled && $isQuarterly)
                         <a href="{{ route('children-tracker.child-aspect', ['time' => $sub->bulan . ' ' . $currentYear, 'child_id' => $sub->student_id]) }}"
-                            class="ct-card">
+                            class="ct-card" data-student-id="{{ $sub->student_id }}">
                             <div class="ct-card-icon color-orange">
                                 <i data-lucide="users"></i>
                             </div>
@@ -124,7 +152,7 @@
                     {{-- Card for Aspek Internal/Eksternal --}}
                     @if($sub->internal_external_filled && !$isQuarterly)
                         <a href="{{ route('children-tracker.internal-external-aspect', ['month' => $sub->bulan . ' ' . $currentYear, 'child_id' => $sub->student_id]) }}"
-                            class="ct-card">
+                            class="ct-card" data-student-id="{{ $sub->student_id }}">
                             <div class="ct-card-icon color-green">
                                 <i data-lucide="calendar"></i>
                             </div>
@@ -185,7 +213,8 @@
                         <div class="ct-card-info">
                             <h3 style="font-size: 16px;">{{ $aspect['name'] }}</h3>
                             <p style="font-size: 11px; opacity: 0.6; font-weight: 600; margin-bottom: 5px;">
-                                {{ $aspect['time_label'] }}</p>
+                                {{ $aspect['time_label'] }}
+                            </p>
                             <div class="ct-indicator-wrapper">
                                 @if($aspect['status'] === 'unfilled')
                                     <span class="ct-indicator-pill warning">
@@ -245,4 +274,41 @@
             Version {{ $appVersion }} • Parents App
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        function filterByStudent(studentId, element) {
+            // Update active state on filter cards
+            document.querySelectorAll('.ct-student-filter-card').forEach(function (card) {
+                card.classList.remove('active');
+            });
+            element.classList.add('active');
+
+            // Filter journal cards
+            const cards = document.querySelectorAll('.ct-card[data-student-id]');
+
+            if (studentId === 'all') {
+                cards.forEach(function (card) {
+                    card.style.display = '';
+                    card.style.animation = 'ctFadeIn 0.3s ease forwards';
+                });
+            } else {
+                cards.forEach(function (card) {
+                    const cardStudentId = parseInt(card.getAttribute('data-student-id'));
+                    if (cardStudentId === studentId) {
+                        card.style.display = '';
+                        card.style.animation = 'ctFadeIn 0.3s ease forwards';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            // Reinitialize lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+    </script>
 @endsection

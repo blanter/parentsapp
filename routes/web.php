@@ -132,6 +132,8 @@ Route::prefix('guru')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\TeacherAuthController::class, 'dashboard'])->name('teacher.dashboard');
         Route::get('/profile', [App\Http\Controllers\TeacherProfileController::class, 'index'])->name('teacher.profile');
         Route::post('/profile/students', [App\Http\Controllers\TeacherProfileController::class, 'updateStudents'])->name('teacher.profile.students');
+        Route::post('/profile/claim-lifebook', [App\Http\Controllers\TeacherProfileController::class, 'claimLifebookStudent'])->name('teacher.profile.claim-lifebook');
+        Route::post('/profile/unclaim-lifebook', [App\Http\Controllers\TeacherProfileController::class, 'unclaimLifebookStudent'])->name('teacher.profile.unclaim-lifebook');
     });
 });
 

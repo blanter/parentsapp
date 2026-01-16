@@ -151,7 +151,8 @@
             </p>
             <div class="pa-textarea-wrapper">
                 @php
-                    $canEditInternalTeacherReply = $isTeacher && !$isLifebookTeacher;
+                    // Guru lifebook (yang juga guru wali) atau guru wali biasa bisa edit
+                    $canEditInternalTeacherReply = $isTeacher;
                 @endphp
 
                 @if($canEditInternalTeacherReply)
@@ -198,7 +199,8 @@
             </p>
             <div class="pa-textarea-wrapper">
                 @php
-                    $canEditExternalTeacherReply = $isTeacher && !$isLifebookTeacher;
+                    // Guru lifebook (yang juga guru wali) atau guru wali biasa bisa edit
+                    $canEditExternalTeacherReply = $isTeacher;
                 @endphp
 
                 @if($canEditExternalTeacherReply)
