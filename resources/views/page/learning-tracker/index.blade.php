@@ -17,6 +17,14 @@
         <div class="lt-loading-text">Sedang memproses...</div>
     </div>
 
+    <!-- Toast Notification -->
+    <div id="ltToast" class="lt-toast" style="display: none;">
+        <div class="lt-toast-content">
+            <i data-lucide="check-circle" id="ltToastIcon"></i>
+            <span id="ltToastMessage">Berhasil!</span>
+        </div>
+    </div>
+
     <!-- Image Viewer Modal -->
     <div class="lt-modal" id="imageViewerModal">
         <div class="lt-modal-content" style="max-width: 500px; padding: 0; overflow: hidden;">
@@ -240,13 +248,9 @@
                                     <button class="lt-action-btn lt-edit-btn" onclick="openEditModal({{ $project->id }}, '{{ addslashes($project->title) }}', '{{ $project->type }}', '{{ addslashes($project->description) }}')">
                                         <i data-lucide="edit-2"></i>
                                     </button>
-                                    <form action="{{ route('learning-tracker.destroy', $project->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus project ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="lt-action-btn lt-delete-btn">
-                                            <i data-lucide="trash-2"></i>
-                                        </button>
-                                    </form>
+                                    <button class="lt-action-btn lt-delete-btn" onclick="deleteProject({{ $project->id }}, '{{ addslashes($project->title) }}')">
+                                        <i data-lucide="trash-2"></i>
+                                    </button>
                                 @endif
                             </div>
                         </div>
@@ -405,9 +409,126 @@
 
             // Reinitialize icons after any dynamic content
             lucide.createIcons();
+
+            // Edit Project Form AJAX
+            $('#editProjectForm').on('submit', function(e) {
+                e.preventDefault();
+                const form = $(this);
+                const url = form.attr('action');
+                const formData = new FormData(form[0]);
+                
+                $('#loadingOverlay').addClass('active');
+                
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-HTTP-Method-Override': 'PUT'
+                    },
+                    success: function(response) {
+                        closeEditModal();
+                        showToast('Project berhasil diupdate!', 'success');
+                        setTimeout(() => location.reload(), 1500);
+                    },
+                    error: function(xhr) {
+                        showToast('Gagal mengupdate project.', 'error');
+                    },
+                    complete: function() {
+                        $('#loadingOverlay').removeClass('active');
+                    }
+                });
+            });
+
+            // Edit Comment Form AJAX
+            $('#editCommentForm').on('submit', function(e) {
+                e.preventDefault();
+                const form = $(this);
+                const url = form.attr('action');
+                const formData = new FormData(form[0]);
+                
+                $('#loadingOverlay').addClass('active');
+                
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-HTTP-Method-Override': 'PUT'
+                    },
+                    success: function(response) {
+                        closeEditCommentModal();
+                        showToast('Komentar berhasil diupdate!', 'success');
+                        setTimeout(() => location.reload(), 1500);
+                    },
+                    error: function(xhr) {
+                        showToast('Gagal mengupdate komentar.', 'error');
+                    },
+                    complete: function() {
+                        $('#loadingOverlay').removeClass('active');
+                    }
+                });
+            });
         });
 
+        // Toast Notification Function
+        function showToast(message, type = 'success') {
+            const toast = $('#ltToast');
+            const icon = $('#ltToastIcon');
+            const msg = $('#ltToastMessage');
+            
+            msg.text(message);
+            
+            if (type === 'success') {
+                toast.css('background', 'linear-gradient(135deg, #36B37E, #2E9968)');
+                icon.attr('data-lucide', 'check-circle');
+            } else {
+                toast.css('background', 'linear-gradient(135deg, #EF4444, #DC2626)');
+                icon.attr('data-lucide', 'x-circle');
+            }
+            
+            lucide.createIcons();
+            toast.fadeIn(300);
+            
+            setTimeout(() => {
+                toast.fadeOut(300);
+            }, 3000);
+        }
+
+        // Delete Project Function
+        function deleteProject(id, title) {
+            if (!confirm(`Yakin ingin menghapus project "${title}"?`)) return;
+            
+            const deleteUrl = "{{ route('learning-tracker.destroy', ':id') }}".replace(':id', id);
+            
+            $('#loadingOverlay').addClass('active');
+            
+            $.ajax({
+                url: deleteUrl,
+                method: 'POST',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    _method: 'DELETE'
+                },
+                success: function(response) {
+                    showToast('Project berhasil dihapus!', 'success');
+                    setTimeout(() => location.reload(), 1500);
+                },
+                error: function(xhr) {
+                    showToast('Gagal menghapus project.', 'error');
+                    $('#loadingOverlay').removeClass('active');
+                }
+            });
+        }
+
+        let currentEditProjectId = null;
+
         function openEditModal(id, title, type, description) {
+            currentEditProjectId = id;
             const updateUrl = "{{ route('learning-tracker.update', ':id') }}".replace(':id', id);
             $('#editProjectForm').attr('action', updateUrl);
             $('#edit_title').val(title);

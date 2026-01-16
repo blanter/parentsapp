@@ -6702,3 +6702,34 @@ a.btn.btn-warning {
     color: var(--db-text-dark);
     font-family: 'Poppins', sans-serif;
 }
+
+/* Learning Tracker Toast Notification */
+.lt-toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 15px 25px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #36B37E, #2E9968);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    font-family: 'Poppins', sans-serif;
+}
+
+.lt-toast-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+}
+
+.lt-toast-content i {
+    width: 20px;
+    height: 20px;
+}
+
+.lt-toast-content span {
+    font-size: 14px;
+    font-weight: 700;
+}
