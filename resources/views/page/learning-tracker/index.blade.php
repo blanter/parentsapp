@@ -417,6 +417,10 @@
                 const url = form.attr('action');
                 const formData = new FormData(form[0]);
                 
+                console.log('=== EDIT PROJECT ===');
+                console.log('URL:', url);
+                console.log('Form Data:', Object.fromEntries(formData));
+                
                 $('#loadingOverlay').addClass('active');
                 
                 $.ajax({
@@ -429,12 +433,32 @@
                         'X-HTTP-Method-Override': 'PUT'
                     },
                     success: function(response) {
+                        console.log('Edit Success:', response);
                         closeEditModal();
                         showToast('Project berhasil diupdate!', 'success');
                         setTimeout(() => location.reload(), 1500);
                     },
-                    error: function(xhr) {
-                        showToast('Gagal mengupdate project.', 'error');
+                    error: function(xhr, status, error) {
+                        console.error('=== EDIT PROJECT ERROR ===');
+                        console.error('Status:', xhr.status);
+                        console.error('Status Text:', xhr.statusText);
+                        console.error('Response:', xhr.responseText);
+                        console.error('Error:', error);
+                        
+                        let errorMsg = 'Gagal mengupdate project.';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMsg = xhr.responseJSON.message;
+                        } else if (xhr.status === 403) {
+                            errorMsg = 'Unauthorized: Anda tidak memiliki akses.';
+                        } else if (xhr.status === 404) {
+                            errorMsg = 'Project tidak ditemukan.';
+                        } else if (xhr.status === 422) {
+                            errorMsg = 'Validasi gagal. Periksa input Anda.';
+                        } else if (xhr.status === 500) {
+                            errorMsg = 'Server error. Cek log server.';
+                        }
+                        
+                        showToast(errorMsg, 'error');
                     },
                     complete: function() {
                         $('#loadingOverlay').removeClass('active');
@@ -449,6 +473,10 @@
                 const url = form.attr('action');
                 const formData = new FormData(form[0]);
                 
+                console.log('=== EDIT COMMENT ===');
+                console.log('URL:', url);
+                console.log('Form Data:', Object.fromEntries(formData));
+                
                 $('#loadingOverlay').addClass('active');
                 
                 $.ajax({
@@ -461,12 +489,32 @@
                         'X-HTTP-Method-Override': 'PUT'
                     },
                     success: function(response) {
+                        console.log('Edit Comment Success:', response);
                         closeEditCommentModal();
                         showToast('Komentar berhasil diupdate!', 'success');
                         setTimeout(() => location.reload(), 1500);
                     },
-                    error: function(xhr) {
-                        showToast('Gagal mengupdate komentar.', 'error');
+                    error: function(xhr, status, error) {
+                        console.error('=== EDIT COMMENT ERROR ===');
+                        console.error('Status:', xhr.status);
+                        console.error('Status Text:', xhr.statusText);
+                        console.error('Response:', xhr.responseText);
+                        console.error('Error:', error);
+                        
+                        let errorMsg = 'Gagal mengupdate komentar.';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMsg = xhr.responseJSON.message;
+                        } else if (xhr.status === 403) {
+                            errorMsg = 'Unauthorized: Anda tidak memiliki akses.';
+                        } else if (xhr.status === 404) {
+                            errorMsg = 'Komentar tidak ditemukan.';
+                        } else if (xhr.status === 422) {
+                            errorMsg = 'Validasi gagal. Periksa input Anda.';
+                        } else if (xhr.status === 500) {
+                            errorMsg = 'Server error. Cek log server.';
+                        }
+                        
+                        showToast(errorMsg, 'error');
                     },
                     complete: function() {
                         $('#loadingOverlay').removeClass('active');
@@ -505,6 +553,10 @@
             
             const deleteUrl = "{{ route('learning-tracker.destroy', ':id') }}".replace(':id', id);
             
+            console.log('=== DELETE PROJECT ===');
+            console.log('Project ID:', id);
+            console.log('URL:', deleteUrl);
+            
             $('#loadingOverlay').addClass('active');
             
             $.ajax({
@@ -515,11 +567,29 @@
                     _method: 'DELETE'
                 },
                 success: function(response) {
+                    console.log('Delete Success:', response);
                     showToast('Project berhasil dihapus!', 'success');
                     setTimeout(() => location.reload(), 1500);
                 },
-                error: function(xhr) {
-                    showToast('Gagal menghapus project.', 'error');
+                error: function(xhr, status, error) {
+                    console.error('=== DELETE PROJECT ERROR ===');
+                    console.error('Status:', xhr.status);
+                    console.error('Status Text:', xhr.statusText);
+                    console.error('Response:', xhr.responseText);
+                    console.error('Error:', error);
+                    
+                    let errorMsg = 'Gagal menghapus project.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    } else if (xhr.status === 403) {
+                        errorMsg = 'Unauthorized: Anda tidak memiliki akses.';
+                    } else if (xhr.status === 404) {
+                        errorMsg = 'Project tidak ditemukan.';
+                    } else if (xhr.status === 500) {
+                        errorMsg = 'Server error. Cek log server.';
+                    }
+                    
+                    showToast(errorMsg, 'error');
                     $('#loadingOverlay').removeClass('active');
                 }
             });
