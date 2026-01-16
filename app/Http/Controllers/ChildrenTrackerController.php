@@ -88,8 +88,17 @@ class ChildrenTrackerController extends Controller
                 ->leftJoin($mainDb . '.teacher_student as ts', 'j.student_id', '=', 'ts.student_id')
                 ->leftJoin($userDb . '.users as t', 'ts.teacher_id', '=', 't.id');
 
+
             if ($isTeacher && !$isLifebookTeacher && !$isAdmin) {
                 $query->where('ts.teacher_id', $user->id);
+            }
+
+            // If default lifebook teacher, exclude students that have been claimed by other teachers
+            if ($isLifebookTeacher && !$isAdmin) {
+                $claimedStudentIds = TeacherLifebookStudent::pluck('student_id')->toArray();
+                if (!empty($claimedStudentIds)) {
+                    $query->whereNotIn('j.student_id', $claimedStudentIds);
+                }
             }
 
             $submissions = $query->select(
@@ -298,6 +307,14 @@ class ChildrenTrackerController extends Controller
 
         if ($isDefaultLifebookTeacher) {
             $children = Student::active()->orderBy('name')->get();
+
+            // If default lifebook teacher (not admin), exclude claimed students
+            if ($isTeacher && $user->id == $defaultLifebookTeacherId) {
+                $claimedStudentIds = TeacherLifebookStudent::pluck('student_id')->toArray();
+                if (!empty($claimedStudentIds)) {
+                    $children = $children->whereNotIn('id', $claimedStudentIds);
+                }
+            }
         } else {
             $children = $user->students;
         }
