@@ -3216,6 +3216,7 @@ a.btn.btn-warning {
 
 .pa-month-btn {
     background: #F3F4F6;
+    color: #111;
     border: none;
     width: 35px;
     height: 35px;
@@ -6294,6 +6295,7 @@ a.btn.btn-warning {
     animation: ltSlideUp 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     max-height: 90vh;
     overflow-y: auto;
+    position: relative;
 }
 
 @keyframes ltSlideUp {
@@ -6322,7 +6324,8 @@ a.btn.btn-warning {
 }
 
 .lt-close-modal {
-    background: #F3F4F6;
+    background: #F44336;
+    color: #fff;
     border: none;
     width: 35px;
     height: 35px;
@@ -6335,7 +6338,7 @@ a.btn.btn-warning {
 }
 
 .lt-close-modal:hover {
-    background: #E5E7EB;
+    background: #111;
     transform: rotate(90deg);
 }
 
