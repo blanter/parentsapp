@@ -183,6 +183,14 @@
                     <button class="lj-btn-edit" onclick="openEditModal('strategy')">Edit</button>
                 </div>
 
+                <!-- Help Button -->
+                <div class="lj-help-btn-container">
+                    <button class="lj-help-btn" onclick="openHelpModal()">
+                        <i data-lucide="help-circle"></i>
+                        Butuh Bantuan?
+                    </button>
+                </div>
+
                 <div class="lj-footer-nav">
                     <button class="lj-footer-btn" id="footerPrev">
                         <i data-lucide="chevron-left"></i>
@@ -298,6 +306,96 @@
                 </div>
                 <input type="hidden" id="weeklyTaskIndex">
                 <button class="lj-save-btn" id="saveWeeklyTaskBtn">Simpan Tugas</button>
+            </div>
+        </div>
+
+        <!-- Help Modal -->
+        <div class="lj-edit-modal" id="helpModal">
+            <div class="lj-edit-card lj-help-modal-card">
+                <div class="lj-edit-header">
+                    <div class="lj-edit-title">📘 Panduan Mengisi Lifebook Journey</div>
+                    <button style="background: none; border: none; cursor: pointer;" onclick="closeHelpModal()">
+                        <i data-lucide="x" style="color: #999;"></i>
+                    </button>
+                </div>
+                
+                <div class="lj-help-content">
+                    <p class="lj-help-intro">
+                        Ayah dan Bunda, untuk memudahkan dalam mengisi Lifebook Journey, terdapat empat tahapan utama yang perlu kita perhatikan. Berikut adalah penjelasan singkat beserta contohnya:
+                    </p>
+
+                    <!-- Premise -->
+                    <div class="lj-help-section lj-help-premise">
+                        <h4 class="lj-help-section-title">
+                            1. Premise (Keyakinan Dasar)
+                        </h4>
+                        <p class="lj-help-section-desc">
+                            <strong>Apa yang kita yakini?</strong> Ini adalah prinsip atau pandangan hidup kita terhadap suatu hal.
+                        </p>
+                        <div class="lj-help-example">
+                            <strong>Contoh:</strong> "Saya yakin kesehatan adalah amanah dan tanggung jawab agar tubuh bisa terus bermanfaat bagi orang lain setiap hari."
+                        </div>
+                    </div>
+
+                    <!-- Vision -->
+                    <div class="lj-help-section lj-help-vision">
+                        <h4 class="lj-help-section-title">
+                            2. Vision (Harapan/Target)
+                        </h4>
+                        <p class="lj-help-section-desc">
+                            <strong>Apa yang ingin kita capai?</strong> Hasil akhir atau kondisi ideal yang ingin diraih di masa depan.
+                        </p>
+                        <div class="lj-help-example">
+                            <strong>Contoh:</strong> "Saya ingin memiliki berat badan ideal 55 kg di tahun ini."
+                        </div>
+                    </div>
+
+                    <!-- Purpose -->
+                    <div class="lj-help-section lj-help-purpose">
+                        <h4 class="lj-help-section-title">
+                            3. Purpose (Tujuan/Alasan)
+                        </h4>
+                        <p class="lj-help-section-desc">
+                            <strong>Mengapa kita menginginkannya?</strong> Alasan kuat di balik visi kita agar kita tetap semangat mencapainya.
+                        </p>
+                        <div class="lj-help-example">
+                            <strong>Contoh:</strong> "Agar badan terasa lebih ringan, tidak mudah lelah, dan metabolisme tubuh tetap seimbang."
+                        </div>
+                    </div>
+
+                    <!-- Strategy -->
+                    <div class="lj-help-section lj-help-strategy">
+                        <h4 class="lj-help-section-title">
+                            4. Strategy (Cara Mencapai)
+                        </h4>
+                        <p class="lj-help-section-desc">
+                            <strong>Bagaimana langkah nyatanya?</strong> Tindakan konkret atau kebiasaan baru yang akan dilakukan untuk mewujudkan visi.
+                        </p>
+                        <div class="lj-help-example">
+                            <strong>Contoh:</strong><br>
+                            • Berlangganan katering sehat.<br>
+                            • Minum air putih minimal 2 liter setiap hari.<br>
+                            • Tidak makan berat 3 jam sebelum tidur.
+                        </div>
+                    </div>
+
+                    <!-- Tips -->
+                    <div class="lj-help-tips">
+                        <div class="lj-help-tips-content">
+                            <i data-lucide="lightbulb" class="lj-help-tips-icon"></i>
+                            <div>
+                                <h4 class="lj-help-tips-title">Tips:</h4>
+                                <p class="lj-help-tips-text">
+                                    Ayah dan Bunda bisa mulai mengisi dari hal yang paling sederhana terlebih dahulu untuk setiap aspek kehidupan (kesehatan, keluarga, karir, dll).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="lj-save-btn" onclick="closeHelpModal()" style="margin-top: 20px;">
+                    Mengerti, Terima Kasih
+                </button>
             </div>
         </div>
 
@@ -467,6 +565,15 @@
             $('#editModal').fadeOut(200);
         }
 
+        function openHelpModal() {
+            $('#helpModal').css('display', 'flex').hide().fadeIn(200);
+            lucide.createIcons();
+        }
+
+        function closeHelpModal() {
+            $('#helpModal').fadeOut(200);
+        }
+
         // Close on overlay click
         $('#editModal').on('click', function (e) {
             if ($(e.target).hasClass('lj-edit-modal')) {
@@ -510,12 +617,12 @@
             let bodyHtml = '';
             habits.forEach(habit => {
                 let habitRow = `<tr><td class="ht-habit-name-col">
-                            <div style="display:flex; align-items:center; gap:8px;">
-                                <button class="ht-btn-delete" onclick="deleteHabit(${habit.id})"><i data-lucide="trash-2" style="width:14px;"></i></button>
-                                <button class="ht-btn-delete" onclick="openEditHabitModal(${habit.id}, '${habit.title.replace(/'/g, "\\'")}')" style="color:var(--db-purple);"><i data-lucide="edit-3" style="width:14px;"></i></button>
-                                ${habit.title}
-                            </div>
-                        </td>`;
+                                    <div style="display:flex; align-items:center; gap:8px;">
+                                        <button class="ht-btn-delete" onclick="deleteHabit(${habit.id})"><i data-lucide="trash-2" style="width:14px;"></i></button>
+                                        <button class="ht-btn-delete" onclick="openEditHabitModal(${habit.id}, '${habit.title.replace(/'/g, "\\'")}')" style="color:var(--db-purple);"><i data-lucide="edit-3" style="width:14px;"></i></button>
+                                        ${habit.title}
+                                    </div>
+                                </td>`;
 
                 const habitLogs = logs[habit.id] || [];
                 for (let d = 1; d <= daysInMonth; d++) {
@@ -524,10 +631,10 @@
                     const weekNum = Math.ceil((d + new Date(currentHTYear, currentHTMonth - 1, 1).getDay()) / 7);
 
                     habitRow += `<td class="ht-day-cell ht-week-${weekNum}">
-                                <input type="checkbox" class="ht-checkbox" 
-                                    ${isDone ? 'checked' : ''} 
-                                    onchange="toggleHabit(${habit.id}, '${dateStr}')">
-                            </td>`;
+                                        <input type="checkbox" class="ht-checkbox" 
+                                            ${isDone ? 'checked' : ''} 
+                                            onchange="toggleHabit(${habit.id}, '${dateStr}')">
+                                    </td>`;
                 }
                 habitRow += '</tr>';
                 bodyHtml += habitRow;
@@ -542,24 +649,24 @@
                 tasks.forEach(task => {
                     const isCompleted = (task.is_completed === true || task.is_completed == 1 || task.is_completed == '1');
                     tasksList += `<li class="ht-weekly-item">
-                                <input type="checkbox" class="ht-checkbox" ${isCompleted ? 'checked' : ''} onchange="toggleWeeklyTask(${task.id})">
-                                <span class="ht-weekly-text ${isCompleted ? 'completed' : ''}">${task.title}</span>
-                                <button class="ht-btn-delete" onclick="openEditWeeklyTaskModal(${task.id}, '${task.title.replace(/'/g, "\\'")}', ${i})" style="color:var(--db-purple);"><i data-lucide="edit-3" style="width:14px;"></i></button>
-                                <button class="ht-btn-delete" onclick="deleteWeeklyTask(${task.id})"><i data-lucide="trash-2" style="width:14px;"></i></button>
-                            </li>`;
+                                        <input type="checkbox" class="ht-checkbox" ${isCompleted ? 'checked' : ''} onchange="toggleWeeklyTask(${task.id})">
+                                        <span class="ht-weekly-text ${isCompleted ? 'completed' : ''}">${task.title}</span>
+                                        <button class="ht-btn-delete" onclick="openEditWeeklyTaskModal(${task.id}, '${task.title.replace(/'/g, "\\'")}', ${i})" style="color:var(--db-purple);"><i data-lucide="edit-3" style="width:14px;"></i></button>
+                                        <button class="ht-btn-delete" onclick="deleteWeeklyTask(${task.id})"><i data-lucide="trash-2" style="width:14px;"></i></button>
+                                    </li>`;
                 });
 
                 const label = i === 6 ? 'MONTHLY' : `WEEK ${i}`;
 
                 weeklyHtml += `
-                            <div class="ht-weekly-card">
-                                <div class="ht-weekly-header">
-                                    <div class="ht-weekly-title">${label}</div>
-                                    <button class="ht-add-btn" onclick="openAddWeeklyTaskModal(${i})"><i data-lucide="plus" style="width:12px;"></i></button>
-                                </div>
-                                <ul class="ht-weekly-list">${tasksList || '<li style="font-size:11px; opacity:0.5;">No tasks</li>'}</ul>
-                            </div>
-                        `;
+                                    <div class="ht-weekly-card">
+                                        <div class="ht-weekly-header">
+                                            <div class="ht-weekly-title">${label}</div>
+                                            <button class="ht-add-btn" onclick="openAddWeeklyTaskModal(${i})"><i data-lucide="plus" style="width:12px;"></i></button>
+                                        </div>
+                                        <ul class="ht-weekly-list">${tasksList || '<li style="font-size:11px; opacity:0.5;">No tasks</li>'}</ul>
+                                    </div>
+                                `;
             }
             $('#ht-weekly-container').html(weeklyHtml);
 
