@@ -166,6 +166,9 @@ class LearningTrackerController extends Controller
 
         // Check if teacher owns this project
         if (Auth::guard('teacher')->id() !== $project->teacher_id) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
+            }
             return back()->with('error', 'Unauthorized action.');
         }
 
@@ -174,6 +177,10 @@ class LearningTrackerController extends Controller
             'description' => $request->description,
             'type' => $request->type,
         ]);
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Project updated successfully!']);
+        }
 
         return back()->with('success', 'Project updated successfully!');
     }
@@ -184,6 +191,9 @@ class LearningTrackerController extends Controller
 
         // Check if teacher owns this project
         if (Auth::guard('teacher')->id() !== $project->teacher_id) {
+            if (request()->ajax() || request()->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
+            }
             return back()->with('error', 'Unauthorized action.');
         }
 
@@ -200,6 +210,10 @@ class LearningTrackerController extends Controller
         }
 
         $project->delete();
+
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Project deleted successfully!']);
+        }
 
         return back()->with('success', 'Project deleted successfully!');
     }
@@ -218,10 +232,16 @@ class LearningTrackerController extends Controller
         // Check ownership
         if ($isTeacher) {
             if ($log->teacher_id !== Auth::guard('teacher')->id()) {
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
+                }
                 return back()->with('error', 'Unauthorized action.');
             }
         } else {
             if ($log->user_id !== Auth::id()) {
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
+                }
                 return back()->with('error', 'Unauthorized action.');
             }
         }
@@ -243,6 +263,10 @@ class LearningTrackerController extends Controller
         // Update project progress if teacher updated log with percentage
         if ($isTeacher && $request->has('progress_percentage')) {
             $log->project->update(['progress_percentage' => $request->progress_percentage]);
+        }
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Comment updated successfully!']);
         }
 
         return back()->with('success', 'Comment updated successfully!');
